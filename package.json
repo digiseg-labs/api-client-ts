@@ -1,7 +1,7 @@
 {
-  "name": "@digiseg-labs/api-client",
+  "name": "digiseg-api-client",
   "version": "0.0.0-dev",
-  "description": "OpenAPI client for @digiseg-labs/api-client",
+  "description": "OpenAPI client for Digiseg API",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
     "type": "git",

@@ -4,4 +4,4 @@ openapi-generator generate \
   -i https://developer.digiseg.net/openapi.json\
   -g typescript-axios \
   --git-repo-id api-client-ts --git-user-id digiseg-labs \
-  --additional-properties=npmName=@digiseg-labs/api-client,npmVersion=0.0.0-dev,npmRepository=https://github.com/digiseg-labs/api-client-ts.git,supportsES6=true
+  --additional-properties=npmName=digiseg-api-client,npmVersion=0.0.0-dev,supportsES6=true
