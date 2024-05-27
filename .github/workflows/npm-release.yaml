@@ -34,4 +34,4 @@ jobs:
         if: steps.semantic.outputs.version != ''
         run: npm publish --provenance --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
