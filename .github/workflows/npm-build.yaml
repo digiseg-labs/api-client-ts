@@ -1,0 +1,19 @@
+name: NPM build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: "0.1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '21.1.0'
+      - name: NPM Install
+        run: npm install
+      - name: NPM CI
+        run: npm ci
