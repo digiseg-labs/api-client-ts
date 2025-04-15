@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Digiseg API
- * ### Digiseg API documentation  # Introduction  This API let you harness the power of Digisegs powerful and tracking-free segmentation engine.  Audiences by Digiseg are available in 50+ countries, probablistically mapping neighborhood characteristics to the IP addresses observed on the internet - Household targeting & measurement for the post-cookie world.  ## Developer SDKs  In addition to using these APIs directly through any HTTP client, we provide a set of API client SDKs for popular programming languages:  <div class=\"api-clients\">   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-python\">     <i class=\"api-client-sdk-logo devicon-python-plain\"></i>     <p>API client for Python</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-ts\">     <i class=\"api-client-sdk-logo devicon-typescript-plain\"></i>     <p>API client for TypeScript</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-go\">     <i class=\"api-client-sdk-logo devicon-go-original-wordmark\"></i>     <p>API client for Go</p>   </a> </div> <div class=\"api-clients-breaker\" />  ## Audience taxonomy  Digiseg audiences are grouped into private and business audiences. In each group there are categories that then contain the audiences. The API endpoints that communicate audiences and household characteristics, audience codes are being used.  The following table can be used as a reference for audience codes. Note that Digiseg will at times update names of audiences for purposes of internationalization, clarity or other such purposes - but the codes will remain as-is and should be considered a stable point of reference for the audience.  | Group | Category | Audience Code | Audience Name | |-------|----------|---------------|---------------| | private | home_type | a1 | Apartment | |  |  | a2 | House | |  | savings | b1 | No Savings | |  |  | b2 | Smaller Savings | |  |  | b3 | Larger Savings | |  | lifecycle | c1 | Young couples and singles | |  |  | c2 | Early family life | |  |  | c3 | Middle-aged families | |  |  | c4 | Mature families | |  |  | c5 | Pensioners | |  | cars | d1 | No cars | |  |  | d2 | 1 car | |  |  | d3 | 2 or more cars | |  | children | e1 | No children | |  |  | e2 | 1 child | |  |  | e3 | 2 or more children | |  | education | f1 | Basic | |  |  | f2 | Medium | |  |  | f3 | Higher | |  | neighbourhood_type | g1 | Countryside | |  |  | g2 | Village | |  |  | g3 | Suburban | |  |  | g4 | City | |  | income | h1 | Lowest 20% | |  |  | h2 | Lowest 20-40% | |  |  | h3 | Middle 40-60% | |  |  | h4 | Highest 60-80% | |  |  | h5 | Top 20% | |  | home_ownership | j1 | Rent | |  |  | j2 | Own | |  | building_age | k1 | Pre 1945 | |  |  | k2 | 1945-1989 | |  |  | k3 | 1990 until today | |  | living_space | l1 | Small | |  |  | l2 | Medium | |  |  | l3 | Large | |  | tech_level | n1 | Basic | |  |  | n2 | Medium | |  |  | n3 | High | | business | size | ba1 | Small Business | |  |  | ba2 | Medium Business | |  |  | ba3 | Larger Business |  There is also an interactive [Audience builder](https://digiseg.io/cookieless-audience-builder/) which lets you discover the targeting reach and power of combining various household characteristics into composite audiences. 
+ * ### Digiseg API documentation  # Introduction  This API let you harness the power of Digisegs powerful and tracking-free segmentation engine.  Audiences by Digiseg are available in 50+ countries, probablistically mapping neighborhood characteristics to the IP addresses observed on the internet - Household targeting & measurement for the post-cookie world.  ## Developer SDKs  In addition to using these APIs directly through any HTTP client, we provide a set of API client SDKs for popular programming languages:  <div class=\"api-clients\">   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-python\">     <i class=\"api-client-sdk-logo devicon-python-plain\"></i>     <p>API client for Python</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-ts\">     <i class=\"api-client-sdk-logo devicon-typescript-plain\"></i>     <p>API client for TypeScript</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-go\">     <i class=\"api-client-sdk-logo devicon-go-original-wordmark\"></i>     <p>API client for Go</p>   </a> </div> <div class=\"api-clients-breaker\" /> 
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: support@digiseg.io
@@ -79,7 +79,33 @@ export interface AccountAux {
      * @memberof AccountAux
      */
     'billing_address'?: PostalAddress;
+    /**
+     * A list of Tax IDs used by the account, for billing purposes.
+     * @type {Array<TaxId>}
+     * @memberof AccountAux
+     */
+    'billing_tax_ids'?: Array<TaxId>;
+    /**
+     * 
+     * @type {SubscriptionPriceCurrency}
+     * @memberof AccountAux
+     */
+    'billing_currency'?: SubscriptionPriceCurrency;
+    /**
+     * An optional official name to use for billing purposes. Requires `owner` role to change.
+     * @type {string}
+     * @memberof AccountAux
+     */
+    'billing_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountAux
+     */
+    'stripe_customer_id'?: string;
 }
+
+
 /**
  * 
  * @export
@@ -194,6 +220,12 @@ export interface AccountCreation {
      */
     'slug'?: string;
     /**
+     * 
+     * @type {AccountOwnerCreation}
+     * @memberof AccountCreation
+     */
+    'owner'?: AccountOwnerCreation;
+    /**
      * ID of the user who is the ultimate owner of the account. Deprecated in favor of the `owner` role of the user\'s account membership.
      * @type {string}
      * @memberof AccountCreation
@@ -212,12 +244,6 @@ export interface AccountCreation {
      * @memberof AccountCreation
      */
     'billing_address'?: PostalAddress;
-    /**
-     * 
-     * @type {AccountOwnerCreation}
-     * @memberof AccountCreation
-     */
-    'owner'?: AccountOwnerCreation;
     /**
      * Whether or not to notify the user that they have been registered
      * @type {boolean}
@@ -239,6 +265,25 @@ export interface AccountCreationAux {
      * @memberof AccountCreationAux
      */
     'owner'?: AccountOwnerCreation;
+    /**
+     * ID of the user who is the ultimate owner of the account. Deprecated in favor of the `owner` role of the user\'s account membership.
+     * @type {string}
+     * @memberof AccountCreationAux
+     * @deprecated
+     */
+    'owner_id'?: string;
+    /**
+     * The email address to send billing information to. Requires `owner` role to change.
+     * @type {string}
+     * @memberof AccountCreationAux
+     */
+    'billing_email'?: string;
+    /**
+     * 
+     * @type {PostalAddress}
+     * @memberof AccountCreationAux
+     */
+    'billing_address'?: PostalAddress;
 }
 /**
  * 
@@ -321,6 +366,42 @@ export interface AccountFull {
      */
     'billing_address'?: PostalAddress;
     /**
+     * A list of Tax IDs used by the account, for billing purposes.
+     * @type {Array<TaxId>}
+     * @memberof AccountFull
+     */
+    'billing_tax_ids'?: Array<TaxId>;
+    /**
+     * 
+     * @type {SubscriptionPriceCurrency}
+     * @memberof AccountFull
+     */
+    'billing_currency'?: SubscriptionPriceCurrency;
+    /**
+     * An optional official name to use for billing purposes. Requires `owner` role to change.
+     * @type {string}
+     * @memberof AccountFull
+     */
+    'billing_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountFull
+     */
+    'stripe_customer_id'?: string;
+    /**
+     * 
+     * @type {PlanFeatureSet}
+     * @memberof AccountFull
+     */
+    'feature_set'?: PlanFeatureSet;
+    /**
+     * 
+     * @type {Array<AccountSubscriptionItem>}
+     * @memberof AccountFull
+     */
+    'subscriptions'?: Array<AccountSubscriptionItem>;
+    /**
      * Date and time of the object creation
      * @type {string}
      * @memberof AccountFull
@@ -345,6 +426,39 @@ export interface AccountFull {
      */
     'updated_by'?: string;
 }
+
+
+/**
+ * Additional properties that may appear as read-only properties depending on the `include` parameter
+ * @export
+ * @interface AccountIncludeAux
+ */
+export interface AccountIncludeAux {
+    /**
+     * 
+     * @type {PlanFeatureSet}
+     * @memberof AccountIncludeAux
+     */
+    'feature_set'?: PlanFeatureSet;
+    /**
+     * 
+     * @type {Array<AccountSubscriptionItem>}
+     * @memberof AccountIncludeAux
+     */
+    'subscriptions'?: Array<AccountSubscriptionItem>;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const AccountIncludeParam = {
+    None: 'none',
+    Subscriptions: 'subscriptions'
+} as const;
+
+export type AccountIncludeParam = typeof AccountIncludeParam[keyof typeof AccountIncludeParam];
 
 
 /**
@@ -408,6 +522,18 @@ export interface AccountItem {
      * @deprecated
      */
     'slug'?: string;
+    /**
+     * 
+     * @type {PlanFeatureSet}
+     * @memberof AccountItem
+     */
+    'feature_set'?: PlanFeatureSet;
+    /**
+     * 
+     * @type {Array<AccountSubscriptionItem>}
+     * @memberof AccountItem
+     */
+    'subscriptions'?: Array<AccountSubscriptionItem>;
 }
 
 
@@ -498,6 +624,30 @@ export interface AccountMutation {
      * @memberof AccountMutation
      */
     'billing_address'?: PostalAddress;
+    /**
+     * A list of Tax IDs used by the account, for billing purposes.
+     * @type {Array<TaxId>}
+     * @memberof AccountMutation
+     */
+    'billing_tax_ids'?: Array<TaxId>;
+    /**
+     * 
+     * @type {SubscriptionPriceCurrency}
+     * @memberof AccountMutation
+     */
+    'billing_currency'?: SubscriptionPriceCurrency;
+    /**
+     * An optional official name to use for billing purposes. Requires `owner` role to change.
+     * @type {string}
+     * @memberof AccountMutation
+     */
+    'billing_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountMutation
+     */
+    'stripe_customer_id'?: string;
 }
 
 
@@ -517,7 +667,7 @@ export interface AccountMutationAux {
 
 
 /**
- * 
+ * Information about the account owner of a newly created account. Can only be specified by super-admins.
  * @export
  * @interface AccountOwnerCreation
  */
@@ -544,21 +694,33 @@ export interface AccountOwnerCreation {
 /**
  * 
  * @export
- * @interface AccountSubscriptionAux
+ * @enum {string}
  */
-export interface AccountSubscriptionAux {
+
+export const AccountSortOption = {
+    CreatedAt: 'created_at',
+    CreatedAt2: '-created_at',
+    Name: 'name',
+    Name2: '-name'
+} as const;
+
+export type AccountSortOption = typeof AccountSortOption[keyof typeof AccountSortOption];
+
+
+/**
+ * 
+ * @export
+ * @interface AccountStripeBillingInfo
+ */
+export interface AccountStripeBillingInfo {
+    [key: string]: any;
+
     /**
-     * The ID of the account
+     * The URL to take the user to, to configure their billing information
      * @type {string}
-     * @memberof AccountSubscriptionAux
+     * @memberof AccountStripeBillingInfo
      */
-    'account_id': string;
-    /**
-     * 
-     * @type {SubscriptionPlan}
-     * @memberof AccountSubscriptionAux
-     */
-    'plan'?: SubscriptionPlan;
+    'billing_portal_url'?: string;
 }
 /**
  * 
@@ -573,13 +735,13 @@ export interface AccountSubscriptionBase {
      */
     'id': string;
     /**
-     * 
+     * Start date (inclusive) of the subscription
      * @type {string}
      * @memberof AccountSubscriptionBase
      */
     'start_date': string;
     /**
-     * 
+     * End date (inclusive) of the subscription
      * @type {string}
      * @memberof AccountSubscriptionBase
      */
@@ -590,6 +752,24 @@ export interface AccountSubscriptionBase {
      * @memberof AccountSubscriptionBase
      */
     'is_active': boolean;
+    /**
+     * Time of cancelling the subscription, if it has been cancelled. Note that a cancelled subscription may still be active, if it has been prepaid for the current period. 
+     * @type {string}
+     * @memberof AccountSubscriptionBase
+     */
+    'cancelled_at'?: string;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof AccountSubscriptionBase
+     */
+    'actual_price'?: SubscriptionPrice;
+    /**
+     * 
+     * @type {AccountSubscriptionPaymentConfiguration}
+     * @memberof AccountSubscriptionBase
+     */
+    'payment_configuration'?: AccountSubscriptionPaymentConfiguration;
 }
 /**
  * 
@@ -604,13 +784,13 @@ export interface AccountSubscriptionCreation {
      */
     'id': string;
     /**
-     * 
+     * Start date (inclusive) of the subscription
      * @type {string}
      * @memberof AccountSubscriptionCreation
      */
     'start_date': string;
     /**
-     * 
+     * End date (inclusive) of the subscription
      * @type {string}
      * @memberof AccountSubscriptionCreation
      */
@@ -622,11 +802,29 @@ export interface AccountSubscriptionCreation {
      */
     'is_active': boolean;
     /**
+     * Time of cancelling the subscription, if it has been cancelled. Note that a cancelled subscription may still be active, if it has been prepaid for the current period. 
+     * @type {string}
+     * @memberof AccountSubscriptionCreation
+     */
+    'cancelled_at'?: string;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof AccountSubscriptionCreation
+     */
+    'actual_price'?: SubscriptionPrice;
+    /**
+     * 
+     * @type {AccountSubscriptionPaymentConfiguration}
+     * @memberof AccountSubscriptionCreation
+     */
+    'payment_configuration'?: AccountSubscriptionPaymentConfiguration;
+    /**
      * The ID of the plan to subscribe to
      * @type {string}
      * @memberof AccountSubscriptionCreation
      */
-    'plan_id'?: string;
+    'plan_id': string;
 }
 /**
  * 
@@ -641,13 +839,13 @@ export interface AccountSubscriptionFull {
      */
     'id': string;
     /**
-     * 
+     * Start date (inclusive) of the subscription
      * @type {string}
      * @memberof AccountSubscriptionFull
      */
     'start_date': string;
     /**
-     * 
+     * End date (inclusive) of the subscription
      * @type {string}
      * @memberof AccountSubscriptionFull
      */
@@ -659,17 +857,41 @@ export interface AccountSubscriptionFull {
      */
     'is_active': boolean;
     /**
+     * Time of cancelling the subscription, if it has been cancelled. Note that a cancelled subscription may still be active, if it has been prepaid for the current period. 
+     * @type {string}
+     * @memberof AccountSubscriptionFull
+     */
+    'cancelled_at'?: string;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof AccountSubscriptionFull
+     */
+    'actual_price'?: SubscriptionPrice;
+    /**
+     * 
+     * @type {AccountSubscriptionPaymentConfiguration}
+     * @memberof AccountSubscriptionFull
+     */
+    'payment_configuration'?: AccountSubscriptionPaymentConfiguration;
+    /**
+     * 
+     * @type {SubscriptionPlanFull}
+     * @memberof AccountSubscriptionFull
+     */
+    'plan': SubscriptionPlanFull;
+    /**
      * The ID of the account
      * @type {string}
      * @memberof AccountSubscriptionFull
      */
     'account_id': string;
     /**
-     * 
-     * @type {SubscriptionPlan}
+     * Timestamp of the last processed payment
+     * @type {string}
      * @memberof AccountSubscriptionFull
      */
-    'plan'?: SubscriptionPlan;
+    'last_paid_at'?: string;
     /**
      * Date and time of the object creation
      * @type {string}
@@ -698,6 +920,31 @@ export interface AccountSubscriptionFull {
 /**
  * 
  * @export
+ * @interface AccountSubscriptionFullAux
+ */
+export interface AccountSubscriptionFullAux {
+    /**
+     * The ID of the account
+     * @type {string}
+     * @memberof AccountSubscriptionFullAux
+     */
+    'account_id': string;
+    /**
+     * 
+     * @type {SubscriptionPlanFull}
+     * @memberof AccountSubscriptionFullAux
+     */
+    'plan': SubscriptionPlanFull;
+    /**
+     * Timestamp of the last processed payment
+     * @type {string}
+     * @memberof AccountSubscriptionFullAux
+     */
+    'last_paid_at'?: string;
+}
+/**
+ * 
+ * @export
  * @interface AccountSubscriptionItem
  */
 export interface AccountSubscriptionItem {
@@ -708,13 +955,13 @@ export interface AccountSubscriptionItem {
      */
     'id': string;
     /**
-     * 
+     * Start date (inclusive) of the subscription
      * @type {string}
      * @memberof AccountSubscriptionItem
      */
     'start_date': string;
     /**
-     * 
+     * End date (inclusive) of the subscription
      * @type {string}
      * @memberof AccountSubscriptionItem
      */
@@ -725,7 +972,89 @@ export interface AccountSubscriptionItem {
      * @memberof AccountSubscriptionItem
      */
     'is_active': boolean;
+    /**
+     * Time of cancelling the subscription, if it has been cancelled. Note that a cancelled subscription may still be active, if it has been prepaid for the current period. 
+     * @type {string}
+     * @memberof AccountSubscriptionItem
+     */
+    'cancelled_at'?: string;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof AccountSubscriptionItem
+     */
+    'actual_price'?: SubscriptionPrice;
+    /**
+     * 
+     * @type {AccountSubscriptionPaymentConfiguration}
+     * @memberof AccountSubscriptionItem
+     */
+    'payment_configuration'?: AccountSubscriptionPaymentConfiguration;
+    /**
+     * 
+     * @type {SubscriptionPlanItem}
+     * @memberof AccountSubscriptionItem
+     */
+    'plan'?: SubscriptionPlanItem;
 }
+/**
+ * 
+ * @export
+ * @interface AccountSubscriptionItemAux
+ */
+export interface AccountSubscriptionItemAux {
+    /**
+     * 
+     * @type {SubscriptionPlanItem}
+     * @memberof AccountSubscriptionItemAux
+     */
+    'plan'?: SubscriptionPlanItem;
+}
+/**
+ * Describes the payment configuration of an account subscription
+ * @export
+ * @interface AccountSubscriptionPaymentConfiguration
+ */
+export interface AccountSubscriptionPaymentConfiguration {
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountSubscriptionPaymentConfiguration
+     */
+    'platform': AccountSubscriptionPaymentConfigurationPlatformEnum;
+    /**
+     * Is the subscription pre-paid or post-paid?
+     * @type {string}
+     * @memberof AccountSubscriptionPaymentConfiguration
+     */
+    'timing': AccountSubscriptionPaymentConfigurationTimingEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountSubscriptionPaymentConfiguration
+     */
+    'stripe_subscription_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountSubscriptionPaymentConfiguration
+     */
+    'stripe_subscription_item_id'?: string;
+}
+
+export const AccountSubscriptionPaymentConfigurationPlatformEnum = {
+    Stripe: 'stripe',
+    Manual: 'manual'
+} as const;
+
+export type AccountSubscriptionPaymentConfigurationPlatformEnum = typeof AccountSubscriptionPaymentConfigurationPlatformEnum[keyof typeof AccountSubscriptionPaymentConfigurationPlatformEnum];
+export const AccountSubscriptionPaymentConfigurationTimingEnum = {
+    Pre: 'pre',
+    Post: 'post'
+} as const;
+
+export type AccountSubscriptionPaymentConfigurationTimingEnum = typeof AccountSubscriptionPaymentConfigurationTimingEnum[keyof typeof AccountSubscriptionPaymentConfigurationTimingEnum];
+
 /**
  * Summarizes an account\'s current subscription(s) and the feature set available
  * @export
@@ -750,6 +1079,50 @@ export interface AccountSubscriptionsSummary {
      * @memberof AccountSubscriptionsSummary
      */
     'feature_set': PlanFeatureSet;
+}
+/**
+ * 
+ * @export
+ * @interface AccountUserAddition
+ */
+export interface AccountUserAddition {
+    /**
+     * The email of the user (used as username when authenticating with password)
+     * @type {string}
+     * @memberof AccountUserAddition
+     */
+    'email': string;
+    /**
+     * Human readable name of the user
+     * @type {string}
+     * @memberof AccountUserAddition
+     */
+    'name'?: string;
+    /**
+     * The roles that the user will have within the account
+     * @type {Array<UserAccountRole>}
+     * @memberof AccountUserAddition
+     */
+    'roles'?: Array<UserAccountRole>;
+}
+/**
+ * 
+ * @export
+ * @interface AddUserToAccount201Response
+ */
+export interface AddUserToAccount201Response {
+    /**
+     * 
+     * @type {UserFull}
+     * @memberof AddUserToAccount201Response
+     */
+    'data'?: UserFull;
+    /**
+     * 
+     * @type {UserLinks}
+     * @memberof AddUserToAccount201Response
+     */
+    'links'?: UserLinks;
 }
 /**
  * 
@@ -1235,6 +1608,31 @@ export interface Audience {
 /**
  * 
  * @export
+ * @interface AudienceCategoryItem
+ */
+export interface AudienceCategoryItem {
+    /**
+     * A code used to represent the audience category
+     * @type {string}
+     * @memberof AudienceCategoryItem
+     */
+    'code': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AudienceCategoryItem
+     */
+    'display_name': string;
+    /**
+     * 
+     * @type {Array<AudienceItem>}
+     * @memberof AudienceCategoryItem
+     */
+    'audiences': Array<AudienceItem>;
+}
+/**
+ * 
+ * @export
  * @interface AudienceCategoryStats
  */
 export interface AudienceCategoryStats {
@@ -1362,6 +1760,180 @@ export interface AudienceExampleInputsResponse {
 /**
  * 
  * @export
+ * @interface AudienceItem
+ */
+export interface AudienceItem {
+    /**
+     * A code used to represent the audience
+     * @type {string}
+     * @memberof AudienceItem
+     */
+    'code': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AudienceItem
+     */
+    'display_name': string;
+    /**
+     * A textual description of the audience
+     * @type {string}
+     * @memberof AudienceItem
+     */
+    'description'?: string;
+    /**
+     * A list of audience codes that this audience is composed from
+     * @type {Array<string>}
+     * @memberof AudienceItem
+     */
+    'composition'?: Array<string>;
+    /**
+     * Platform-specific code, provided when `platform` (and `country` if needed for the platform) is provided
+     * @type {string}
+     * @memberof AudienceItem
+     */
+    'platform_code'?: string;
+    /**
+     * 
+     * @type {AudienceReachStats}
+     * @memberof AudienceItem
+     */
+    'reach_stats'?: AudienceReachStats;
+}
+/**
+ * 
+ * @export
+ * @interface AudiencePlatformItem
+ */
+export interface AudiencePlatformItem {
+    /**
+     * A code used to represent the platform when querying platform-specific information
+     * @type {string}
+     * @memberof AudiencePlatformItem
+     */
+    'code': string;
+    /**
+     * Name of the audience platform
+     * @type {string}
+     * @memberof AudiencePlatformItem
+     */
+    'display_name': string;
+    /**
+     * Whether the platform-specific codes for the particular platform are global (or country-specific when NOT global)
+     * @type {boolean}
+     * @memberof AudiencePlatformItem
+     */
+    'has_global_taxonomy': boolean;
+    /**
+     * A list of supported countries, each represented by their country code
+     * @type {Array<string>}
+     * @memberof AudiencePlatformItem
+     */
+    'supported_countries': Array<string>;
+}
+/**
+ * Reach statistics for an audience in a particular country
+ * @export
+ * @interface AudienceReachStats
+ */
+export interface AudienceReachStats {
+    /**
+     * A measure of accuracy, ie. the amount of in-target reach (as opposed to excess reach) of the audience.
+     * @type {number}
+     * @memberof AudienceReachStats
+     */
+    'in_target_reach'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AudienceReachStats
+     */
+    'num_households'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AudienceReachStats
+     */
+    'num_persons'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AudienceReachStats
+     */
+    'num_devices'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AudienceReachStats
+     */
+    'num_daily_impressions'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface AudienceRecommendationRecommendationItem
+ */
+export interface AudienceRecommendationRecommendationItem {
+    /**
+     * 
+     * @type {string}
+     * @memberof AudienceRecommendationRecommendationItem
+     */
+    'reason': string;
+    /**
+     * 
+     * @type {AudienceItem}
+     * @memberof AudienceRecommendationRecommendationItem
+     */
+    'audience': AudienceItem;
+}
+/**
+ * A user\'s message in an audience recommendation conversation
+ * @export
+ * @interface AudienceRecommendationRequestMessage
+ */
+export interface AudienceRecommendationRequestMessage {
+    /**
+     * The ID of the conversation to add this message to. Do not provide a conversation ID in the initial/first message.
+     * @type {string}
+     * @memberof AudienceRecommendationRequestMessage
+     */
+    'conversation_id'?: string;
+    /**
+     * The text message to send to the audience recommendation conversation.
+     * @type {string}
+     * @memberof AudienceRecommendationRequestMessage
+     */
+    'message_text': string;
+}
+/**
+ * A service response message in an audience recommendation conversation. A response will always contain a `message_text`, and may also contain `recommendations`.
+ * @export
+ * @interface AudienceRecommendationResponseMessage
+ */
+export interface AudienceRecommendationResponseMessage {
+    /**
+     * The ID of the conversation that this message pertains to.
+     * @type {string}
+     * @memberof AudienceRecommendationResponseMessage
+     */
+    'conversation_id': string;
+    /**
+     * The text message sent back to the audience recommendation conversation.
+     * @type {string}
+     * @memberof AudienceRecommendationResponseMessage
+     */
+    'message_text': string;
+    /**
+     * 
+     * @type {Array<AudienceRecommendationRecommendationItem>}
+     * @memberof AudienceRecommendationResponseMessage
+     */
+    'recommendations'?: Array<AudienceRecommendationRecommendationItem>;
+}
+/**
+ * 
+ * @export
  * @interface AudienceResponse
  */
 export interface AudienceResponse {
@@ -1398,6 +1970,50 @@ export type AudienceResponseStatus = typeof AudienceResponseStatus[keyof typeof 
 /**
  * 
  * @export
+ * @interface AudienceSetItem
+ */
+export interface AudienceSetItem {
+    /**
+     * A code used to represent the audience set
+     * @type {string}
+     * @memberof AudienceSetItem
+     */
+    'code': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AudienceSetItem
+     */
+    'display_name': string;
+    /**
+     * 
+     * @type {Array<AudienceCategoryItem>}
+     * @memberof AudienceSetItem
+     */
+    'categories': Array<AudienceCategoryItem>;
+}
+/**
+ * 
+ * @export
+ * @interface AudienceSetListResponseMeta
+ */
+export interface AudienceSetListResponseMeta {
+    /**
+     * 
+     * @type {CountryItem}
+     * @memberof AudienceSetListResponseMeta
+     */
+    'country'?: CountryItem;
+    /**
+     * 
+     * @type {AudiencePlatformItem}
+     * @memberof AudienceSetListResponseMeta
+     */
+    'platform'?: AudiencePlatformItem;
+}
+/**
+ * 
+ * @export
  * @interface AudienceStats
  */
 export interface AudienceStats {
@@ -1429,6 +2045,22 @@ export interface AudienceStats {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+
+export const AudiencesIncludeParam = {
+    Core: 'core',
+    Composite: 'composite',
+    Name: 'name',
+    Category: 'category'
+} as const;
+
+export type AudiencesIncludeParam = typeof AudiencesIncludeParam[keyof typeof AudiencesIncludeParam];
+
+
+/**
+ * 
+ * @export
  * @interface AuthTokenRequest
  */
 export interface AuthTokenRequest {
@@ -1450,6 +2082,12 @@ export interface AuthTokenRequest {
      * @memberof AuthTokenRequest
      */
     'password'?: string;
+    /**
+     * Optional account_id to authenticate for, if the user has multiple account memberships
+     * @type {string}
+     * @memberof AuthTokenRequest
+     */
+    'account_id'?: string;
     /**
      * A previously issued refresh token for the given username
      * @type {string}
@@ -1624,6 +2262,62 @@ export interface ComparisonsContainer {
 /**
  * 
  * @export
+ * @interface CountryItem
+ */
+export interface CountryItem {
+    /**
+     * 2-letter country code
+     * @type {string}
+     * @memberof CountryItem
+     */
+    'code': string;
+    /**
+     * Name of the country
+     * @type {string}
+     * @memberof CountryItem
+     */
+    'display_name': string;
+    /**
+     * 
+     * @type {CountryReachStats}
+     * @memberof CountryItem
+     */
+    'reach_stats'?: CountryReachStats;
+}
+/**
+ * Reach statistics for a country
+ * @export
+ * @interface CountryReachStats
+ */
+export interface CountryReachStats {
+    /**
+     * 
+     * @type {number}
+     * @memberof CountryReachStats
+     */
+    'num_households'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CountryReachStats
+     */
+    'num_persons'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CountryReachStats
+     */
+    'num_devices'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CountryReachStats
+     */
+    'num_daily_impressions'?: number;
+}
+/**
+ * 
+ * @export
  * @interface CountryStats
  */
 export interface CountryStats {
@@ -1639,6 +2333,25 @@ export interface CountryStats {
      * @memberof CountryStats
      */
     'code': string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateAccount201Response
+ */
+export interface CreateAccount201Response {
+    /**
+     * 
+     * @type {AccountFull}
+     * @memberof CreateAccount201Response
+     */
+    'data'?: AccountFull;
+    /**
+     * 
+     * @type {AccountLinks}
+     * @memberof CreateAccount201Response
+     */
+    'links'?: AccountLinks;
 }
 /**
  * 
@@ -1669,6 +2382,19 @@ export interface CreateMeasurementClient201Response {
 /**
  * 
  * @export
+ * @interface CreateSharedReport201Response
+ */
+export interface CreateSharedReport201Response {
+    /**
+     * 
+     * @type {SharedReportFull}
+     * @memberof CreateSharedReport201Response
+     */
+    'data'?: SharedReportFull;
+}
+/**
+ * 
+ * @export
  * @interface CreateStudy201Response
  */
 export interface CreateStudy201Response {
@@ -1694,21 +2420,21 @@ export interface CreateStudy201Response {
 /**
  * 
  * @export
- * @interface CreateUserInAccount201Response
+ * @interface CustomerCommunicationMessage
  */
-export interface CreateUserInAccount201Response {
+export interface CustomerCommunicationMessage {
     /**
      * 
-     * @type {UserFull}
-     * @memberof CreateUserInAccount201Response
+     * @type {string}
+     * @memberof CustomerCommunicationMessage
      */
-    'data'?: UserFull;
+    'subject': string;
     /**
      * 
-     * @type {UserLinks}
-     * @memberof CreateUserInAccount201Response
+     * @type {string}
+     * @memberof CustomerCommunicationMessage
      */
-    'links'?: UserLinks;
+    'body': string;
 }
 /**
  * Contains statistics about the day of the month that study activity has been measured. The time zone used to record these measurements is the time zone of the measured user, or UTC if the user\'s location cannot be resolved. 
@@ -1984,36 +2710,17 @@ export interface ErrorResponse {
  */
 export interface FrequencyStats {
     /**
-     * A frequency of study impressions to users. * The value 1 means that the study has been exposed just once. * The value 2 means that the study has been exposed twice. * And so on... 
+     * A frequency of study events to users. * The value 1 means that the study has been exposed just once. * The value 2 means that the study has been exposed twice. * And so on... 
      * @type {number}
      * @memberof FrequencyStats
      */
     'frequency'?: number;
     /**
-     * The number of users that have generated impressions at the corresponding frequency
+     * The number of users that have generated events at the corresponding frequency
      * @type {number}
      * @memberof FrequencyStats
      */
     'count'?: number;
-}
-/**
- * 
- * @export
- * @interface GetAccountById200Response
- */
-export interface GetAccountById200Response {
-    /**
-     * 
-     * @type {AccountFull}
-     * @memberof GetAccountById200Response
-     */
-    'data'?: AccountFull;
-    /**
-     * 
-     * @type {AccountLinks}
-     * @memberof GetAccountById200Response
-     */
-    'links'?: AccountLinks;
 }
 /**
  * 
@@ -2072,6 +2779,19 @@ export interface GetPopuplationByKey200Response {
      * @memberof GetPopuplationByKey200Response
      */
     'data'?: PopulationFull;
+}
+/**
+ * 
+ * @export
+ * @interface GetUserAccountMembership200Response
+ */
+export interface GetUserAccountMembership200Response {
+    /**
+     * 
+     * @type {UserAccountMembership}
+     * @memberof GetUserAccountMembership200Response
+     */
+    'data'?: UserAccountMembership;
 }
 /**
  * Contains statistics about the time of day that study activity has been measured. The 24 hour time format is used to represent measurements for each hour. The time zone used to record these measurements is the time zone of the measured user, or UTC if the user\'s location cannot be resolved. 
@@ -2253,6 +2973,193 @@ export interface IdentifyableObject1 {
 /**
  * 
  * @export
+ * @interface InlineObject
+ */
+export interface InlineObject {
+    /**
+     * 
+     * @type {RegistrationCreationResponseData}
+     * @memberof InlineObject
+     */
+    'data'?: RegistrationCreationResponseData;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject1
+ */
+export interface InlineObject1 {
+    /**
+     * 
+     * @type {RegistrationVerificationResponseData}
+     * @memberof InlineObject1
+     */
+    'data'?: RegistrationVerificationResponseData;
+    /**
+     * 
+     * @type {RegistrationVerificationResponseLinks}
+     * @memberof InlineObject1
+     */
+    'links'?: RegistrationVerificationResponseLinks;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject10
+ */
+export interface InlineObject10 {
+    /**
+     * 
+     * @type {PopulationSource}
+     * @memberof InlineObject10
+     */
+    'data'?: PopulationSource;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject11
+ */
+export interface InlineObject11 {
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof InlineObject11
+     */
+    'data'?: { [key: string]: string; };
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject12
+ */
+export interface InlineObject12 {
+    /**
+     * 
+     * @type {AudienceRecommendationResponseMessage}
+     * @memberof InlineObject12
+     */
+    'data'?: AudienceRecommendationResponseMessage;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject2
+ */
+export interface InlineObject2 {
+    /**
+     * 
+     * @type {RegistrationByIdResponseData}
+     * @memberof InlineObject2
+     */
+    'data'?: RegistrationByIdResponseData;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject3
+ */
+export interface InlineObject3 {
+    /**
+     * 
+     * @type {SubscriptionPlanFull}
+     * @memberof InlineObject3
+     */
+    'data'?: SubscriptionPlanFull;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject4
+ */
+export interface InlineObject4 {
+    /**
+     * 
+     * @type {SubscriptionOfferFull}
+     * @memberof InlineObject4
+     */
+    'data'?: SubscriptionOfferFull;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject5
+ */
+export interface InlineObject5 {
+    /**
+     * 
+     * @type {ListPaginationMeta}
+     * @memberof InlineObject5
+     */
+    'meta'?: ListPaginationMeta;
+    /**
+     * 
+     * @type {ListPaginationLinks}
+     * @memberof InlineObject5
+     */
+    'links'?: ListPaginationLinks;
+    /**
+     * 
+     * @type {Array<AccountItem>}
+     * @memberof InlineObject5
+     */
+    'data'?: Array<AccountItem>;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject6
+ */
+export interface InlineObject6 {
+    /**
+     * 
+     * @type {StripeAccountSubscriptionCheckoutSession}
+     * @memberof InlineObject6
+     */
+    'data'?: StripeAccountSubscriptionCheckoutSession;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject7
+ */
+export interface InlineObject7 {
+    /**
+     * 
+     * @type {AccountStripeBillingInfo}
+     * @memberof InlineObject7
+     */
+    'data'?: AccountStripeBillingInfo;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject8
+ */
+export interface InlineObject8 {
+    /**
+     * 
+     * @type {SharedReportPublicData}
+     * @memberof InlineObject8
+     */
+    'data'?: SharedReportPublicData;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject9
+ */
+export interface InlineObject9 {
+    /**
+     * 
+     * @type {StudyOlapQueryResult}
+     * @memberof InlineObject9
+     */
+    'data'?: StudyOlapQueryResult;
+}
+/**
+ * 
+ * @export
  * @enum {string}
  */
 
@@ -2327,6 +3234,51 @@ export interface ListAudienceDataRealtimeUsage200Response {
      * @memberof ListAudienceDataRealtimeUsage200Response
      */
     'data'?: Array<AudienceDataRealtimeUsage>;
+}
+/**
+ * 
+ * @export
+ * @interface ListAudiencePlatforms200Response
+ */
+export interface ListAudiencePlatforms200Response {
+    /**
+     * 
+     * @type {Array<AudiencePlatformItem>}
+     * @memberof ListAudiencePlatforms200Response
+     */
+    'data'?: Array<AudiencePlatformItem>;
+}
+/**
+ * 
+ * @export
+ * @interface ListAudiences200Response
+ */
+export interface ListAudiences200Response {
+    /**
+     * 
+     * @type {AudienceSetListResponseMeta}
+     * @memberof ListAudiences200Response
+     */
+    'meta'?: AudienceSetListResponseMeta;
+    /**
+     * 
+     * @type {Array<AudienceSetItem>}
+     * @memberof ListAudiences200Response
+     */
+    'data'?: Array<AudienceSetItem>;
+}
+/**
+ * 
+ * @export
+ * @interface ListCountries200Response
+ */
+export interface ListCountries200Response {
+    /**
+     * 
+     * @type {Array<CountryItem>}
+     * @memberof ListCountries200Response
+     */
+    'data'?: Array<CountryItem>;
 }
 /**
  * 
@@ -2445,6 +3397,19 @@ export interface ListPopuplations200Response {
 /**
  * 
  * @export
+ * @interface ListSharedReportsByStudyId200Response
+ */
+export interface ListSharedReportsByStudyId200Response {
+    /**
+     * 
+     * @type {Array<SharedReportItem>}
+     * @memberof ListSharedReportsByStudyId200Response
+     */
+    'data'?: Array<SharedReportItem>;
+}
+/**
+ * 
+ * @export
  * @interface ListStudies200Response
  */
 export interface ListStudies200Response {
@@ -2470,15 +3435,40 @@ export interface ListStudies200Response {
 /**
  * 
  * @export
+ * @interface ListSubscriptionOffers200Response
+ */
+export interface ListSubscriptionOffers200Response {
+    /**
+     * 
+     * @type {Array<SubscriptionOfferItem>}
+     * @memberof ListSubscriptionOffers200Response
+     */
+    'data'?: Array<SubscriptionOfferItem>;
+    /**
+     * 
+     * @type {ListPaginationMeta}
+     * @memberof ListSubscriptionOffers200Response
+     */
+    'meta'?: ListPaginationMeta;
+    /**
+     * 
+     * @type {ListPaginationLinks}
+     * @memberof ListSubscriptionOffers200Response
+     */
+    'links'?: ListPaginationLinks;
+}
+/**
+ * 
+ * @export
  * @interface ListSubscriptionPlans200Response
  */
 export interface ListSubscriptionPlans200Response {
     /**
      * 
-     * @type {Array<SubscriptionPlan>}
+     * @type {Array<SubscriptionPlanItem>}
      * @memberof ListSubscriptionPlans200Response
      */
-    'data'?: Array<SubscriptionPlan>;
+    'data'?: Array<SubscriptionPlanItem>;
     /**
      * 
      * @type {ListPaginationMeta}
@@ -2529,6 +3519,12 @@ export interface Measurement {
      * @memberof Measurement
      */
     'event': string;
+    /**
+     * An indicator that will be `true` when the measurement is not delivered because the account is limited (typically due to subscription terms). 
+     * @type {boolean}
+     * @memberof Measurement
+     */
+    'restricted'?: boolean;
     /**
      * The real value of the measurement, typically a counter value (integer)
      * @type {number}
@@ -2744,8 +3740,8 @@ export interface MeasurementEventLinks {
  */
 
 export const MeasurementEventSet = {
-    Only: 'impressions_only',
-    AndClicks: 'impressions_and_clicks'
+    ImpressionsOnly: 'impressions_only',
+    ImpressionsAndClicks: 'impressions_and_clicks'
 } as const;
 
 export type MeasurementEventSet = typeof MeasurementEventSet[keyof typeof MeasurementEventSet];
@@ -2851,6 +3847,12 @@ export interface PlanFeatureSet {
      * @memberof PlanFeatureSet
      */
     'max_events_per_study': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PlanFeatureSet
+     */
+    'max_study_events_per_month': number;
     /**
      * 
      * @type {number}
@@ -3684,6 +4686,19 @@ export interface QueryStudyCountryStats200Response {
 /**
  * 
  * @export
+ * @interface QueryStudyDeviceStats200Response
+ */
+export interface QueryStudyDeviceStats200Response {
+    /**
+     * 
+     * @type {StudyDeviceStats}
+     * @memberof QueryStudyDeviceStats200Response
+     */
+    'data'?: StudyDeviceStats;
+}
+/**
+ * 
+ * @export
  * @interface QueryStudyFrequencyStats200Response
  */
 export interface QueryStudyFrequencyStats200Response {
@@ -3693,6 +4708,19 @@ export interface QueryStudyFrequencyStats200Response {
      * @memberof QueryStudyFrequencyStats200Response
      */
     'data'?: StudyFrequencyStats;
+}
+/**
+ * 
+ * @export
+ * @interface QueryStudyTimelineStats200Response
+ */
+export interface QueryStudyTimelineStats200Response {
+    /**
+     * 
+     * @type {StudyTimelineStats}
+     * @memberof QueryStudyTimelineStats200Response
+     */
+    'data'?: StudyTimelineStats;
 }
 /**
  * 
@@ -3913,6 +4941,359 @@ export interface ResolveAudiencesOfMultipleResponseItem {
 /**
  * 
  * @export
+ * @interface ResourceSharingTokenRequest
+ */
+export interface ResourceSharingTokenRequest {
+    /**
+     * An optional ID to encode into the token to enable future identification of it
+     * @type {string}
+     * @memberof ResourceSharingTokenRequest
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ResourceSharingTokenRequest
+     */
+    'resource_urls'?: Array<string>;
+    /**
+     * The ID of the account to create the resource sharing token for. The account ID will be encoded into the token and ensure that e.g. subscription limitations and account settings are carried over to the interactions provided with the token. 
+     * @type {string}
+     * @memberof ResourceSharingTokenRequest
+     */
+    'account_id'?: string;
+    /**
+     * The duration of time (in seconds) the resource sharing token is granted for
+     * @type {number}
+     * @memberof ResourceSharingTokenRequest
+     */
+    'expires_in'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface SendEmailQuery
+ */
+export interface SendEmailQuery {
+    /**
+     * The ID of the email template to use.
+     * @type {string}
+     * @memberof SendEmailQuery
+     */
+    'template_id': string;
+    /**
+     * Model data to pass to the email template. Note that the following model data fields will be automatically populated by the service:  * `user_id`: The ID of the recipient user  * `user_name`: The name of the recipient user  * `user_email`: The email of the recipient user  * `account_id`: The ID of the recipient user\'s account  * `account_name`: The name of the recipient user\'s account 
+     * @type {{ [key: string]: string; }}
+     * @memberof SendEmailQuery
+     */
+    'model_data'?: { [key: string]: string; };
+    /**
+     * 
+     * @type {SendEmailUserFilters}
+     * @memberof SendEmailQuery
+     */
+    'include_users': SendEmailUserFilters;
+}
+/**
+ * Queries users to be recipients for an email. Depending on the `query_type`, other properties must be set as follows:   * If `single_user` is selected, `user_id` must be provided.   * If `users_filter` is selected, at least one of the `users_filter_*` properties should be provided.     They map directly to the filter properties on the `/users` endpoint.   * If `everyone` is selected, ALL users in the platform is emailed. Use with caution. 
+ * @export
+ * @interface SendEmailUserFilters
+ */
+export interface SendEmailUserFilters {
+    /**
+     * 
+     * @type {string}
+     * @memberof SendEmailUserFilters
+     */
+    'query_type': SendEmailUserFiltersQueryTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SendEmailUserFilters
+     */
+    'user_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SendEmailUserFilters
+     */
+    'filter_account_id'?: string;
+    /**
+     * 
+     * @type {UserPlatformRole}
+     * @memberof SendEmailUserFilters
+     */
+    'filter_platform_role'?: UserPlatformRole;
+    /**
+     * 
+     * @type {UserAccountRole}
+     * @memberof SendEmailUserFilters
+     */
+    'filter_account_role'?: UserAccountRole;
+}
+
+export const SendEmailUserFiltersQueryTypeEnum = {
+    SingleUser: 'single_user',
+    UsersFilter: 'users_filter',
+    Everyone: 'everyone'
+} as const;
+
+export type SendEmailUserFiltersQueryTypeEnum = typeof SendEmailUserFiltersQueryTypeEnum[keyof typeof SendEmailUserFiltersQueryTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface SharedReportAux
+ */
+export interface SharedReportAux {
+    /**
+     * ID of the account that owns the study
+     * @type {string}
+     * @memberof SharedReportAux
+     */
+    'account_id'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface SharedReportBase
+ */
+export interface SharedReportBase {
+    /**
+     * URL of the publicly available asset
+     * @type {string}
+     * @memberof SharedReportBase
+     */
+    'asset_url'?: string;
+    /**
+     * 
+     * @type {SharedReportType}
+     * @memberof SharedReportBase
+     */
+    'report_type': SharedReportType;
+    /**
+     * Optional date/time that the shared report will expire. Default is 28 days after the time of creation.
+     * @type {string}
+     * @memberof SharedReportBase
+     */
+    'expires_at'?: string;
+    /**
+     * ID of the study to which the report belongs
+     * @type {string}
+     * @memberof SharedReportBase
+     */
+    'study_id'?: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface SharedReportCreation
+ */
+export interface SharedReportCreation {
+    /**
+     * URL of the publicly available asset
+     * @type {string}
+     * @memberof SharedReportCreation
+     */
+    'asset_url'?: string;
+    /**
+     * 
+     * @type {SharedReportType}
+     * @memberof SharedReportCreation
+     */
+    'report_type': SharedReportType;
+    /**
+     * Optional date/time that the shared report will expire. Default is 28 days after the time of creation.
+     * @type {string}
+     * @memberof SharedReportCreation
+     */
+    'expires_at'?: string;
+    /**
+     * ID of the study to which the report belongs
+     * @type {string}
+     * @memberof SharedReportCreation
+     */
+    'study_id'?: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface SharedReportFull
+ */
+export interface SharedReportFull {
+    /**
+     * Unique ID for the object
+     * @type {string}
+     * @memberof SharedReportFull
+     */
+    'id': string;
+    /**
+     * URL of the publicly available asset
+     * @type {string}
+     * @memberof SharedReportFull
+     */
+    'asset_url'?: string;
+    /**
+     * 
+     * @type {SharedReportType}
+     * @memberof SharedReportFull
+     */
+    'report_type': SharedReportType;
+    /**
+     * Optional date/time that the shared report will expire. Default is 28 days after the time of creation.
+     * @type {string}
+     * @memberof SharedReportFull
+     */
+    'expires_at'?: string;
+    /**
+     * ID of the study to which the report belongs
+     * @type {string}
+     * @memberof SharedReportFull
+     */
+    'study_id'?: string;
+    /**
+     * ID of the account that owns the study
+     * @type {string}
+     * @memberof SharedReportFull
+     */
+    'account_id'?: string;
+    /**
+     * Date and time of the object creation
+     * @type {string}
+     * @memberof SharedReportFull
+     */
+    'created_at': string;
+    /**
+     * ID of the user who created the object
+     * @type {string}
+     * @memberof SharedReportFull
+     */
+    'created_by': string;
+    /**
+     * Date and time of the latest update to the object
+     * @type {string}
+     * @memberof SharedReportFull
+     */
+    'updated_at'?: string;
+    /**
+     * ID of the user who last updated the object
+     * @type {string}
+     * @memberof SharedReportFull
+     */
+    'updated_by'?: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface SharedReportItem
+ */
+export interface SharedReportItem {
+    /**
+     * Unique ID for the object
+     * @type {string}
+     * @memberof SharedReportItem
+     */
+    'id': string;
+    /**
+     * URL of the publicly available asset
+     * @type {string}
+     * @memberof SharedReportItem
+     */
+    'asset_url'?: string;
+    /**
+     * 
+     * @type {SharedReportType}
+     * @memberof SharedReportItem
+     */
+    'report_type': SharedReportType;
+    /**
+     * Optional date/time that the shared report will expire. Default is 28 days after the time of creation.
+     * @type {string}
+     * @memberof SharedReportItem
+     */
+    'expires_at'?: string;
+    /**
+     * ID of the study to which the report belongs
+     * @type {string}
+     * @memberof SharedReportItem
+     */
+    'study_id'?: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface SharedReportPublicData
+ */
+export interface SharedReportPublicData {
+    /**
+     * 
+     * @type {string}
+     * @memberof SharedReportPublicData
+     */
+    'study_id': string;
+    /**
+     * Access token that can be used for API requests, if the user is not already authenticated
+     * @type {string}
+     * @memberof SharedReportPublicData
+     */
+    'access_token'?: string;
+}
+/**
+ * The type of shared report
+ * @export
+ * @enum {string}
+ */
+
+export const SharedReportType = {
+    AudienceEvaluation: 'audience_evaluation'
+} as const;
+
+export type SharedReportType = typeof SharedReportType[keyof typeof SharedReportType];
+
+
+/**
+ * 
+ * @export
+ * @interface StripeAccountSubscriptionCheckoutSession
+ */
+export interface StripeAccountSubscriptionCheckoutSession {
+    /**
+     * 
+     * @type {string}
+     * @memberof StripeAccountSubscriptionCheckoutSession
+     */
+    'session_id'?: string;
+    /**
+     * The URL to take the user to, to set up payment
+     * @type {string}
+     * @memberof StripeAccountSubscriptionCheckoutSession
+     */
+    'redirect_url'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface StripeAccountSubscriptionPurchaseCreation
+ */
+export interface StripeAccountSubscriptionPurchaseCreation {
+    /**
+     * The ID of the plan to subscribe to
+     * @type {string}
+     * @memberof StripeAccountSubscriptionPurchaseCreation
+     */
+    'plan_id': string;
+}
+/**
+ * 
+ * @export
  * @interface StudyAudienceStats
  */
 export interface StudyAudienceStats {
@@ -3947,6 +5328,12 @@ export interface StudyAux {
      * @memberof StudyAux
      */
     'event_links'?: MeasurementEventLinks;
+    /**
+     * If present, an upper limit on the number of events that will be processed in this study.
+     * @type {number}
+     * @memberof StudyAux
+     */
+    'event_cap'?: number;
     /**
      * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
      * @type {string}
@@ -3996,6 +5383,12 @@ export interface StudyBase {
      * @memberof StudyBase
      */
     'start_date'?: string;
+    /**
+     * The date for which the study and its data ingestion will end
+     * @type {string}
+     * @memberof StudyBase
+     */
+    'end_date'?: string;
     /**
      * 
      * @type {StudyLifecycleStage}
@@ -4085,6 +5478,12 @@ export interface StudyCreation {
      */
     'start_date'?: string;
     /**
+     * The date for which the study and its data ingestion will end
+     * @type {string}
+     * @memberof StudyCreation
+     */
+    'end_date'?: string;
+    /**
      * 
      * @type {StudyLifecycleStage}
      * @memberof StudyCreation
@@ -4114,6 +5513,12 @@ export interface StudyCreation {
      * @memberof StudyCreation
      */
     'event_links'?: MeasurementEventLinks;
+    /**
+     * If present, an upper limit on the number of events that will be processed in this study.
+     * @type {number}
+     * @memberof StudyCreation
+     */
+    'event_cap'?: number;
     /**
      * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
      * @type {string}
@@ -4171,11 +5576,217 @@ export interface StudyCreationData {
 /**
  * 
  * @export
+ * @interface StudyDeviceStats
+ */
+export interface StudyDeviceStats {
+    /**
+     * 
+     * @type {Array<StudyDeviceTypeCategoryStats>}
+     * @memberof StudyDeviceStats
+     */
+    'device_types': Array<StudyDeviceTypeCategoryStats>;
+}
+/**
+ * 
+ * @export
+ * @interface StudyDeviceSubTypeStats
+ */
+export interface StudyDeviceSubTypeStats {
+    /**
+     * 
+     * @type {string}
+     * @memberof StudyDeviceSubTypeStats
+     */
+    'name': string;
+    /**
+     * The total count of events recorded for the device.
+     * @type {number}
+     * @memberof StudyDeviceSubTypeStats
+     */
+    'count': number;
+    /**
+     * The total count of impressions recorded for the device.
+     * @type {number}
+     * @memberof StudyDeviceSubTypeStats
+     */
+    'impressions'?: number;
+    /**
+     * The total count of clicks recorded for the device.
+     * @type {number}
+     * @memberof StudyDeviceSubTypeStats
+     */
+    'clicks'?: number;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const StudyDeviceTypeCategory = {
+    Mobile: 'mobile',
+    Desktop: 'desktop',
+    Tv: 'tv',
+    Bot: 'bot',
+    Other: 'other',
+    Unknown: 'unknown'
+} as const;
+
+export type StudyDeviceTypeCategory = typeof StudyDeviceTypeCategory[keyof typeof StudyDeviceTypeCategory];
+
+
+/**
+ * 
+ * @export
+ * @interface StudyDeviceTypeCategoryStats
+ */
+export interface StudyDeviceTypeCategoryStats {
+    /**
+     * 
+     * @type {StudyDeviceTypeCategory}
+     * @memberof StudyDeviceTypeCategoryStats
+     */
+    'category': StudyDeviceTypeCategory;
+    /**
+     * The total count of events recorded for the device category.
+     * @type {number}
+     * @memberof StudyDeviceTypeCategoryStats
+     */
+    'count': number;
+    /**
+     * The total count of impressions recorded for the device category.
+     * @type {number}
+     * @memberof StudyDeviceTypeCategoryStats
+     */
+    'impressions'?: number;
+    /**
+     * The total count of clicks recorded for the device category.
+     * @type {number}
+     * @memberof StudyDeviceTypeCategoryStats
+     */
+    'clicks'?: number;
+    /**
+     * 
+     * @type {Array<StudyDeviceSubTypeStats>}
+     * @memberof StudyDeviceTypeCategoryStats
+     */
+    'sub_types'?: Array<StudyDeviceSubTypeStats>;
+}
+
+
+/**
+ * Defines the creation of one or more study events. If creating a single event, the `events` array is not needed. If creating a bulk of events, repeated attributes (for example event_type) can be entered once and reused across the `events` array. 
+ * @export
+ * @interface StudyEventCreation
+ */
+export interface StudyEventCreation {
+    /**
+     * 
+     * @type {Array<StudyEventCreationBase>}
+     * @memberof StudyEventCreation
+     */
+    'events'?: Array<StudyEventCreationBase>;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudyEventCreation
+     */
+    'ip_address'?: string;
+    /**
+     * The user agent of the event
+     * @type {string}
+     * @memberof StudyEventCreation
+     */
+    'user_agent'?: string;
+    /**
+     * The referer value of the event
+     * @type {string}
+     * @memberof StudyEventCreation
+     */
+    'referer'?: string;
+    /**
+     * Optionally, the time of the event
+     * @type {string}
+     * @memberof StudyEventCreation
+     */
+    'event_time'?: string;
+    /**
+     * The event type to ingest, typically `impression` or `click`
+     * @type {string}
+     * @memberof StudyEventCreation
+     */
+    'event_type'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface StudyEventCreationBase
+ */
+export interface StudyEventCreationBase {
+    /**
+     * 
+     * @type {string}
+     * @memberof StudyEventCreationBase
+     */
+    'ip_address'?: string;
+    /**
+     * The user agent of the event
+     * @type {string}
+     * @memberof StudyEventCreationBase
+     */
+    'user_agent'?: string;
+    /**
+     * The referer value of the event
+     * @type {string}
+     * @memberof StudyEventCreationBase
+     */
+    'referer'?: string;
+    /**
+     * Optionally, the time of the event
+     * @type {string}
+     * @memberof StudyEventCreationBase
+     */
+    'event_time'?: string;
+    /**
+     * The event type to ingest, typically `impression` or `click`
+     * @type {string}
+     * @memberof StudyEventCreationBase
+     */
+    'event_type'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface StudyEventCreationBulk
+ */
+export interface StudyEventCreationBulk {
+    /**
+     * 
+     * @type {Array<StudyEventCreationBase>}
+     * @memberof StudyEventCreationBulk
+     */
+    'events'?: Array<StudyEventCreationBase>;
+}
+/**
+ * 
+ * @export
  * @interface StudyFrequencyStats
  */
 export interface StudyFrequencyStats {
     /**
-     * The average frequency of impressions per user. 
+     * The event that is represented in this frequency stats. Current values include `all` (all events), `impression` or `click`
+     * @type {string}
+     * @memberof StudyFrequencyStats
+     */
+    'event_type'?: string;
+    /**
+     * Optionally an array of additional frequency stats for more fine-grained event types
+     * @type {Array<StudyFrequencyStats>}
+     * @memberof StudyFrequencyStats
+     */
+    'sub_frequencies'?: Array<StudyFrequencyStats>;
+    /**
+     * The average frequency of events per user. 
      * @type {number}
      * @memberof StudyFrequencyStats
      */
@@ -4187,7 +5798,7 @@ export interface StudyFrequencyStats {
      */
     'frequencies'?: Array<FrequencyStats>;
     /**
-     * The number of users that have generated impressions at a frequency value greater than those represented in `frequencies`. 
+     * The number of users that have generated events at a frequency value greater than those represented in `frequencies`. 
      * @type {number}
      * @memberof StudyFrequencyStats
      */
@@ -4230,6 +5841,12 @@ export interface StudyFull {
      */
     'start_date'?: string;
     /**
+     * The date for which the study and its data ingestion will end
+     * @type {string}
+     * @memberof StudyFull
+     */
+    'end_date'?: string;
+    /**
      * 
      * @type {StudyLifecycleStage}
      * @memberof StudyFull
@@ -4259,6 +5876,12 @@ export interface StudyFull {
      * @memberof StudyFull
      */
     'event_links'?: MeasurementEventLinks;
+    /**
+     * If present, an upper limit on the number of events that will be processed in this study.
+     * @type {number}
+     * @memberof StudyFull
+     */
+    'event_cap'?: number;
     /**
      * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
      * @type {string}
@@ -4305,7 +5928,7 @@ export interface StudyFull {
 
 
 /**
- * The status of the data collection of the study, indicating whether stats are available and representative.  * `no_data` means that the study has been created but no data has been received. * `active_ramping_up` means that data has been received, but not enough to provide meaningful stats yet. * `active_fulfilled` means that the study has received a good amount of data, but more data can still be added. * `finished_complete` means that the study has finished and is no longer open to receive data. * `finished_expired` means that the study has finished but not enough data was collected to provide meaningful stats. 
+ * The status of the data collection of the study, indicating whether stats are available and representative.  * `no_data` means that the study has been created but no data has been received. * `active_ramping_up` means that data has been received, but not enough to provide meaningful stats yet. * `active_fulfilled` means that the study has received a good amount of data, but more data can still be added. * `paused_limited` means that the study was paused because of exceeded limits (typically when `event_cap` is exceeded) * `finished_complete` means that the study has finished and is no longer open to receive data. * `finished_expired` means that the study has finished but not enough data was collected to provide meaningful stats. 
  * @export
  * @enum {string}
  */
@@ -4314,6 +5937,7 @@ export const StudyIngestionStatus = {
     NoData: 'no_data',
     ActiveRampingUp: 'active_ramping_up',
     ActiveFulfilled: 'active_fulfilled',
+    PausedLimited: 'paused_limited',
     FinishedComplete: 'finished_complete',
     FinishedExpired: 'finished_expired'
 } as const;
@@ -4357,6 +5981,12 @@ export interface StudyItem {
      * @memberof StudyItem
      */
     'start_date'?: string;
+    /**
+     * The date for which the study and its data ingestion will end
+     * @type {string}
+     * @memberof StudyItem
+     */
+    'end_date'?: string;
     /**
      * 
      * @type {StudyLifecycleStage}
@@ -4475,6 +6105,12 @@ export interface StudyMutation {
      */
     'start_date'?: string;
     /**
+     * The date for which the study and its data ingestion will end
+     * @type {string}
+     * @memberof StudyMutation
+     */
+    'end_date'?: string;
+    /**
      * 
      * @type {StudyLifecycleStage}
      * @memberof StudyMutation
@@ -4505,6 +6141,12 @@ export interface StudyMutation {
      */
     'event_links'?: MeasurementEventLinks;
     /**
+     * If present, an upper limit on the number of events that will be processed in this study.
+     * @type {number}
+     * @memberof StudyMutation
+     */
+    'event_cap'?: number;
+    /**
      * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
      * @type {string}
      * @memberof StudyMutation
@@ -4522,9 +6164,167 @@ export interface StudyMutation {
      * @memberof StudyMutation
      */
     'is_example'?: boolean;
+    /**
+     * 
+     * @type {MeasurementEventSet}
+     * @memberof StudyMutation
+     */
+    'event_set'?: MeasurementEventSet;
+    /**
+     * The ID of the measurement client that this study is for
+     * @type {string}
+     * @memberof StudyMutation
+     */
+    'client_id'?: string;
 }
 
 
+/**
+ * 
+ * @export
+ * @interface StudyMutationData
+ */
+export interface StudyMutationData {
+    /**
+     * 
+     * @type {MeasurementEventSet}
+     * @memberof StudyMutationData
+     */
+    'event_set'?: MeasurementEventSet;
+    /**
+     * The ID of the measurement client that this study is for
+     * @type {string}
+     * @memberof StudyMutationData
+     */
+    'client_id'?: string;
+}
+
+
+/**
+ * The dimensions that are queryable in the OLAP endpoint.  Notes about the values you can expect in these dimensions:  * The `record_type` is either `private`, `business` or `not_resolved` * Time-based values (`date` and `hour`) are UTC based * The `country` dimension returns 2-letter ISO country codes * The audience dimension values are audience codes such as `a1`, `b2` etc. * If a value is not present, an empty string will be returned 
+ * @export
+ * @enum {string}
+ */
+
+export const StudyOlapDimensionKey = {
+    RecordType: 'record_type',
+    RefererDomain: 'referer_domain',
+    RefererPath: 'referer_path',
+    DeviceType: 'device_type',
+    Country: 'country',
+    TimeZone: 'time_zone',
+    DateUtc: 'date_utc',
+    HourUtc: 'hour_utc',
+    DateLocal: 'date_local',
+    HourLocal: 'hour_local',
+    HomeType: 'home_type',
+    Savings: 'savings',
+    Lifecycle: 'lifecycle',
+    Cars: 'cars',
+    Children: 'children',
+    Education: 'education',
+    NeighbourhoodType: 'neighbourhood_type',
+    Income: 'income',
+    HomeOwnership: 'home_ownership',
+    BuildingAge: 'building_age',
+    LivingSpace: 'living_space',
+    TechLevel: 'tech_level',
+    BusinessSize: 'business_size'
+} as const;
+
+export type StudyOlapDimensionKey = typeof StudyOlapDimensionKey[keyof typeof StudyOlapDimensionKey];
+
+
+/**
+ * 
+ * @export
+ * @interface StudyOlapFilterItem
+ */
+export interface StudyOlapFilterItem {
+    /**
+     * 
+     * @type {StudyOlapDimensionKey}
+     * @memberof StudyOlapFilterItem
+     */
+    'k': StudyOlapDimensionKey;
+    /**
+     * Represents a value for a `StudyOlapDimensionKey`.
+     * @type {string}
+     * @memberof StudyOlapFilterItem
+     */
+    'v': string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface StudyOlapQuery
+ */
+export interface StudyOlapQuery {
+    /**
+     * The from-date of the events to query
+     * @type {string}
+     * @memberof StudyOlapQuery
+     */
+    'filter_time_from'?: string;
+    /**
+     * The to-date of the events to query
+     * @type {string}
+     * @memberof StudyOlapQuery
+     */
+    'filter_time_to'?: string;
+    /**
+     * 
+     * @type {Array<StudyOlapDimensionKey>}
+     * @memberof StudyOlapQuery
+     */
+    'group_by'?: Array<StudyOlapDimensionKey>;
+    /**
+     * 
+     * @type {Array<StudyOlapFilterItem>}
+     * @memberof StudyOlapQuery
+     */
+    'filter_dimensions_include'?: Array<StudyOlapFilterItem>;
+    /**
+     * 
+     * @type {Array<StudyOlapFilterItem>}
+     * @memberof StudyOlapQuery
+     */
+    'filter_dimensions_exclude'?: Array<StudyOlapFilterItem>;
+}
+/**
+ * 
+ * @export
+ * @interface StudyOlapQueryResult
+ */
+export interface StudyOlapQueryResult {
+    /**
+     * 
+     * @type {Array<StudyOlapQueryResultRow>}
+     * @memberof StudyOlapQueryResult
+     */
+    'rows'?: Array<StudyOlapQueryResultRow>;
+}
+/**
+ * 
+ * @export
+ * @interface StudyOlapQueryResultRow
+ */
+export interface StudyOlapQueryResultRow {
+    /**
+     * Measurements related to this object
+     * @type {Array<Measurement>}
+     * @memberof StudyOlapQueryResultRow
+     */
+    'measurements': Array<Measurement>;
+    /**
+     * 
+     * @type {Array<StudyOlapFilterItem>}
+     * @memberof StudyOlapQueryResultRow
+     */
+    'dimensions'?: Array<StudyOlapFilterItem>;
+}
 /**
  * Provides information about the current user\'s permissions of a study
  * @export
@@ -4576,6 +6376,69 @@ export interface StudySummaryStats {
     'not_resolved': MeasurementsContainer;
 }
 /**
+ * Represents a UTC date of gathering timeline data for a study.
+ * @export
+ * @interface StudyTimelineDate
+ */
+export interface StudyTimelineDate {
+    /**
+     * 
+     * @type {string}
+     * @memberof StudyTimelineDate
+     */
+    'date': string;
+    /**
+     * 
+     * @type {Array<StudyTimelineHour>}
+     * @memberof StudyTimelineDate
+     */
+    'hours': Array<StudyTimelineHour>;
+}
+/**
+ * Represents a UTC hour of gathering timeline data for a study.
+ * @export
+ * @interface StudyTimelineHour
+ */
+export interface StudyTimelineHour {
+    /**
+     * The hour of the day (from 0-23) in UTC time
+     * @type {number}
+     * @memberof StudyTimelineHour
+     */
+    'hour'?: number;
+    /**
+     * The total count of events recorded in the hour.
+     * @type {number}
+     * @memberof StudyTimelineHour
+     */
+    'count'?: number;
+    /**
+     * The total count of impressions recorded in the hour.
+     * @type {number}
+     * @memberof StudyTimelineHour
+     */
+    'impressions'?: number;
+    /**
+     * The total count of clicks recorded in the hour.
+     * @type {number}
+     * @memberof StudyTimelineHour
+     */
+    'clicks'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface StudyTimelineStats
+ */
+export interface StudyTimelineStats {
+    /**
+     * 
+     * @type {Array<StudyTimelineDate>}
+     * @memberof StudyTimelineStats
+     */
+    'dates': Array<StudyTimelineDate>;
+}
+/**
  * 
  * @export
  * @interface StudyTimingStats
@@ -4601,41 +6464,573 @@ export interface StudyTimingStats {
     'day_of_month'?: DayOfMonthStats;
 }
 /**
- * Defines a subscription plan (a feature set at a given pricing configuration)
+ * 
  * @export
- * @interface SubscriptionPlan
+ * @interface SubscriptionOfferAux
  */
-export interface SubscriptionPlan {
+export interface SubscriptionOfferAux {
     /**
-     * The ID of the plan/price that the account is subscribed to
+     * 
+     * @type {SubscriptionPlanFull}
+     * @memberof SubscriptionOfferAux
+     */
+    'plan'?: SubscriptionPlanFull;
+}
+/**
+ * 
+ * @export
+ * @interface SubscriptionOfferBase
+ */
+export interface SubscriptionOfferBase {
+    /**
+     * The ID of the account that has the offer
      * @type {string}
-     * @memberof SubscriptionPlan
+     * @memberof SubscriptionOfferBase
+     */
+    'account_id': string;
+    /**
+     * The ID of the subscription plan that is offered (may have changed from the original, or may not exist yet)
+     * @type {string}
+     * @memberof SubscriptionOfferBase
+     */
+    'subscription_plan_id'?: string;
+    /**
+     * The ID of the user who accepted the offer
+     * @type {string}
+     * @memberof SubscriptionOfferBase
+     */
+    'accepted_by'?: string;
+    /**
+     * Date and time of the acceptance
+     * @type {string}
+     * @memberof SubscriptionOfferBase
+     */
+    'accepted_at'?: string;
+    /**
+     * The ID of the subscription plan that this offer was originally based on
+     * @type {string}
+     * @memberof SubscriptionOfferBase
+     */
+    'original_plan_id'?: string;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof SubscriptionOfferBase
+     */
+    'offered_price': SubscriptionPrice;
+}
+/**
+ * 
+ * @export
+ * @interface SubscriptionOfferCreation
+ */
+export interface SubscriptionOfferCreation {
+    /**
+     * The ID of the subscription plan
+     * @type {string}
+     * @memberof SubscriptionOfferCreation
+     */
+    'original_plan_id': string;
+    /**
+     * The ID of the account that has the offer
+     * @type {string}
+     * @memberof SubscriptionOfferCreation
+     */
+    'account_id': string;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof SubscriptionOfferCreation
+     */
+    'offered_price': SubscriptionPrice;
+}
+/**
+ * 
+ * @export
+ * @interface SubscriptionOfferFull
+ */
+export interface SubscriptionOfferFull {
+    /**
+     * Unique ID for the object
+     * @type {string}
+     * @memberof SubscriptionOfferFull
      */
     'id'?: string;
     /**
-     * Is the plan/price a public price or custom?
-     * @type {boolean}
-     * @memberof SubscriptionPlan
+     * The ID of the account that has the offer
+     * @type {string}
+     * @memberof SubscriptionOfferFull
      */
-    'is_public'?: boolean;
+    'account_id': string;
+    /**
+     * The ID of the subscription plan that is offered (may have changed from the original, or may not exist yet)
+     * @type {string}
+     * @memberof SubscriptionOfferFull
+     */
+    'subscription_plan_id'?: string;
+    /**
+     * The ID of the user who accepted the offer
+     * @type {string}
+     * @memberof SubscriptionOfferFull
+     */
+    'accepted_by'?: string;
+    /**
+     * Date and time of the acceptance
+     * @type {string}
+     * @memberof SubscriptionOfferFull
+     */
+    'accepted_at'?: string;
+    /**
+     * The ID of the subscription plan that this offer was originally based on
+     * @type {string}
+     * @memberof SubscriptionOfferFull
+     */
+    'original_plan_id'?: string;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof SubscriptionOfferFull
+     */
+    'offered_price': SubscriptionPrice;
+    /**
+     * 
+     * @type {SubscriptionPlanFull}
+     * @memberof SubscriptionOfferFull
+     */
+    'plan'?: SubscriptionPlanFull;
+    /**
+     * Date and time of the object creation
+     * @type {string}
+     * @memberof SubscriptionOfferFull
+     */
+    'created_at'?: string;
+    /**
+     * ID of the user who created the object
+     * @type {string}
+     * @memberof SubscriptionOfferFull
+     */
+    'created_by'?: string;
+    /**
+     * Date and time of the latest update to the object
+     * @type {string}
+     * @memberof SubscriptionOfferFull
+     */
+    'updated_at'?: string;
+    /**
+     * ID of the user who last updated the object
+     * @type {string}
+     * @memberof SubscriptionOfferFull
+     */
+    'updated_by'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface SubscriptionOfferItem
+ */
+export interface SubscriptionOfferItem {
+    /**
+     * Unique ID for the object
+     * @type {string}
+     * @memberof SubscriptionOfferItem
+     */
+    'id'?: string;
+    /**
+     * The ID of the account that has the offer
+     * @type {string}
+     * @memberof SubscriptionOfferItem
+     */
+    'account_id': string;
+    /**
+     * The ID of the subscription plan that is offered (may have changed from the original, or may not exist yet)
+     * @type {string}
+     * @memberof SubscriptionOfferItem
+     */
+    'subscription_plan_id'?: string;
+    /**
+     * The ID of the user who accepted the offer
+     * @type {string}
+     * @memberof SubscriptionOfferItem
+     */
+    'accepted_by'?: string;
+    /**
+     * Date and time of the acceptance
+     * @type {string}
+     * @memberof SubscriptionOfferItem
+     */
+    'accepted_at'?: string;
+    /**
+     * The ID of the subscription plan that this offer was originally based on
+     * @type {string}
+     * @memberof SubscriptionOfferItem
+     */
+    'original_plan_id'?: string;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof SubscriptionOfferItem
+     */
+    'offered_price': SubscriptionPrice;
+    /**
+     * Date and time of the object creation
+     * @type {string}
+     * @memberof SubscriptionOfferItem
+     */
+    'created_at'?: string;
+    /**
+     * ID of the user who created the object
+     * @type {string}
+     * @memberof SubscriptionOfferItem
+     */
+    'created_by'?: string;
+    /**
+     * Date and time of the latest update to the object
+     * @type {string}
+     * @memberof SubscriptionOfferItem
+     */
+    'updated_at'?: string;
+    /**
+     * ID of the user who last updated the object
+     * @type {string}
+     * @memberof SubscriptionOfferItem
+     */
+    'updated_by'?: string;
+}
+/**
+ * Defines a subscription plan (a feature set at a given pricing configuration)
+ * @export
+ * @interface SubscriptionPlanAux
+ */
+export interface SubscriptionPlanAux {
+    /**
+     * The ID of the plan/price that the account is subscribed to
+     * @type {string}
+     * @memberof SubscriptionPlanAux
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {PlanFeatureSet}
+     * @memberof SubscriptionPlanAux
+     */
+    'feature_set': PlanFeatureSet;
+}
+/**
+ * 
+ * @export
+ * @interface SubscriptionPlanBase
+ */
+export interface SubscriptionPlanBase {
     /**
      * The display name of the price/plan
      * @type {string}
-     * @memberof SubscriptionPlan
+     * @memberof SubscriptionPlanBase
      */
     'display_name'?: string;
     /**
      * An optional code, typically provided if the plan/price is public and advertised
      * @type {string}
-     * @memberof SubscriptionPlan
+     * @memberof SubscriptionPlanBase
      */
     'code'?: string;
     /**
+     * Is the plan/price a public price or custom?
+     * @type {boolean}
+     * @memberof SubscriptionPlanBase
+     */
+    'is_public': boolean;
+    /**
+     * 
+     * @type {SubscriptionProductType}
+     * @memberof SubscriptionPlanBase
+     */
+    'product_type': SubscriptionProductType;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof SubscriptionPlanBase
+     */
+    'list_price'?: SubscriptionPrice;
+    /**
+     * 
+     * @type {string}
+     * @memberof SubscriptionPlanBase
+     */
+    'stripe_product_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SubscriptionPlanBase
+     */
+    'stripe_price_id'?: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface SubscriptionPlanFull
+ */
+export interface SubscriptionPlanFull {
+    /**
+     * The ID of the plan/price that the account is subscribed to
+     * @type {string}
+     * @memberof SubscriptionPlanFull
+     */
+    'id'?: string;
+    /**
+     * Date and time of the object creation
+     * @type {string}
+     * @memberof SubscriptionPlanFull
+     */
+    'created_at'?: string;
+    /**
+     * ID of the user who created the object
+     * @type {string}
+     * @memberof SubscriptionPlanFull
+     */
+    'created_by'?: string;
+    /**
+     * Date and time of the latest update to the object
+     * @type {string}
+     * @memberof SubscriptionPlanFull
+     */
+    'updated_at'?: string;
+    /**
+     * ID of the user who last updated the object
+     * @type {string}
+     * @memberof SubscriptionPlanFull
+     */
+    'updated_by'?: string;
+    /**
+     * The display name of the price/plan
+     * @type {string}
+     * @memberof SubscriptionPlanFull
+     */
+    'display_name'?: string;
+    /**
+     * An optional code, typically provided if the plan/price is public and advertised
+     * @type {string}
+     * @memberof SubscriptionPlanFull
+     */
+    'code'?: string;
+    /**
+     * Is the plan/price a public price or custom?
+     * @type {boolean}
+     * @memberof SubscriptionPlanFull
+     */
+    'is_public': boolean;
+    /**
+     * 
+     * @type {SubscriptionProductType}
+     * @memberof SubscriptionPlanFull
+     */
+    'product_type': SubscriptionProductType;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof SubscriptionPlanFull
+     */
+    'list_price'?: SubscriptionPrice;
+    /**
+     * 
+     * @type {string}
+     * @memberof SubscriptionPlanFull
+     */
+    'stripe_product_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SubscriptionPlanFull
+     */
+    'stripe_price_id'?: string;
+    /**
      * 
      * @type {PlanFeatureSet}
-     * @memberof SubscriptionPlan
+     * @memberof SubscriptionPlanFull
+     */
+    'feature_set': PlanFeatureSet;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface SubscriptionPlanItem
+ */
+export interface SubscriptionPlanItem {
+    /**
+     * Unique ID for the object
+     * @type {string}
+     * @memberof SubscriptionPlanItem
+     */
+    'id'?: string;
+    /**
+     * The display name of the price/plan
+     * @type {string}
+     * @memberof SubscriptionPlanItem
+     */
+    'display_name'?: string;
+    /**
+     * An optional code, typically provided if the plan/price is public and advertised
+     * @type {string}
+     * @memberof SubscriptionPlanItem
+     */
+    'code'?: string;
+    /**
+     * Is the plan/price a public price or custom?
+     * @type {boolean}
+     * @memberof SubscriptionPlanItem
+     */
+    'is_public': boolean;
+    /**
+     * 
+     * @type {SubscriptionProductType}
+     * @memberof SubscriptionPlanItem
+     */
+    'product_type': SubscriptionProductType;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof SubscriptionPlanItem
+     */
+    'list_price'?: SubscriptionPrice;
+    /**
+     * 
+     * @type {string}
+     * @memberof SubscriptionPlanItem
+     */
+    'stripe_product_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SubscriptionPlanItem
+     */
+    'stripe_price_id'?: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface SubscriptionPlanMutation
+ */
+export interface SubscriptionPlanMutation {
+    /**
+     * 
+     * @type {PlanFeatureSet}
+     * @memberof SubscriptionPlanMutation
      */
     'feature_set'?: PlanFeatureSet;
+    /**
+     * The display name of the price/plan
+     * @type {string}
+     * @memberof SubscriptionPlanMutation
+     */
+    'display_name'?: string;
+    /**
+     * An optional code, typically provided if the plan/price is public and advertised
+     * @type {string}
+     * @memberof SubscriptionPlanMutation
+     */
+    'code'?: string;
+    /**
+     * Is the plan/price a public price or custom?
+     * @type {boolean}
+     * @memberof SubscriptionPlanMutation
+     */
+    'is_public'?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface SubscriptionPrice
+ */
+export interface SubscriptionPrice {
+    /**
+     * 
+     * @type {number}
+     * @memberof SubscriptionPrice
+     */
+    'amount': number;
+    /**
+     * 
+     * @type {SubscriptionPriceCurrency}
+     * @memberof SubscriptionPrice
+     */
+    'currency': SubscriptionPriceCurrency;
+    /**
+     * 
+     * @type {SubscriptionPriceInterval}
+     * @memberof SubscriptionPrice
+     */
+    'interval': SubscriptionPriceInterval;
+}
+
+
+/**
+ * Currency code for the price
+ * @export
+ * @enum {string}
+ */
+
+export const SubscriptionPriceCurrency = {
+    Eur: 'EUR',
+    Usd: 'USD',
+    Dkk: 'DKK'
+} as const;
+
+export type SubscriptionPriceCurrency = typeof SubscriptionPriceCurrency[keyof typeof SubscriptionPriceCurrency];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const SubscriptionPriceInterval = {
+    Daily: 'daily',
+    Weekly: 'weekly',
+    Monthly: 'monthly',
+    Annually: 'annually'
+} as const;
+
+export type SubscriptionPriceInterval = typeof SubscriptionPriceInterval[keyof typeof SubscriptionPriceInterval];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const SubscriptionProductType = {
+    Base: 'base',
+    AddOn: 'add-on'
+} as const;
+
+export type SubscriptionProductType = typeof SubscriptionProductType[keyof typeof SubscriptionProductType];
+
+
+/**
+ * Represents a Tax ID used for account billing
+ * @export
+ * @interface TaxId
+ */
+export interface TaxId {
+    /**
+     * The Tax ID number / code
+     * @type {string}
+     * @memberof TaxId
+     */
+    'value': string;
+    /**
+     * The type of Tax ID
+     * @type {string}
+     * @memberof TaxId
+     */
+    'type': string;
 }
 /**
  * 
@@ -4700,7 +7095,7 @@ export interface TimestampedObject1 {
     'updated_by'?: string;
 }
 /**
- * Describes a user\'s membership of an account
+ * 
  * @export
  * @interface UserAccountMembership
  */
@@ -4721,6 +7116,87 @@ export interface UserAccountMembership {
      * The roles that the user has within the account
      * @type {Array<UserAccountRole>}
      * @memberof UserAccountMembership
+     */
+    'roles': Array<UserAccountRole>;
+    /**
+     * 
+     * @type {AccountFull}
+     * @memberof UserAccountMembership
+     */
+    'account'?: AccountFull;
+    /**
+     * 
+     * @type {PlanFeatureSet}
+     * @memberof UserAccountMembership
+     */
+    'feature_set'?: PlanFeatureSet;
+    /**
+     * 
+     * @type {Array<AccountSubscriptionItem>}
+     * @memberof UserAccountMembership
+     */
+    'subscriptions'?: Array<AccountSubscriptionItem>;
+}
+/**
+ * Describes a user\'s membership of an account
+ * @export
+ * @interface UserAccountMembershipBase
+ */
+export interface UserAccountMembershipBase {
+    /**
+     * The ID of the account
+     * @type {string}
+     * @memberof UserAccountMembershipBase
+     */
+    'account_id': string;
+    /**
+     * The name of the account
+     * @type {string}
+     * @memberof UserAccountMembershipBase
+     */
+    'account_name'?: string;
+    /**
+     * The roles that the user has within the account
+     * @type {Array<UserAccountRole>}
+     * @memberof UserAccountMembershipBase
+     */
+    'roles': Array<UserAccountRole>;
+}
+/**
+ * Additional properties that may appear as read-only properties depending on the `include` parameter
+ * @export
+ * @interface UserAccountMembershipIncludeAux
+ */
+export interface UserAccountMembershipIncludeAux {
+    /**
+     * 
+     * @type {AccountFull}
+     * @memberof UserAccountMembershipIncludeAux
+     */
+    'account'?: AccountFull;
+    /**
+     * 
+     * @type {PlanFeatureSet}
+     * @memberof UserAccountMembershipIncludeAux
+     */
+    'feature_set'?: PlanFeatureSet;
+    /**
+     * 
+     * @type {Array<AccountSubscriptionItem>}
+     * @memberof UserAccountMembershipIncludeAux
+     */
+    'subscriptions'?: Array<AccountSubscriptionItem>;
+}
+/**
+ * 
+ * @export
+ * @interface UserAccountMembershipUpdate
+ */
+export interface UserAccountMembershipUpdate {
+    /**
+     * The roles to apply to the user within the account
+     * @type {Array<UserAccountRole>}
+     * @memberof UserAccountMembershipUpdate
      */
     'roles': Array<UserAccountRole>;
 }
@@ -4787,12 +7263,14 @@ export interface UserBase {
      * ID of the account that this user pertains to. If the user has multiple account memberships, this account ID will represent the primary account of the user. 
      * @type {string}
      * @memberof UserBase
+     * @deprecated
      */
     'account_id'?: string;
     /**
      * The roles that the user has within the account
      * @type {Array<UserAccountRole>}
      * @memberof UserBase
+     * @deprecated
      */
     'roles'?: Array<UserAccountRole>;
     /**
@@ -4830,12 +7308,14 @@ export interface UserCreation {
      * ID of the account that this user pertains to. If the user has multiple account memberships, this account ID will represent the primary account of the user. 
      * @type {string}
      * @memberof UserCreation
+     * @deprecated
      */
     'account_id'?: string;
     /**
      * The roles that the user has within the account
      * @type {Array<UserAccountRole>}
      * @memberof UserCreation
+     * @deprecated
      */
     'roles'?: Array<UserAccountRole>;
     /**
@@ -4936,12 +7416,14 @@ export interface UserFull {
      * ID of the account that this user pertains to. If the user has multiple account memberships, this account ID will represent the primary account of the user. 
      * @type {string}
      * @memberof UserFull
+     * @deprecated
      */
     'account_id'?: string;
     /**
      * The roles that the user has within the account
      * @type {Array<UserAccountRole>}
      * @memberof UserFull
+     * @deprecated
      */
     'roles'?: Array<UserAccountRole>;
     /**
@@ -5003,6 +7485,21 @@ export interface UserFull {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+
+export const UserIncludeParam = {
+    None: 'none',
+    Subscriptions: 'subscriptions',
+    Account: 'account'
+} as const;
+
+export type UserIncludeParam = typeof UserIncludeParam[keyof typeof UserIncludeParam];
+
+
+/**
+ * 
+ * @export
  * @interface UserItem
  */
 export interface UserItem {
@@ -5028,12 +7525,14 @@ export interface UserItem {
      * ID of the account that this user pertains to. If the user has multiple account memberships, this account ID will represent the primary account of the user. 
      * @type {string}
      * @memberof UserItem
+     * @deprecated
      */
     'account_id'?: string;
     /**
      * The roles that the user has within the account
      * @type {Array<UserAccountRole>}
      * @memberof UserItem
+     * @deprecated
      */
     'roles'?: Array<UserAccountRole>;
     /**
@@ -5090,12 +7589,14 @@ export interface UserMutation {
      * ID of the account that this user pertains to. If the user has multiple account memberships, this account ID will represent the primary account of the user. 
      * @type {string}
      * @memberof UserMutation
+     * @deprecated
      */
     'account_id'?: string;
     /**
      * The roles that the user has within the account
      * @type {Array<UserAccountRole>}
      * @memberof UserMutation
+     * @deprecated
      */
     'roles'?: Array<UserAccountRole>;
     /**
@@ -5177,18 +7678,18 @@ export type UserSortOption = typeof UserSortOption[keyof typeof UserSortOption];
 export const AccountsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create a user within the referenced account. 
-         * @summary Create user
+         * Adds a user to the referenced account. 
+         * @summary Add user to account
          * @param {string} accountId 
-         * @param {UserCreation} userCreation 
+         * @param {AccountUserAddition} accountUserAddition 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUserInAccount: async (accountId: string, userCreation: UserCreation, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        addUserToAccount: async (accountId: string, accountUserAddition: AccountUserAddition, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'accountId' is not null or undefined
-            assertParamExists('createUserInAccount', 'accountId', accountId)
-            // verify required parameter 'userCreation' is not null or undefined
-            assertParamExists('createUserInAccount', 'userCreation', userCreation)
+            assertParamExists('addUserToAccount', 'accountId', accountId)
+            // verify required parameter 'accountUserAddition' is not null or undefined
+            assertParamExists('addUserToAccount', 'accountUserAddition', accountUserAddition)
             const localVarPath = `/accounts/{account_id}/users`
                 .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -5223,7 +7724,57 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(userCreation, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(accountUserAddition, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Create account
+         * @param {AccountCreation} accountCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createAccount: async (accountCreation: AccountCreation, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'accountCreation' is not null or undefined
+            assertParamExists('createAccount', 'accountCreation', accountCreation)
+            const localVarPath = `/accounts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(accountCreation, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5282,10 +7833,11 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * 
          * @summary Get account
          * @param {string} accountId 
+         * @param {Array<AccountIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccountById: async (accountId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAccountById: async (accountId: string, include?: Array<AccountIncludeParam>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('getAccountById', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}`
@@ -5314,6 +7866,10 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
 
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+            if (include) {
+                localVarQueryParameter['include'] = include.join(COLLECTION_FORMATS.csv);
+            }
 
 
     
@@ -5476,6 +8032,58 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
+         * @summary Get a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserAccountMembership: async (accountId: string, userId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('getUserAccountMembership', 'accountId', accountId)
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('getUserAccountMembership', 'userId', userId)
+            const localVarPath = `/accounts/{account_id}/users/{user_id}`
+                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
+                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary List API keys for account
          * @param {string} accountId 
          * @param {*} [options] Override http request option.
@@ -5527,6 +8135,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * @summary List users for account
          * @param {string} accountId 
          * @param {UserPlatformRole} [filterPlatformRoles] Filter based on platform roles, e.g. super_admin
+         * @param {UserAccountRole} [filterAccountRoles] Filter based on account roles, e.g. &#x60;owner&#x60;
          * @param {string} [filterNameContains] Optional parameter used to search for users where the name contains a substring (case insensitive)
          * @param {UserSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
          * @param {number} [pageSize] The desired page size
@@ -5534,7 +8143,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUsersByAccountId: async (accountId: string, filterPlatformRoles?: UserPlatformRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listUsersByAccountId: async (accountId: string, filterPlatformRoles?: UserPlatformRole, filterAccountRoles?: UserAccountRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('listUsersByAccountId', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}/users`
@@ -5568,6 +8177,10 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
                 localVarQueryParameter['filter[platform_roles]'] = filterPlatformRoles;
             }
 
+            if (filterAccountRoles !== undefined) {
+                localVarQueryParameter['filter[account_roles]'] = filterAccountRoles;
+            }
+
             if (filterNameContains !== undefined) {
                 localVarQueryParameter['filter[name][contains]'] = filterNameContains;
             }
@@ -5583,6 +8196,58 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             if (pageAfter !== undefined) {
                 localVarQueryParameter['page[after]'] = pageAfter;
             }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Removes a user from the referenced account. 
+         * @summary Remove user from account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeUserFromAccount: async (accountId: string, userId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('removeUserFromAccount', 'accountId', accountId)
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('removeUserFromAccount', 'userId', userId)
+            const localVarPath = `/accounts/{account_id}/users/{user_id}`
+                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
+                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
     
@@ -5643,6 +8308,64 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(accountMutation, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {UserAccountMembershipUpdate} userAccountMembershipUpdate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserAccountMembership: async (accountId: string, userId: string, userAccountMembershipUpdate: UserAccountMembershipUpdate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('updateUserAccountMembership', 'accountId', accountId)
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('updateUserAccountMembership', 'userId', userId)
+            // verify required parameter 'userAccountMembershipUpdate' is not null or undefined
+            assertParamExists('updateUserAccountMembership', 'userAccountMembershipUpdate', userAccountMembershipUpdate)
+            const localVarPath = `/accounts/{account_id}/users/{user_id}`
+                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
+                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(userAccountMembershipUpdate, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5714,17 +8437,30 @@ export const AccountsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AccountsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Create a user within the referenced account. 
-         * @summary Create user
+         * Adds a user to the referenced account. 
+         * @summary Add user to account
          * @param {string} accountId 
-         * @param {UserCreation} userCreation 
+         * @param {AccountUserAddition} accountUserAddition 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createUserInAccount(accountId: string, userCreation: UserCreation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateUserInAccount201Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createUserInAccount(accountId, userCreation, options);
+        async addUserToAccount(accountId: string, accountUserAddition: AccountUserAddition, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AddUserToAccount201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addUserToAccount(accountId, accountUserAddition, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AccountsApi.createUserInAccount']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AccountsApi.addUserToAccount']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Create account
+         * @param {AccountCreation} accountCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createAccount(accountCreation: AccountCreation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateAccount201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createAccount(accountCreation, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountsApi.createAccount']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -5744,11 +8480,12 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get account
          * @param {string} accountId 
+         * @param {Array<AccountIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAccountById(accountId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAccountById200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountById(accountId, options);
+        async getAccountById(accountId: string, include?: Array<AccountIncludeParam>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateAccount201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountById(accountId, include, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountsApi.getAccountById']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -5795,6 +8532,20 @@ export const AccountsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getUserAccountMembership(accountId: string, userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserAccountMembership200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserAccountMembership(accountId, userId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountsApi.getUserAccountMembership']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary List API keys for account
          * @param {string} accountId 
          * @param {*} [options] Override http request option.
@@ -5811,6 +8562,7 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @summary List users for account
          * @param {string} accountId 
          * @param {UserPlatformRole} [filterPlatformRoles] Filter based on platform roles, e.g. super_admin
+         * @param {UserAccountRole} [filterAccountRoles] Filter based on account roles, e.g. &#x60;owner&#x60;
          * @param {string} [filterNameContains] Optional parameter used to search for users where the name contains a substring (case insensitive)
          * @param {UserSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
          * @param {number} [pageSize] The desired page size
@@ -5818,10 +8570,24 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListUsersByAccountId200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listUsersByAccountId(accountId, filterPlatformRoles, filterNameContains, sort, pageSize, pageAfter, options);
+        async listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterAccountRoles?: UserAccountRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListUsersByAccountId200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listUsersByAccountId(accountId, filterPlatformRoles, filterAccountRoles, filterNameContains, sort, pageSize, pageAfter, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountsApi.listUsersByAccountId']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Removes a user from the referenced account. 
+         * @summary Remove user from account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async removeUserFromAccount(accountId: string, userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.removeUserFromAccount(accountId, userId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountsApi.removeUserFromAccount']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -5832,10 +8598,25 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateAccountById(accountId: string, accountMutation: AccountMutation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAccountById200Response>> {
+        async updateAccountById(accountId: string, accountMutation: AccountMutation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateAccount201Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateAccountById(accountId, accountMutation, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountsApi.updateAccountById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Update a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {UserAccountMembershipUpdate} userAccountMembershipUpdate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateUserAccountMembership(accountId: string, userId: string, userAccountMembershipUpdate: UserAccountMembershipUpdate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserAccountMembership200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUserAccountMembership(accountId, userId, userAccountMembershipUpdate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountsApi.updateUserAccountMembership']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -5863,15 +8644,25 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
     const localVarFp = AccountsApiFp(configuration)
     return {
         /**
-         * Create a user within the referenced account. 
-         * @summary Create user
+         * Adds a user to the referenced account. 
+         * @summary Add user to account
          * @param {string} accountId 
-         * @param {UserCreation} userCreation 
+         * @param {AccountUserAddition} accountUserAddition 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUserInAccount(accountId: string, userCreation: UserCreation, options?: any): AxiosPromise<CreateUserInAccount201Response> {
-            return localVarFp.createUserInAccount(accountId, userCreation, options).then((request) => request(axios, basePath));
+        addUserToAccount(accountId: string, accountUserAddition: AccountUserAddition, options?: RawAxiosRequestConfig): AxiosPromise<AddUserToAccount201Response> {
+            return localVarFp.addUserToAccount(accountId, accountUserAddition, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Create account
+         * @param {AccountCreation} accountCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createAccount(accountCreation: AccountCreation, options?: RawAxiosRequestConfig): AxiosPromise<CreateAccount201Response> {
+            return localVarFp.createAccount(accountCreation, options).then((request) => request(axios, basePath));
         },
         /**
          * Deletes the logo for an account 
@@ -5880,18 +8671,19 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteAccountLogo(accountId: string, options?: any): AxiosPromise<void> {
+        deleteAccountLogo(accountId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteAccountLogo(accountId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get account
          * @param {string} accountId 
+         * @param {Array<AccountIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccountById(accountId: string, options?: any): AxiosPromise<GetAccountById200Response> {
-            return localVarFp.getAccountById(accountId, options).then((request) => request(axios, basePath));
+        getAccountById(accountId: string, include?: Array<AccountIncludeParam>, options?: RawAxiosRequestConfig): AxiosPromise<CreateAccount201Response> {
+            return localVarFp.getAccountById(accountId, include, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets the account logo, if the image is hosted on the Digiseg platform. Refer to the account\'s `logo_url` to get a non-authenticated and shareable URL for the logo. 
@@ -5900,7 +8692,7 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccountLogo(accountId: string, options?: any): AxiosPromise<void> {
+        getAccountLogo(accountId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.getAccountLogo(accountId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -5911,7 +8703,7 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccountSubscriptionById(accountId: string, subscriptionId: string, options?: any): AxiosPromise<GetAccountSubscriptionById200Response> {
+        getAccountSubscriptionById(accountId: string, subscriptionId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetAccountSubscriptionById200Response> {
             return localVarFp.getAccountSubscriptionById(accountId, subscriptionId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -5921,8 +8713,19 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccountSubscriptions(accountId: string, options?: any): AxiosPromise<GetAccountSubscriptions200Response> {
+        getAccountSubscriptions(accountId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetAccountSubscriptions200Response> {
             return localVarFp.getAccountSubscriptions(accountId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserAccountMembership(accountId: string, userId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetUserAccountMembership200Response> {
+            return localVarFp.getUserAccountMembership(accountId, userId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5931,7 +8734,7 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listApiKeysByAccountId(accountId: string, options?: any): AxiosPromise<ListApiKeysByAccountId200Response> {
+        listApiKeysByAccountId(accountId: string, options?: RawAxiosRequestConfig): AxiosPromise<ListApiKeysByAccountId200Response> {
             return localVarFp.listApiKeysByAccountId(accountId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -5939,6 +8742,7 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @summary List users for account
          * @param {string} accountId 
          * @param {UserPlatformRole} [filterPlatformRoles] Filter based on platform roles, e.g. super_admin
+         * @param {UserAccountRole} [filterAccountRoles] Filter based on account roles, e.g. &#x60;owner&#x60;
          * @param {string} [filterNameContains] Optional parameter used to search for users where the name contains a substring (case insensitive)
          * @param {UserSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
          * @param {number} [pageSize] The desired page size
@@ -5946,8 +8750,19 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: any): AxiosPromise<ListUsersByAccountId200Response> {
-            return localVarFp.listUsersByAccountId(accountId, filterPlatformRoles, filterNameContains, sort, pageSize, pageAfter, options).then((request) => request(axios, basePath));
+        listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterAccountRoles?: UserAccountRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListUsersByAccountId200Response> {
+            return localVarFp.listUsersByAccountId(accountId, filterPlatformRoles, filterAccountRoles, filterNameContains, sort, pageSize, pageAfter, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Removes a user from the referenced account. 
+         * @summary Remove user from account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeUserFromAccount(accountId: string, userId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.removeUserFromAccount(accountId, userId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5957,8 +8772,20 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateAccountById(accountId: string, accountMutation: AccountMutation, options?: any): AxiosPromise<GetAccountById200Response> {
+        updateAccountById(accountId: string, accountMutation: AccountMutation, options?: RawAxiosRequestConfig): AxiosPromise<CreateAccount201Response> {
             return localVarFp.updateAccountById(accountId, accountMutation, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {UserAccountMembershipUpdate} userAccountMembershipUpdate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserAccountMembership(accountId: string, userId: string, userAccountMembershipUpdate: UserAccountMembershipUpdate, options?: RawAxiosRequestConfig): AxiosPromise<GetUserAccountMembership200Response> {
+            return localVarFp.updateUserAccountMembership(accountId, userId, userAccountMembershipUpdate, options).then((request) => request(axios, basePath));
         },
         /**
          * Upload a logo for an account 
@@ -5968,7 +8795,7 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadAccountLogo(accountId: string, body: File, options?: any): AxiosPromise<void> {
+        uploadAccountLogo(accountId: string, body: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.uploadAccountLogo(accountId, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -5982,16 +8809,28 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
  */
 export class AccountsApi extends BaseAPI {
     /**
-     * Create a user within the referenced account. 
-     * @summary Create user
+     * Adds a user to the referenced account. 
+     * @summary Add user to account
      * @param {string} accountId 
-     * @param {UserCreation} userCreation 
+     * @param {AccountUserAddition} accountUserAddition 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public createUserInAccount(accountId: string, userCreation: UserCreation, options?: RawAxiosRequestConfig) {
-        return AccountsApiFp(this.configuration).createUserInAccount(accountId, userCreation, options).then((request) => request(this.axios, this.basePath));
+    public addUserToAccount(accountId: string, accountUserAddition: AccountUserAddition, options?: RawAxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).addUserToAccount(accountId, accountUserAddition, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Create account
+     * @param {AccountCreation} accountCreation 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public createAccount(accountCreation: AccountCreation, options?: RawAxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).createAccount(accountCreation, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6010,12 +8849,13 @@ export class AccountsApi extends BaseAPI {
      * 
      * @summary Get account
      * @param {string} accountId 
+     * @param {Array<AccountIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public getAccountById(accountId: string, options?: RawAxiosRequestConfig) {
-        return AccountsApiFp(this.configuration).getAccountById(accountId, options).then((request) => request(this.axios, this.basePath));
+    public getAccountById(accountId: string, include?: Array<AccountIncludeParam>, options?: RawAxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).getAccountById(accountId, include, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6057,6 +8897,19 @@ export class AccountsApi extends BaseAPI {
 
     /**
      * 
+     * @summary Get a user\'s membership with an account
+     * @param {string} accountId 
+     * @param {string} userId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getUserAccountMembership(accountId: string, userId: string, options?: RawAxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).getUserAccountMembership(accountId, userId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary List API keys for account
      * @param {string} accountId 
      * @param {*} [options] Override http request option.
@@ -6072,6 +8925,7 @@ export class AccountsApi extends BaseAPI {
      * @summary List users for account
      * @param {string} accountId 
      * @param {UserPlatformRole} [filterPlatformRoles] Filter based on platform roles, e.g. super_admin
+     * @param {UserAccountRole} [filterAccountRoles] Filter based on account roles, e.g. &#x60;owner&#x60;
      * @param {string} [filterNameContains] Optional parameter used to search for users where the name contains a substring (case insensitive)
      * @param {UserSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
      * @param {number} [pageSize] The desired page size
@@ -6080,8 +8934,21 @@ export class AccountsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
-        return AccountsApiFp(this.configuration).listUsersByAccountId(accountId, filterPlatformRoles, filterNameContains, sort, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
+    public listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterAccountRoles?: UserAccountRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).listUsersByAccountId(accountId, filterPlatformRoles, filterAccountRoles, filterNameContains, sort, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Removes a user from the referenced account. 
+     * @summary Remove user from account
+     * @param {string} accountId 
+     * @param {string} userId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public removeUserFromAccount(accountId: string, userId: string, options?: RawAxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).removeUserFromAccount(accountId, userId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6095,6 +8962,20 @@ export class AccountsApi extends BaseAPI {
      */
     public updateAccountById(accountId: string, accountMutation: AccountMutation, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).updateAccountById(accountId, accountMutation, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update a user\'s membership with an account
+     * @param {string} accountId 
+     * @param {string} userId 
+     * @param {UserAccountMembershipUpdate} userAccountMembershipUpdate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public updateUserAccountMembership(accountId: string, userId: string, userAccountMembershipUpdate: UserAccountMembershipUpdate, options?: RawAxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).updateUserAccountMembership(accountId, userId, userAccountMembershipUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6122,12 +9003,12 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary Get audiences of the API client
-         * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        resolveAudiencesOfClient: async (include?: string, type?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        resolveAudiencesOfClient: async (include?: Array<AudiencesIncludeParam>, type?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/audiences`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6154,8 +9035,8 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-            if (include !== undefined) {
-                localVarQueryParameter['include'] = include;
+            if (include) {
+                localVarQueryParameter['include'] = include.join(COLLECTION_FORMATS.csv);
             }
 
             if (type !== undefined) {
@@ -6177,11 +9058,11 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
          * 
          * @summary Get audiences for multiple IP addresses
          * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-         * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        resolveAudiencesOfMultiple: async (resolveAudiencesOfMultipleRequest: ResolveAudiencesOfMultipleRequest, include?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        resolveAudiencesOfMultiple: async (resolveAudiencesOfMultipleRequest: ResolveAudiencesOfMultipleRequest, include?: Array<AudiencesIncludeParam>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'resolveAudiencesOfMultipleRequest' is not null or undefined
             assertParamExists('resolveAudiencesOfMultiple', 'resolveAudiencesOfMultipleRequest', resolveAudiencesOfMultipleRequest)
             const localVarPath = `/audiences`;
@@ -6210,8 +9091,8 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-            if (include !== undefined) {
-                localVarQueryParameter['include'] = include;
+            if (include) {
+                localVarQueryParameter['include'] = include.join(COLLECTION_FORMATS.csv);
             }
 
 
@@ -6232,11 +9113,11 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
          * 
          * @summary Get audiences for a given IP address
          * @param {string} userIp The IP address to look up.
-         * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        resolveAudiencesOfSingle: async (userIp: string, include?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        resolveAudiencesOfSingle: async (userIp: string, include?: Array<AudiencesIncludeParam>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userIp' is not null or undefined
             assertParamExists('resolveAudiencesOfSingle', 'userIp', userIp)
             const localVarPath = `/audiences/{user_ip}`
@@ -6266,8 +9147,8 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-            if (include !== undefined) {
-                localVarQueryParameter['include'] = include;
+            if (include) {
+                localVarQueryParameter['include'] = include.join(COLLECTION_FORMATS.csv);
             }
 
 
@@ -6294,12 +9175,12 @@ export const AudiencesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get audiences of the API client
-         * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async resolveAudiencesOfClient(include?: string, type?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AudienceResponse>> {
+        async resolveAudiencesOfClient(include?: Array<AudiencesIncludeParam>, type?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AudienceResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.resolveAudiencesOfClient(include, type, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AudiencesApi.resolveAudiencesOfClient']?.[localVarOperationServerIndex]?.url;
@@ -6309,11 +9190,11 @@ export const AudiencesApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get audiences for multiple IP addresses
          * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-         * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async resolveAudiencesOfMultiple(resolveAudiencesOfMultipleRequest: ResolveAudiencesOfMultipleRequest, include?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResolveAudiencesOfMultipleResponse>> {
+        async resolveAudiencesOfMultiple(resolveAudiencesOfMultipleRequest: ResolveAudiencesOfMultipleRequest, include?: Array<AudiencesIncludeParam>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResolveAudiencesOfMultipleResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.resolveAudiencesOfMultiple(resolveAudiencesOfMultipleRequest, include, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AudiencesApi.resolveAudiencesOfMultiple']?.[localVarOperationServerIndex]?.url;
@@ -6323,11 +9204,11 @@ export const AudiencesApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get audiences for a given IP address
          * @param {string} userIp The IP address to look up.
-         * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async resolveAudiencesOfSingle(userIp: string, include?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AudienceResponse>> {
+        async resolveAudiencesOfSingle(userIp: string, include?: Array<AudiencesIncludeParam>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AudienceResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.resolveAudiencesOfSingle(userIp, include, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AudiencesApi.resolveAudiencesOfSingle']?.[localVarOperationServerIndex]?.url;
@@ -6346,34 +9227,34 @@ export const AudiencesApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @summary Get audiences of the API client
-         * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        resolveAudiencesOfClient(include?: string, type?: string, options?: any): AxiosPromise<AudienceResponse> {
+        resolveAudiencesOfClient(include?: Array<AudiencesIncludeParam>, type?: string, options?: RawAxiosRequestConfig): AxiosPromise<AudienceResponse> {
             return localVarFp.resolveAudiencesOfClient(include, type, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get audiences for multiple IP addresses
          * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-         * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        resolveAudiencesOfMultiple(resolveAudiencesOfMultipleRequest: ResolveAudiencesOfMultipleRequest, include?: string, options?: any): AxiosPromise<ResolveAudiencesOfMultipleResponse> {
+        resolveAudiencesOfMultiple(resolveAudiencesOfMultipleRequest: ResolveAudiencesOfMultipleRequest, include?: Array<AudiencesIncludeParam>, options?: RawAxiosRequestConfig): AxiosPromise<ResolveAudiencesOfMultipleResponse> {
             return localVarFp.resolveAudiencesOfMultiple(resolveAudiencesOfMultipleRequest, include, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get audiences for a given IP address
          * @param {string} userIp The IP address to look up.
-         * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        resolveAudiencesOfSingle(userIp: string, include?: string, options?: any): AxiosPromise<AudienceResponse> {
+        resolveAudiencesOfSingle(userIp: string, include?: Array<AudiencesIncludeParam>, options?: RawAxiosRequestConfig): AxiosPromise<AudienceResponse> {
             return localVarFp.resolveAudiencesOfSingle(userIp, include, options).then((request) => request(axios, basePath));
         },
     };
@@ -6389,13 +9270,13 @@ export class AudiencesApi extends BaseAPI {
     /**
      * 
      * @summary Get audiences of the API client
-     * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
      * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AudiencesApi
      */
-    public resolveAudiencesOfClient(include?: string, type?: string, options?: RawAxiosRequestConfig) {
+    public resolveAudiencesOfClient(include?: Array<AudiencesIncludeParam>, type?: string, options?: RawAxiosRequestConfig) {
         return AudiencesApiFp(this.configuration).resolveAudiencesOfClient(include, type, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -6403,12 +9284,12 @@ export class AudiencesApi extends BaseAPI {
      * 
      * @summary Get audiences for multiple IP addresses
      * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-     * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AudiencesApi
      */
-    public resolveAudiencesOfMultiple(resolveAudiencesOfMultipleRequest: ResolveAudiencesOfMultipleRequest, include?: string, options?: RawAxiosRequestConfig) {
+    public resolveAudiencesOfMultiple(resolveAudiencesOfMultipleRequest: ResolveAudiencesOfMultipleRequest, include?: Array<AudiencesIncludeParam>, options?: RawAxiosRequestConfig) {
         return AudiencesApiFp(this.configuration).resolveAudiencesOfMultiple(resolveAudiencesOfMultipleRequest, include, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -6416,12 +9297,12 @@ export class AudiencesApi extends BaseAPI {
      * 
      * @summary Get audiences for a given IP address
      * @param {string} userIp The IP address to look up.
-     * @param {string} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AudiencesApi
      */
-    public resolveAudiencesOfSingle(userIp: string, include?: string, options?: RawAxiosRequestConfig) {
+    public resolveAudiencesOfSingle(userIp: string, include?: Array<AudiencesIncludeParam>, options?: RawAxiosRequestConfig) {
         return AudiencesApiFp(this.configuration).resolveAudiencesOfSingle(userIp, include, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -6680,10 +9561,11 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @summary List API keys for user
          * @param {string} userId 
+         * @param {string} [filterAccountId] Filter by specific account id
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listApiKeysByUserId: async (userId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listApiKeysByUserId: async (userId: string, filterAccountId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('listApiKeysByUserId', 'userId', userId)
             const localVarPath = `/users/{user_id}/apikeys`
@@ -6712,6 +9594,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+            if (filterAccountId !== undefined) {
+                localVarQueryParameter['filter[account_id]'] = filterAccountId;
+            }
 
 
     
@@ -6864,11 +9750,12 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * 
          * @summary List API keys for user
          * @param {string} userId 
+         * @param {string} [filterAccountId] Filter by specific account id
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listApiKeysByUserId(userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListApiKeysByAccountId200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listApiKeysByUserId(userId, options);
+        async listApiKeysByUserId(userId: string, filterAccountId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListApiKeysByAccountId200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listApiKeysByUserId(userId, filterAccountId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.listApiKeysByUserId']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6905,7 +9792,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createAccessToken(authTokenRequest: AuthTokenRequest, options?: any): AxiosPromise<AuthTokenResponse> {
+        createAccessToken(authTokenRequest: AuthTokenRequest, options?: RawAxiosRequestConfig): AxiosPromise<AuthTokenResponse> {
             return localVarFp.createAccessToken(authTokenRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6916,7 +9803,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createApiKey(userId: string, apiKeyCreation: ApiKeyCreation, options?: any): AxiosPromise<CreateApiKey201Response> {
+        createApiKey(userId: string, apiKeyCreation: ApiKeyCreation, options?: RawAxiosRequestConfig): AxiosPromise<CreateApiKey201Response> {
             return localVarFp.createApiKey(userId, apiKeyCreation, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6927,7 +9814,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteApiKeyById(userId: string, keyId: string, options?: any): AxiosPromise<void> {
+        deleteApiKeyById(userId: string, keyId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteApiKeyById(userId, keyId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6938,7 +9825,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApiKeyById(userId: string, keyId: string, options?: any): AxiosPromise<GetApiKeyById200Response> {
+        getApiKeyById(userId: string, keyId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetApiKeyById200Response> {
             return localVarFp.getApiKeyById(userId, keyId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6948,18 +9835,19 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listApiKeysByAccountId(accountId: string, options?: any): AxiosPromise<ListApiKeysByAccountId200Response> {
+        listApiKeysByAccountId(accountId: string, options?: RawAxiosRequestConfig): AxiosPromise<ListApiKeysByAccountId200Response> {
             return localVarFp.listApiKeysByAccountId(accountId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary List API keys for user
          * @param {string} userId 
+         * @param {string} [filterAccountId] Filter by specific account id
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listApiKeysByUserId(userId: string, options?: any): AxiosPromise<ListApiKeysByAccountId200Response> {
-            return localVarFp.listApiKeysByUserId(userId, options).then((request) => request(axios, basePath));
+        listApiKeysByUserId(userId: string, filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListApiKeysByAccountId200Response> {
+            return localVarFp.listApiKeysByUserId(userId, filterAccountId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -6970,7 +9858,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateApiKeyById(userId: string, keyId: string, apiKeyMutation: ApiKeyMutation, options?: any): AxiosPromise<GetApiKeyById200Response> {
+        updateApiKeyById(userId: string, keyId: string, apiKeyMutation: ApiKeyMutation, options?: RawAxiosRequestConfig): AxiosPromise<GetApiKeyById200Response> {
             return localVarFp.updateApiKeyById(userId, keyId, apiKeyMutation, options).then((request) => request(axios, basePath));
         },
     };
@@ -7050,12 +9938,13 @@ export class AuthApi extends BaseAPI {
      * 
      * @summary List API keys for user
      * @param {string} userId 
+     * @param {string} [filterAccountId] Filter by specific account id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public listApiKeysByUserId(userId: string, options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).listApiKeysByUserId(userId, options).then((request) => request(this.axios, this.basePath));
+    public listApiKeysByUserId(userId: string, filterAccountId?: string, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).listApiKeysByUserId(userId, filterAccountId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -7631,7 +10520,7 @@ export const MeasurementClientsApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMeasurementClient(measurementClientMutation: MeasurementClientMutation, options?: any): AxiosPromise<CreateMeasurementClient201Response> {
+        createMeasurementClient(measurementClientMutation: MeasurementClientMutation, options?: RawAxiosRequestConfig): AxiosPromise<CreateMeasurementClient201Response> {
             return localVarFp.createMeasurementClient(measurementClientMutation, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7641,7 +10530,7 @@ export const MeasurementClientsApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteClientLogo(clientId: string, options?: any): AxiosPromise<void> {
+        deleteClientLogo(clientId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteClientLogo(clientId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7651,7 +10540,7 @@ export const MeasurementClientsApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteMeasurementClientById(clientId: string, options?: any): AxiosPromise<void> {
+        deleteMeasurementClientById(clientId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteMeasurementClientById(clientId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7661,7 +10550,7 @@ export const MeasurementClientsApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getClientLogo(clientId: string, options?: any): AxiosPromise<void> {
+        getClientLogo(clientId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.getClientLogo(clientId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7671,7 +10560,7 @@ export const MeasurementClientsApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMeasurementClientById(clientId: string, options?: any): AxiosPromise<CreateMeasurementClient201Response> {
+        getMeasurementClientById(clientId: string, options?: RawAxiosRequestConfig): AxiosPromise<CreateMeasurementClient201Response> {
             return localVarFp.getMeasurementClientById(clientId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7684,7 +10573,7 @@ export const MeasurementClientsApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listMeasurementClients(filterAccountId?: string, filterNameContains?: string, pageSize?: number, pageAfter?: string, options?: any): AxiosPromise<ListMeasurementClients200Response> {
+        listMeasurementClients(filterAccountId?: string, filterNameContains?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListMeasurementClients200Response> {
             return localVarFp.listMeasurementClients(filterAccountId, filterNameContains, pageSize, pageAfter, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7695,7 +10584,7 @@ export const MeasurementClientsApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateMeasurementClientById(clientId: string, measurementClientMutation: MeasurementClientMutation, options?: any): AxiosPromise<CreateMeasurementClient201Response> {
+        updateMeasurementClientById(clientId: string, measurementClientMutation: MeasurementClientMutation, options?: RawAxiosRequestConfig): AxiosPromise<CreateMeasurementClient201Response> {
             return localVarFp.updateMeasurementClientById(clientId, measurementClientMutation, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7706,7 +10595,7 @@ export const MeasurementClientsApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadClientLogo(clientId: string, body: File, options?: any): AxiosPromise<void> {
+        uploadClientLogo(clientId: string, body: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.uploadClientLogo(clientId, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -7918,7 +10807,7 @@ export const MeasurementLabelsApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listMeasurementLabels(filterAccountId?: string, options?: any): AxiosPromise<ListMeasurementLabels200Response> {
+        listMeasurementLabels(filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListMeasurementLabels200Response> {
             return localVarFp.listMeasurementLabels(filterAccountId, options).then((request) => request(axios, basePath));
         },
     };
@@ -8107,7 +10996,7 @@ export const PopulationsApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPopuplationByKey(categoryKey: string, populationKey: string, options?: any): AxiosPromise<GetPopuplationByKey200Response> {
+        getPopuplationByKey(categoryKey: string, populationKey: string, options?: RawAxiosRequestConfig): AxiosPromise<GetPopuplationByKey200Response> {
             return localVarFp.getPopuplationByKey(categoryKey, populationKey, options).then((request) => request(axios, basePath));
         },
         /**
@@ -8117,7 +11006,7 @@ export const PopulationsApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listPopuplations(categoryKey: string, options?: any): AxiosPromise<ListPopuplations200Response> {
+        listPopuplations(categoryKey: string, options?: RawAxiosRequestConfig): AxiosPromise<ListPopuplations200Response> {
             return localVarFp.listPopuplations(categoryKey, options).then((request) => request(axios, basePath));
         },
     };
@@ -8165,6 +11054,60 @@ export class PopulationsApi extends BaseAPI {
 export const StudiesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * 
+         * @summary Create shared report
+         * @param {string} studyId 
+         * @param {SharedReportCreation} sharedReportCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSharedReport: async (studyId: string, sharedReportCreation: SharedReportCreation, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'studyId' is not null or undefined
+            assertParamExists('createSharedReport', 'studyId', studyId)
+            // verify required parameter 'sharedReportCreation' is not null or undefined
+            assertParamExists('createSharedReport', 'sharedReportCreation', sharedReportCreation)
+            const localVarPath = `/studies/{study_id}/shared_reports`
+                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(sharedReportCreation, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Create a new study
          * @summary Create study
          * @param {StudyCreation} studyCreation 
@@ -8208,6 +11151,112 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(studyCreation, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Create an event (such as an impression or click) and ingest it into the study. 
+         * @summary Create study event
+         * @param {string} studyId 
+         * @param {StudyEventCreation} studyEventCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createStudyEvent: async (studyId: string, studyEventCreation: StudyEventCreation, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'studyId' is not null or undefined
+            assertParamExists('createStudyEvent', 'studyId', studyId)
+            // verify required parameter 'studyEventCreation' is not null or undefined
+            assertParamExists('createStudyEvent', 'studyEventCreation', studyEventCreation)
+            const localVarPath = `/studies/{study_id}/events`
+                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(studyEventCreation, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete shared report
+         * @param {string} studyId 
+         * @param {string} reportId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSharedReportById: async (studyId: string, reportId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'studyId' is not null or undefined
+            assertParamExists('deleteSharedReportById', 'studyId', studyId)
+            // verify required parameter 'reportId' is not null or undefined
+            assertParamExists('deleteSharedReportById', 'reportId', reportId)
+            const localVarPath = `/studies/{study_id}/shared_reports/{report_id}`
+                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)))
+                .replace(`{${"report_id"}}`, encodeURIComponent(String(reportId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8282,6 +11331,58 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             }
 
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get shared report
+         * @param {string} studyId 
+         * @param {string} reportId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSharedReportById: async (studyId: string, reportId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'studyId' is not null or undefined
+            assertParamExists('getSharedReportById', 'studyId', studyId)
+            // verify required parameter 'reportId' is not null or undefined
+            assertParamExists('getSharedReportById', 'reportId', reportId)
+            const localVarPath = `/studies/{study_id}/shared_reports/{report_id}`
+                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)))
+                .replace(`{${"report_id"}}`, encodeURIComponent(String(reportId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -8407,19 +11508,73 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * 
+         * @summary Get shared reports for a study
+         * @param {string} studyId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSharedReportsByStudyId: async (studyId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'studyId' is not null or undefined
+            assertParamExists('listSharedReportsByStudyId', 'studyId', studyId)
+            const localVarPath = `/studies/{study_id}/shared_reports`
+                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * List studies that the user has access to 
          * @summary List studies
          * @param {ListStudiesSortEnum} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
+         * @param {StudyLifecycleStage} [filterLifeCycleStage] Optional parameter used to filter studies by their life cycle stage
          * @param {boolean} [filterIsExample] Optional parameter used to filter for example studies
          * @param {string} [filterLabel] Optional parameter used to filter by study label
          * @param {string} [filterNameContains] Optional parameter used to search for studies where the name contains a substring (case insensitive)
+         * @param {string} [filterStartDateAfter] Optional parameter used to search for studies that have started after a specific date
+         * @param {string} [filterStartDateBefore] Optional parameter used to search for studies that have start before a specific date
+         * @param {string} [filterEndDate] Optional parameter used to search for studies that have a specific end date
+         * @param {string} [filterCreatedAtAfter] Optional parameter used to search for studies that have been created after a specific date
+         * @param {string} [filterCreatedAtBefore] Optional parameter used to search for studies that have been created before a specific date
          * @param {string} [filterAccountId] Optional parameter used to query studies by specific account IDs (only available to super admins). The value &#x60;*&#x60; is synonymous for \&quot;all accounts\&quot;. 
          * @param {number} [pageSize] The desired page size
          * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listStudies: async (sort?: ListStudiesSortEnum, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listStudies: async (sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/studies`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8450,6 +11605,10 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['sort'] = sort;
             }
 
+            if (filterLifeCycleStage !== undefined) {
+                localVarQueryParameter['filter[life_cycle_stage]'] = filterLifeCycleStage;
+            }
+
             if (filterIsExample !== undefined) {
                 localVarQueryParameter['filter[is_example]'] = filterIsExample;
             }
@@ -8460,6 +11619,36 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
 
             if (filterNameContains !== undefined) {
                 localVarQueryParameter['filter[name][contains]'] = filterNameContains;
+            }
+
+            if (filterStartDateAfter !== undefined) {
+                localVarQueryParameter['filter[start_date][after]'] = (filterStartDateAfter as any instanceof Date) ?
+                    (filterStartDateAfter as any).toISOString() :
+                    filterStartDateAfter;
+            }
+
+            if (filterStartDateBefore !== undefined) {
+                localVarQueryParameter['filter[start_date][before]'] = (filterStartDateBefore as any instanceof Date) ?
+                    (filterStartDateBefore as any).toISOString() :
+                    filterStartDateBefore;
+            }
+
+            if (filterEndDate !== undefined) {
+                localVarQueryParameter['filter[end_date]'] = (filterEndDate as any instanceof Date) ?
+                    (filterEndDate as any).toISOString() :
+                    filterEndDate;
+            }
+
+            if (filterCreatedAtAfter !== undefined) {
+                localVarQueryParameter['filter[created_at][after]'] = (filterCreatedAtAfter as any instanceof Date) ?
+                    (filterCreatedAtAfter as any).toISOString() :
+                    filterCreatedAtAfter;
+            }
+
+            if (filterCreatedAtBefore !== undefined) {
+                localVarQueryParameter['filter[created_at][before]'] = (filterCreatedAtBefore as any instanceof Date) ?
+                    (filterCreatedAtBefore as any).toISOString() :
+                    filterCreatedAtBefore;
             }
 
             if (filterAccountId !== undefined) {
@@ -8582,7 +11771,55 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of impressions per user, or distinct reach of a study. It can also be helpful to identify how multiple impressions for the same users may or may not generate more clicks. 
+         * Query the device statistics for a study. 
+         * @summary Device statistics for study
+         * @param {string} studyId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        queryStudyDeviceStats: async (studyId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'studyId' is not null or undefined
+            assertParamExists('queryStudyDeviceStats', 'studyId', studyId)
+            const localVarPath = `/studies/{study_id}/stats/devices`
+                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of events per user, or distinct reach of a study. It can also be helpful to identify how multiple events for the same users may or may not generate more clicks. 
          * @summary Frequency statistics for study
          * @param {string} studyId 
          * @param {*} [options] Override http request option.
@@ -8617,6 +11854,68 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
 
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Query the timeline statistics for a study. 
+         * @summary Timeline statistics for study
+         * @param {string} studyId 
+         * @param {string} [fromDate] 
+         * @param {string} [toDate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        queryStudyTimelineStats: async (studyId: string, fromDate?: string, toDate?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'studyId' is not null or undefined
+            assertParamExists('queryStudyTimelineStats', 'studyId', studyId)
+            const localVarPath = `/studies/{study_id}/stats/timeline`
+                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+            if (fromDate !== undefined) {
+                localVarQueryParameter['from_date'] = (fromDate as any instanceof Date) ?
+                    (fromDate as any).toISOString().substring(0,10) :
+                    fromDate;
+            }
+
+            if (toDate !== undefined) {
+                localVarQueryParameter['to_date'] = (toDate as any instanceof Date) ?
+                    (toDate as any).toISOString().substring(0,10) :
+                    toDate;
+            }
 
 
     
@@ -8796,6 +12095,20 @@ export const StudiesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = StudiesApiAxiosParamCreator(configuration)
     return {
         /**
+         * 
+         * @summary Create shared report
+         * @param {string} studyId 
+         * @param {SharedReportCreation} sharedReportCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSharedReport(studyId: string, sharedReportCreation: SharedReportCreation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateSharedReport201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSharedReport(studyId, sharedReportCreation, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StudiesApi.createSharedReport']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Create a new study
          * @summary Create study
          * @param {StudyCreation} studyCreation 
@@ -8806,6 +12119,34 @@ export const StudiesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createStudy(studyCreation, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StudiesApi.createStudy']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Create an event (such as an impression or click) and ingest it into the study. 
+         * @summary Create study event
+         * @param {string} studyId 
+         * @param {StudyEventCreation} studyEventCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createStudyEvent(studyId: string, studyEventCreation: StudyEventCreation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createStudyEvent(studyId, studyEventCreation, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StudiesApi.createStudyEvent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Delete shared report
+         * @param {string} studyId 
+         * @param {string} reportId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteSharedReportById(studyId: string, reportId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSharedReportById(studyId, reportId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StudiesApi.deleteSharedReportById']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -8835,6 +12176,20 @@ export const StudiesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 
+         * @summary Get shared report
+         * @param {string} studyId 
+         * @param {string} reportId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSharedReportById(studyId: string, reportId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateSharedReport201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSharedReportById(studyId, reportId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StudiesApi.getSharedReportById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Gets the study banner image, if the image is hosted on the Digiseg platform. Refer to the study\'s `banner_image_url` to get a non-authenticated and shareable URL for the logo. 
          * @summary Get study banner image
          * @param {string} studyId 
@@ -8861,20 +12216,39 @@ export const StudiesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 
+         * @summary Get shared reports for a study
+         * @param {string} studyId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listSharedReportsByStudyId(studyId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListSharedReportsByStudyId200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listSharedReportsByStudyId(studyId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StudiesApi.listSharedReportsByStudyId']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * List studies that the user has access to 
          * @summary List studies
          * @param {ListStudiesSortEnum} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
+         * @param {StudyLifecycleStage} [filterLifeCycleStage] Optional parameter used to filter studies by their life cycle stage
          * @param {boolean} [filterIsExample] Optional parameter used to filter for example studies
          * @param {string} [filterLabel] Optional parameter used to filter by study label
          * @param {string} [filterNameContains] Optional parameter used to search for studies where the name contains a substring (case insensitive)
+         * @param {string} [filterStartDateAfter] Optional parameter used to search for studies that have started after a specific date
+         * @param {string} [filterStartDateBefore] Optional parameter used to search for studies that have start before a specific date
+         * @param {string} [filterEndDate] Optional parameter used to search for studies that have a specific end date
+         * @param {string} [filterCreatedAtAfter] Optional parameter used to search for studies that have been created after a specific date
+         * @param {string} [filterCreatedAtBefore] Optional parameter used to search for studies that have been created before a specific date
          * @param {string} [filterAccountId] Optional parameter used to query studies by specific account IDs (only available to super admins). The value &#x60;*&#x60; is synonymous for \&quot;all accounts\&quot;. 
          * @param {number} [pageSize] The desired page size
          * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listStudies(sort?: ListStudiesSortEnum, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListStudies200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listStudies(sort, filterIsExample, filterLabel, filterNameContains, filterAccountId, pageSize, pageAfter, options);
+        async listStudies(sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListStudies200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listStudies(sort, filterLifeCycleStage, filterIsExample, filterLabel, filterNameContains, filterStartDateAfter, filterStartDateBefore, filterEndDate, filterCreatedAtAfter, filterCreatedAtBefore, filterAccountId, pageSize, pageAfter, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StudiesApi.listStudies']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -8906,7 +12280,20 @@ export const StudiesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of impressions per user, or distinct reach of a study. It can also be helpful to identify how multiple impressions for the same users may or may not generate more clicks. 
+         * Query the device statistics for a study. 
+         * @summary Device statistics for study
+         * @param {string} studyId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async queryStudyDeviceStats(studyId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueryStudyDeviceStats200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.queryStudyDeviceStats(studyId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StudiesApi.queryStudyDeviceStats']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of events per user, or distinct reach of a study. It can also be helpful to identify how multiple events for the same users may or may not generate more clicks. 
          * @summary Frequency statistics for study
          * @param {string} studyId 
          * @param {*} [options] Override http request option.
@@ -8916,6 +12303,21 @@ export const StudiesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.queryStudyFrequencyStats(studyId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StudiesApi.queryStudyFrequencyStats']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Query the timeline statistics for a study. 
+         * @summary Timeline statistics for study
+         * @param {string} studyId 
+         * @param {string} [fromDate] 
+         * @param {string} [toDate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async queryStudyTimelineStats(studyId: string, fromDate?: string, toDate?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueryStudyTimelineStats200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.queryStudyTimelineStats(studyId, fromDate, toDate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StudiesApi.queryStudyTimelineStats']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -8970,14 +12372,47 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = StudiesApiFp(configuration)
     return {
         /**
+         * 
+         * @summary Create shared report
+         * @param {string} studyId 
+         * @param {SharedReportCreation} sharedReportCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSharedReport(studyId: string, sharedReportCreation: SharedReportCreation, options?: RawAxiosRequestConfig): AxiosPromise<CreateSharedReport201Response> {
+            return localVarFp.createSharedReport(studyId, sharedReportCreation, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Create a new study
          * @summary Create study
          * @param {StudyCreation} studyCreation 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createStudy(studyCreation: StudyCreation, options?: any): AxiosPromise<CreateStudy201Response> {
+        createStudy(studyCreation: StudyCreation, options?: RawAxiosRequestConfig): AxiosPromise<CreateStudy201Response> {
             return localVarFp.createStudy(studyCreation, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Create an event (such as an impression or click) and ingest it into the study. 
+         * @summary Create study event
+         * @param {string} studyId 
+         * @param {StudyEventCreation} studyEventCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createStudyEvent(studyId: string, studyEventCreation: StudyEventCreation, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.createStudyEvent(studyId, studyEventCreation, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete shared report
+         * @param {string} studyId 
+         * @param {string} reportId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSharedReportById(studyId: string, reportId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deleteSharedReportById(studyId, reportId, options).then((request) => request(axios, basePath));
         },
         /**
          * Deletes the banner image for a study 
@@ -8986,7 +12421,7 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteStudyBannerImage(studyId: string, options?: any): AxiosPromise<void> {
+        deleteStudyBannerImage(studyId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteStudyBannerImage(studyId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -8996,8 +12431,19 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteStudyById(studyId: string, options?: any): AxiosPromise<void> {
+        deleteStudyById(studyId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteStudyById(studyId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get shared report
+         * @param {string} studyId 
+         * @param {string} reportId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSharedReportById(studyId: string, reportId: string, options?: RawAxiosRequestConfig): AxiosPromise<CreateSharedReport201Response> {
+            return localVarFp.getSharedReportById(studyId, reportId, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets the study banner image, if the image is hosted on the Digiseg platform. Refer to the study\'s `banner_image_url` to get a non-authenticated and shareable URL for the logo. 
@@ -9006,7 +12452,7 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStudyBannerImage(studyId: string, options?: any): AxiosPromise<void> {
+        getStudyBannerImage(studyId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.getStudyBannerImage(studyId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9016,24 +12462,40 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStudyById(studyId: string, options?: any): AxiosPromise<CreateStudy201Response> {
+        getStudyById(studyId: string, options?: RawAxiosRequestConfig): AxiosPromise<CreateStudy201Response> {
             return localVarFp.getStudyById(studyId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get shared reports for a study
+         * @param {string} studyId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSharedReportsByStudyId(studyId: string, options?: RawAxiosRequestConfig): AxiosPromise<ListSharedReportsByStudyId200Response> {
+            return localVarFp.listSharedReportsByStudyId(studyId, options).then((request) => request(axios, basePath));
         },
         /**
          * List studies that the user has access to 
          * @summary List studies
          * @param {ListStudiesSortEnum} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
+         * @param {StudyLifecycleStage} [filterLifeCycleStage] Optional parameter used to filter studies by their life cycle stage
          * @param {boolean} [filterIsExample] Optional parameter used to filter for example studies
          * @param {string} [filterLabel] Optional parameter used to filter by study label
          * @param {string} [filterNameContains] Optional parameter used to search for studies where the name contains a substring (case insensitive)
+         * @param {string} [filterStartDateAfter] Optional parameter used to search for studies that have started after a specific date
+         * @param {string} [filterStartDateBefore] Optional parameter used to search for studies that have start before a specific date
+         * @param {string} [filterEndDate] Optional parameter used to search for studies that have a specific end date
+         * @param {string} [filterCreatedAtAfter] Optional parameter used to search for studies that have been created after a specific date
+         * @param {string} [filterCreatedAtBefore] Optional parameter used to search for studies that have been created before a specific date
          * @param {string} [filterAccountId] Optional parameter used to query studies by specific account IDs (only available to super admins). The value &#x60;*&#x60; is synonymous for \&quot;all accounts\&quot;. 
          * @param {number} [pageSize] The desired page size
          * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listStudies(sort?: ListStudiesSortEnum, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: any): AxiosPromise<ListStudies200Response> {
-            return localVarFp.listStudies(sort, filterIsExample, filterLabel, filterNameContains, filterAccountId, pageSize, pageAfter, options).then((request) => request(axios, basePath));
+        listStudies(sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListStudies200Response> {
+            return localVarFp.listStudies(sort, filterLifeCycleStage, filterIsExample, filterLabel, filterNameContains, filterStartDateAfter, filterStartDateBefore, filterEndDate, filterCreatedAtAfter, filterCreatedAtBefore, filterAccountId, pageSize, pageAfter, options).then((request) => request(axios, basePath));
         },
         /**
          * Query the audience statistics for a study, enabling the user to see the representation of matched household characteristics to impressions and clicks. These statistics can be compared to the Average Internet Population (globally or for a specific country), or to the audience stats of other studies. 
@@ -9042,7 +12504,7 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        queryStudyAudienceStats(studyId: string, options?: any): AxiosPromise<QueryStudyAudienceStats200Response> {
+        queryStudyAudienceStats(studyId: string, options?: RawAxiosRequestConfig): AxiosPromise<QueryStudyAudienceStats200Response> {
             return localVarFp.queryStudyAudienceStats(studyId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9052,18 +12514,40 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        queryStudyCountryStats(studyId: string, options?: any): AxiosPromise<QueryStudyCountryStats200Response> {
+        queryStudyCountryStats(studyId: string, options?: RawAxiosRequestConfig): AxiosPromise<QueryStudyCountryStats200Response> {
             return localVarFp.queryStudyCountryStats(studyId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of impressions per user, or distinct reach of a study. It can also be helpful to identify how multiple impressions for the same users may or may not generate more clicks. 
+         * Query the device statistics for a study. 
+         * @summary Device statistics for study
+         * @param {string} studyId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        queryStudyDeviceStats(studyId: string, options?: RawAxiosRequestConfig): AxiosPromise<QueryStudyDeviceStats200Response> {
+            return localVarFp.queryStudyDeviceStats(studyId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of events per user, or distinct reach of a study. It can also be helpful to identify how multiple events for the same users may or may not generate more clicks. 
          * @summary Frequency statistics for study
          * @param {string} studyId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        queryStudyFrequencyStats(studyId: string, options?: any): AxiosPromise<QueryStudyFrequencyStats200Response> {
+        queryStudyFrequencyStats(studyId: string, options?: RawAxiosRequestConfig): AxiosPromise<QueryStudyFrequencyStats200Response> {
             return localVarFp.queryStudyFrequencyStats(studyId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Query the timeline statistics for a study. 
+         * @summary Timeline statistics for study
+         * @param {string} studyId 
+         * @param {string} [fromDate] 
+         * @param {string} [toDate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        queryStudyTimelineStats(studyId: string, fromDate?: string, toDate?: string, options?: RawAxiosRequestConfig): AxiosPromise<QueryStudyTimelineStats200Response> {
+            return localVarFp.queryStudyTimelineStats(studyId, fromDate, toDate, options).then((request) => request(axios, basePath));
         },
         /**
          * Query the timing statistics for a study, enabling the user to see performance and delivery figures at different times of day, days of the week and days of the month. 
@@ -9072,7 +12556,7 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        queryStudyTimingStats(studyId: string, options?: any): AxiosPromise<QueryStudyTimingStats200Response> {
+        queryStudyTimingStats(studyId: string, options?: RawAxiosRequestConfig): AxiosPromise<QueryStudyTimingStats200Response> {
             return localVarFp.queryStudyTimingStats(studyId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9083,7 +12567,7 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateStudyById(studyId: string, studyMutation: StudyMutation, options?: any): AxiosPromise<CreateStudy201Response> {
+        updateStudyById(studyId: string, studyMutation: StudyMutation, options?: RawAxiosRequestConfig): AxiosPromise<CreateStudy201Response> {
             return localVarFp.updateStudyById(studyId, studyMutation, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9094,7 +12578,7 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadStudyBannerImage(studyId: string, body: File, options?: any): AxiosPromise<void> {
+        uploadStudyBannerImage(studyId: string, body: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.uploadStudyBannerImage(studyId, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -9108,6 +12592,19 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
  */
 export class StudiesApi extends BaseAPI {
     /**
+     * 
+     * @summary Create shared report
+     * @param {string} studyId 
+     * @param {SharedReportCreation} sharedReportCreation 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudiesApi
+     */
+    public createSharedReport(studyId: string, sharedReportCreation: SharedReportCreation, options?: RawAxiosRequestConfig) {
+        return StudiesApiFp(this.configuration).createSharedReport(studyId, sharedReportCreation, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Create a new study
      * @summary Create study
      * @param {StudyCreation} studyCreation 
@@ -9117,6 +12614,32 @@ export class StudiesApi extends BaseAPI {
      */
     public createStudy(studyCreation: StudyCreation, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).createStudy(studyCreation, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Create an event (such as an impression or click) and ingest it into the study. 
+     * @summary Create study event
+     * @param {string} studyId 
+     * @param {StudyEventCreation} studyEventCreation 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudiesApi
+     */
+    public createStudyEvent(studyId: string, studyEventCreation: StudyEventCreation, options?: RawAxiosRequestConfig) {
+        return StudiesApiFp(this.configuration).createStudyEvent(studyId, studyEventCreation, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete shared report
+     * @param {string} studyId 
+     * @param {string} reportId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudiesApi
+     */
+    public deleteSharedReportById(studyId: string, reportId: string, options?: RawAxiosRequestConfig) {
+        return StudiesApiFp(this.configuration).deleteSharedReportById(studyId, reportId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -9144,6 +12667,19 @@ export class StudiesApi extends BaseAPI {
     }
 
     /**
+     * 
+     * @summary Get shared report
+     * @param {string} studyId 
+     * @param {string} reportId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudiesApi
+     */
+    public getSharedReportById(studyId: string, reportId: string, options?: RawAxiosRequestConfig) {
+        return StudiesApiFp(this.configuration).getSharedReportById(studyId, reportId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Gets the study banner image, if the image is hosted on the Digiseg platform. Refer to the study\'s `banner_image_url` to get a non-authenticated and shareable URL for the logo. 
      * @summary Get study banner image
      * @param {string} studyId 
@@ -9168,12 +12704,30 @@ export class StudiesApi extends BaseAPI {
     }
 
     /**
+     * 
+     * @summary Get shared reports for a study
+     * @param {string} studyId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudiesApi
+     */
+    public listSharedReportsByStudyId(studyId: string, options?: RawAxiosRequestConfig) {
+        return StudiesApiFp(this.configuration).listSharedReportsByStudyId(studyId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * List studies that the user has access to 
      * @summary List studies
      * @param {ListStudiesSortEnum} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
+     * @param {StudyLifecycleStage} [filterLifeCycleStage] Optional parameter used to filter studies by their life cycle stage
      * @param {boolean} [filterIsExample] Optional parameter used to filter for example studies
      * @param {string} [filterLabel] Optional parameter used to filter by study label
      * @param {string} [filterNameContains] Optional parameter used to search for studies where the name contains a substring (case insensitive)
+     * @param {string} [filterStartDateAfter] Optional parameter used to search for studies that have started after a specific date
+     * @param {string} [filterStartDateBefore] Optional parameter used to search for studies that have start before a specific date
+     * @param {string} [filterEndDate] Optional parameter used to search for studies that have a specific end date
+     * @param {string} [filterCreatedAtAfter] Optional parameter used to search for studies that have been created after a specific date
+     * @param {string} [filterCreatedAtBefore] Optional parameter used to search for studies that have been created before a specific date
      * @param {string} [filterAccountId] Optional parameter used to query studies by specific account IDs (only available to super admins). The value &#x60;*&#x60; is synonymous for \&quot;all accounts\&quot;. 
      * @param {number} [pageSize] The desired page size
      * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
@@ -9181,8 +12735,8 @@ export class StudiesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof StudiesApi
      */
-    public listStudies(sort?: ListStudiesSortEnum, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
-        return StudiesApiFp(this.configuration).listStudies(sort, filterIsExample, filterLabel, filterNameContains, filterAccountId, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
+    public listStudies(sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
+        return StudiesApiFp(this.configuration).listStudies(sort, filterLifeCycleStage, filterIsExample, filterLabel, filterNameContains, filterStartDateAfter, filterStartDateBefore, filterEndDate, filterCreatedAtAfter, filterCreatedAtBefore, filterAccountId, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -9210,7 +12764,19 @@ export class StudiesApi extends BaseAPI {
     }
 
     /**
-     * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of impressions per user, or distinct reach of a study. It can also be helpful to identify how multiple impressions for the same users may or may not generate more clicks. 
+     * Query the device statistics for a study. 
+     * @summary Device statistics for study
+     * @param {string} studyId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudiesApi
+     */
+    public queryStudyDeviceStats(studyId: string, options?: RawAxiosRequestConfig) {
+        return StudiesApiFp(this.configuration).queryStudyDeviceStats(studyId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of events per user, or distinct reach of a study. It can also be helpful to identify how multiple events for the same users may or may not generate more clicks. 
      * @summary Frequency statistics for study
      * @param {string} studyId 
      * @param {*} [options] Override http request option.
@@ -9219,6 +12785,20 @@ export class StudiesApi extends BaseAPI {
      */
     public queryStudyFrequencyStats(studyId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).queryStudyFrequencyStats(studyId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Query the timeline statistics for a study. 
+     * @summary Timeline statistics for study
+     * @param {string} studyId 
+     * @param {string} [fromDate] 
+     * @param {string} [toDate] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudiesApi
+     */
+    public queryStudyTimelineStats(studyId: string, fromDate?: string, toDate?: string, options?: RawAxiosRequestConfig) {
+        return StudiesApiFp(this.configuration).queryStudyTimelineStats(studyId, fromDate, toDate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -9380,14 +12960,66 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @summary List subscription offers
+         * @param {string} [filterAccountId] Optional parameter used to filter on the account ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSubscriptionOffers: async (filterAccountId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/subscription_offers`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+            if (filterAccountId !== undefined) {
+                localVarQueryParameter['filter[account_id]'] = filterAccountId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary List subscription plans
          * @param {number} [pageSize] The desired page size
          * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
          * @param {boolean} [filterIsPublic] Optional parameter used to filter on the &#x60;is_public&#x60; field
+         * @param {SubscriptionProductType} [filterProductType] Optional parameter used to filter on the &#x60;product_type&#x60; field
+         * @param {SubscriptionPriceCurrency} [filterListPriceCurrency] Optional parameter used to filter on the list price\&#39;s currency
+         * @param {SubscriptionPriceInterval} [filterListPriceInterval] Optional parameter used to filter on the list price\&#39;s interval
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listSubscriptionPlans: async (pageSize?: number, pageAfter?: string, filterIsPublic?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listSubscriptionPlans: async (pageSize?: number, pageAfter?: string, filterIsPublic?: boolean, filterProductType?: SubscriptionProductType, filterListPriceCurrency?: SubscriptionPriceCurrency, filterListPriceInterval?: SubscriptionPriceInterval, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/subscription_plans`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -9424,6 +13056,18 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
 
             if (filterIsPublic !== undefined) {
                 localVarQueryParameter['filter[is_public]'] = filterIsPublic;
+            }
+
+            if (filterProductType !== undefined) {
+                localVarQueryParameter['filter[product_type]'] = filterProductType;
+            }
+
+            if (filterListPriceCurrency !== undefined) {
+                localVarQueryParameter['filter[list_price.currency]'] = filterListPriceCurrency;
+            }
+
+            if (filterListPriceInterval !== undefined) {
+                localVarQueryParameter['filter[list_price.interval]'] = filterListPriceInterval;
             }
 
 
@@ -9476,15 +13120,31 @@ export const SubscriptionsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary List subscription offers
+         * @param {string} [filterAccountId] Optional parameter used to filter on the account ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listSubscriptionOffers(filterAccountId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListSubscriptionOffers200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listSubscriptionOffers(filterAccountId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SubscriptionsApi.listSubscriptionOffers']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary List subscription plans
          * @param {number} [pageSize] The desired page size
          * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
          * @param {boolean} [filterIsPublic] Optional parameter used to filter on the &#x60;is_public&#x60; field
+         * @param {SubscriptionProductType} [filterProductType] Optional parameter used to filter on the &#x60;product_type&#x60; field
+         * @param {SubscriptionPriceCurrency} [filterListPriceCurrency] Optional parameter used to filter on the list price\&#39;s currency
+         * @param {SubscriptionPriceInterval} [filterListPriceInterval] Optional parameter used to filter on the list price\&#39;s interval
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listSubscriptionPlans(pageSize?: number, pageAfter?: string, filterIsPublic?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListSubscriptionPlans200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listSubscriptionPlans(pageSize, pageAfter, filterIsPublic, options);
+        async listSubscriptionPlans(pageSize?: number, pageAfter?: string, filterIsPublic?: boolean, filterProductType?: SubscriptionProductType, filterListPriceCurrency?: SubscriptionPriceCurrency, filterListPriceInterval?: SubscriptionPriceInterval, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListSubscriptionPlans200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listSubscriptionPlans(pageSize, pageAfter, filterIsPublic, filterProductType, filterListPriceCurrency, filterListPriceInterval, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SubscriptionsApi.listSubscriptionPlans']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -9507,7 +13167,7 @@ export const SubscriptionsApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccountSubscriptionById(accountId: string, subscriptionId: string, options?: any): AxiosPromise<GetAccountSubscriptionById200Response> {
+        getAccountSubscriptionById(accountId: string, subscriptionId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetAccountSubscriptionById200Response> {
             return localVarFp.getAccountSubscriptionById(accountId, subscriptionId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9517,8 +13177,18 @@ export const SubscriptionsApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccountSubscriptions(accountId: string, options?: any): AxiosPromise<GetAccountSubscriptions200Response> {
+        getAccountSubscriptions(accountId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetAccountSubscriptions200Response> {
             return localVarFp.getAccountSubscriptions(accountId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List subscription offers
+         * @param {string} [filterAccountId] Optional parameter used to filter on the account ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSubscriptionOffers(filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListSubscriptionOffers200Response> {
+            return localVarFp.listSubscriptionOffers(filterAccountId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9526,11 +13196,14 @@ export const SubscriptionsApiFactory = function (configuration?: Configuration, 
          * @param {number} [pageSize] The desired page size
          * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
          * @param {boolean} [filterIsPublic] Optional parameter used to filter on the &#x60;is_public&#x60; field
+         * @param {SubscriptionProductType} [filterProductType] Optional parameter used to filter on the &#x60;product_type&#x60; field
+         * @param {SubscriptionPriceCurrency} [filterListPriceCurrency] Optional parameter used to filter on the list price\&#39;s currency
+         * @param {SubscriptionPriceInterval} [filterListPriceInterval] Optional parameter used to filter on the list price\&#39;s interval
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listSubscriptionPlans(pageSize?: number, pageAfter?: string, filterIsPublic?: boolean, options?: any): AxiosPromise<ListSubscriptionPlans200Response> {
-            return localVarFp.listSubscriptionPlans(pageSize, pageAfter, filterIsPublic, options).then((request) => request(axios, basePath));
+        listSubscriptionPlans(pageSize?: number, pageAfter?: string, filterIsPublic?: boolean, filterProductType?: SubscriptionProductType, filterListPriceCurrency?: SubscriptionPriceCurrency, filterListPriceInterval?: SubscriptionPriceInterval, options?: RawAxiosRequestConfig): AxiosPromise<ListSubscriptionPlans200Response> {
+            return localVarFp.listSubscriptionPlans(pageSize, pageAfter, filterIsPublic, filterProductType, filterListPriceCurrency, filterListPriceInterval, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -9569,16 +13242,314 @@ export class SubscriptionsApi extends BaseAPI {
 
     /**
      * 
-     * @summary List subscription plans
-     * @param {number} [pageSize] The desired page size
-     * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
-     * @param {boolean} [filterIsPublic] Optional parameter used to filter on the &#x60;is_public&#x60; field
+     * @summary List subscription offers
+     * @param {string} [filterAccountId] Optional parameter used to filter on the account ID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SubscriptionsApi
      */
-    public listSubscriptionPlans(pageSize?: number, pageAfter?: string, filterIsPublic?: boolean, options?: RawAxiosRequestConfig) {
-        return SubscriptionsApiFp(this.configuration).listSubscriptionPlans(pageSize, pageAfter, filterIsPublic, options).then((request) => request(this.axios, this.basePath));
+    public listSubscriptionOffers(filterAccountId?: string, options?: RawAxiosRequestConfig) {
+        return SubscriptionsApiFp(this.configuration).listSubscriptionOffers(filterAccountId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List subscription plans
+     * @param {number} [pageSize] The desired page size
+     * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
+     * @param {boolean} [filterIsPublic] Optional parameter used to filter on the &#x60;is_public&#x60; field
+     * @param {SubscriptionProductType} [filterProductType] Optional parameter used to filter on the &#x60;product_type&#x60; field
+     * @param {SubscriptionPriceCurrency} [filterListPriceCurrency] Optional parameter used to filter on the list price\&#39;s currency
+     * @param {SubscriptionPriceInterval} [filterListPriceInterval] Optional parameter used to filter on the list price\&#39;s interval
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SubscriptionsApi
+     */
+    public listSubscriptionPlans(pageSize?: number, pageAfter?: string, filterIsPublic?: boolean, filterProductType?: SubscriptionProductType, filterListPriceCurrency?: SubscriptionPriceCurrency, filterListPriceInterval?: SubscriptionPriceInterval, options?: RawAxiosRequestConfig) {
+        return SubscriptionsApiFp(this.configuration).listSubscriptionPlans(pageSize, pageAfter, filterIsPublic, filterProductType, filterListPriceCurrency, filterListPriceInterval, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TaxonomyApi - axios parameter creator
+ * @export
+ */
+export const TaxonomyApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary List audience platforms
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listAudiencePlatforms: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/taxonomy/audience_platforms`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List audiences
+         * @param {string} [platform] A platform code to apply for platform-specific audience codes
+         * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listAudiences: async (platform?: string, country?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/taxonomy/audiences`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+            if (platform !== undefined) {
+                localVarQueryParameter['platform'] = platform;
+            }
+
+            if (country !== undefined) {
+                localVarQueryParameter['country'] = country;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List countries
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listCountries: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/taxonomy/countries`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TaxonomyApi - functional programming interface
+ * @export
+ */
+export const TaxonomyApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TaxonomyApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary List audience platforms
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listAudiencePlatforms(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAudiencePlatforms200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listAudiencePlatforms(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TaxonomyApi.listAudiencePlatforms']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary List audiences
+         * @param {string} [platform] A platform code to apply for platform-specific audience codes
+         * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listAudiences(platform?: string, country?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAudiences200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listAudiences(platform, country, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TaxonomyApi.listAudiences']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary List countries
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listCountries(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCountries200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listCountries(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TaxonomyApi.listCountries']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TaxonomyApi - factory interface
+ * @export
+ */
+export const TaxonomyApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TaxonomyApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary List audience platforms
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listAudiencePlatforms(options?: RawAxiosRequestConfig): AxiosPromise<ListAudiencePlatforms200Response> {
+            return localVarFp.listAudiencePlatforms(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List audiences
+         * @param {string} [platform] A platform code to apply for platform-specific audience codes
+         * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listAudiences(platform?: string, country?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListAudiences200Response> {
+            return localVarFp.listAudiences(platform, country, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List countries
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listCountries(options?: RawAxiosRequestConfig): AxiosPromise<ListCountries200Response> {
+            return localVarFp.listCountries(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TaxonomyApi - object-oriented interface
+ * @export
+ * @class TaxonomyApi
+ * @extends {BaseAPI}
+ */
+export class TaxonomyApi extends BaseAPI {
+    /**
+     * 
+     * @summary List audience platforms
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaxonomyApi
+     */
+    public listAudiencePlatforms(options?: RawAxiosRequestConfig) {
+        return TaxonomyApiFp(this.configuration).listAudiencePlatforms(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List audiences
+     * @param {string} [platform] A platform code to apply for platform-specific audience codes
+     * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaxonomyApi
+     */
+    public listAudiences(platform?: string, country?: string, options?: RawAxiosRequestConfig) {
+        return TaxonomyApiFp(this.configuration).listAudiences(platform, country, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List countries
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaxonomyApi
+     */
+    public listCountries(options?: RawAxiosRequestConfig) {
+        return TaxonomyApiFp(this.configuration).listCountries(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -9708,7 +13679,7 @@ export const UsageApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible.
+         * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible. The results will be returned in usage objects, each representing 5 minutes of non-zero usage. 
          * @summary List realtime usage of Audience Data
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
@@ -9796,7 +13767,7 @@ export const UsageApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible.
+         * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible. The results will be returned in usage objects, each representing 5 minutes of non-zero usage. 
          * @summary List realtime usage of Audience Data
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
@@ -9827,7 +13798,7 @@ export const UsageApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudienceDataDailyUsage(filterDateFrom?: string, filterDateTo?: string, filterAccountId?: string, options?: any): AxiosPromise<ListAudienceDataDailyUsage200Response> {
+        listAudienceDataDailyUsage(filterDateFrom?: string, filterDateTo?: string, filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListAudienceDataDailyUsage200Response> {
             return localVarFp.listAudienceDataDailyUsage(filterDateFrom, filterDateTo, filterAccountId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9838,17 +13809,17 @@ export const UsageApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudienceDataMonthlyUsage(filterYear?: number, filterAccountId?: string, options?: any): AxiosPromise<ListAudienceDataMonthlyUsage200Response> {
+        listAudienceDataMonthlyUsage(filterYear?: number, filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListAudienceDataMonthlyUsage200Response> {
             return localVarFp.listAudienceDataMonthlyUsage(filterYear, filterAccountId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible.
+         * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible. The results will be returned in usage objects, each representing 5 minutes of non-zero usage. 
          * @summary List realtime usage of Audience Data
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudienceDataRealtimeUsage(filterAccountId?: string, options?: any): AxiosPromise<ListAudienceDataRealtimeUsage200Response> {
+        listAudienceDataRealtimeUsage(filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListAudienceDataRealtimeUsage200Response> {
             return localVarFp.listAudienceDataRealtimeUsage(filterAccountId, options).then((request) => request(axios, basePath));
         },
     };
@@ -9889,7 +13860,7 @@ export class UsageApi extends BaseAPI {
     }
 
     /**
-     * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible.
+     * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible. The results will be returned in usage objects, each representing 5 minutes of non-zero usage. 
      * @summary List realtime usage of Audience Data
      * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
      * @param {*} [options] Override http request option.
@@ -9909,6 +13880,60 @@ export class UsageApi extends BaseAPI {
  */
 export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Adds a user to the referenced account. 
+         * @summary Add user to account
+         * @param {string} accountId 
+         * @param {AccountUserAddition} accountUserAddition 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addUserToAccount: async (accountId: string, accountUserAddition: AccountUserAddition, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('addUserToAccount', 'accountId', accountId)
+            // verify required parameter 'accountUserAddition' is not null or undefined
+            assertParamExists('addUserToAccount', 'accountUserAddition', accountUserAddition)
+            const localVarPath = `/accounts/{account_id}/users`
+                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(accountUserAddition, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Create API key for the given user. When an API key is created, the `token` value will be exposed in the response. This token can be passed as the `X-API-KEY` header value for future requests. It is not obtainable in other API requests (ie. the client must decide how to keep the API key token in e.g. a vault or similar). 
          * @summary Create API key
@@ -9957,60 +13982,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(apiKeyCreation, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Create a user within the referenced account. 
-         * @summary Create user
-         * @param {string} accountId 
-         * @param {UserCreation} userCreation 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createUserInAccount: async (accountId: string, userCreation: UserCreation, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'accountId' is not null or undefined
-            assertParamExists('createUserInAccount', 'accountId', accountId)
-            // verify required parameter 'userCreation' is not null or undefined
-            assertParamExists('createUserInAccount', 'userCreation', userCreation)
-            const localVarPath = `/accounts/{account_id}/users`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication oAuth required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            // authentication apiKeyHeaderAuth required
-            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
-
-            // authentication apiKeyQueryParamAuth required
-            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(userCreation, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -10220,11 +14191,68 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Get information about the currently authenticated user
          * @summary Get current user
+         * @param {Array<UserIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrentUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCurrentUser: async (include?: Array<UserIncludeParam>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+            if (include) {
+                localVarQueryParameter['include'] = include.join(COLLECTION_FORMATS.csv);
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserAccountMembership: async (accountId: string, userId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('getUserAccountMembership', 'accountId', accountId)
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('getUserAccountMembership', 'userId', userId)
+            const localVarPath = `/accounts/{account_id}/users/{user_id}`
+                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
+                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10313,10 +14341,11 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * 
          * @summary Get user
          * @param {string} userId 
+         * @param {Array<UserIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserById: async (userId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getUserById: async (userId: string, include?: Array<UserIncludeParam>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('getUserById', 'userId', userId)
             const localVarPath = `/users/{user_id}`
@@ -10346,6 +14375,10 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            if (include) {
+                localVarQueryParameter['include'] = include.join(COLLECTION_FORMATS.csv);
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -10361,10 +14394,11 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * 
          * @summary List API keys for user
          * @param {string} userId 
+         * @param {string} [filterAccountId] Filter by specific account id
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listApiKeysByUserId: async (userId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listApiKeysByUserId: async (userId: string, filterAccountId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('listApiKeysByUserId', 'userId', userId)
             const localVarPath = `/users/{user_id}/apikeys`
@@ -10394,6 +14428,10 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            if (filterAccountId !== undefined) {
+                localVarQueryParameter['filter[account_id]'] = filterAccountId;
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -10410,6 +14448,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @summary List users for account
          * @param {string} accountId 
          * @param {UserPlatformRole} [filterPlatformRoles] Filter based on platform roles, e.g. super_admin
+         * @param {UserAccountRole} [filterAccountRoles] Filter based on account roles, e.g. &#x60;owner&#x60;
          * @param {string} [filterNameContains] Optional parameter used to search for users where the name contains a substring (case insensitive)
          * @param {UserSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
          * @param {number} [pageSize] The desired page size
@@ -10417,7 +14456,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUsersByAccountId: async (accountId: string, filterPlatformRoles?: UserPlatformRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listUsersByAccountId: async (accountId: string, filterPlatformRoles?: UserPlatformRole, filterAccountRoles?: UserAccountRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('listUsersByAccountId', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}/users`
@@ -10451,6 +14490,10 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['filter[platform_roles]'] = filterPlatformRoles;
             }
 
+            if (filterAccountRoles !== undefined) {
+                localVarQueryParameter['filter[account_roles]'] = filterAccountRoles;
+            }
+
             if (filterNameContains !== undefined) {
                 localVarQueryParameter['filter[name][contains]'] = filterNameContains;
             }
@@ -10466,6 +14509,58 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             if (pageAfter !== undefined) {
                 localVarQueryParameter['page[after]'] = pageAfter;
             }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Removes a user from the referenced account. 
+         * @summary Remove user from account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeUserFromAccount: async (accountId: string, userId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('removeUserFromAccount', 'accountId', accountId)
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('removeUserFromAccount', 'userId', userId)
+            const localVarPath = `/accounts/{account_id}/users/{user_id}`
+                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
+                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
     
@@ -10530,6 +14625,64 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(apiKeyMutation, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {UserAccountMembershipUpdate} userAccountMembershipUpdate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserAccountMembership: async (accountId: string, userId: string, userAccountMembershipUpdate: UserAccountMembershipUpdate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('updateUserAccountMembership', 'accountId', accountId)
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('updateUserAccountMembership', 'userId', userId)
+            // verify required parameter 'userAccountMembershipUpdate' is not null or undefined
+            assertParamExists('updateUserAccountMembership', 'userAccountMembershipUpdate', userAccountMembershipUpdate)
+            const localVarPath = `/accounts/{account_id}/users/{user_id}`
+                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
+                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(userAccountMembershipUpdate, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -10655,6 +14808,20 @@ export const UsersApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
     return {
         /**
+         * Adds a user to the referenced account. 
+         * @summary Add user to account
+         * @param {string} accountId 
+         * @param {AccountUserAddition} accountUserAddition 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async addUserToAccount(accountId: string, accountUserAddition: AccountUserAddition, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AddUserToAccount201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addUserToAccount(accountId, accountUserAddition, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.addUserToAccount']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Create API key for the given user. When an API key is created, the `token` value will be exposed in the response. This token can be passed as the `X-API-KEY` header value for future requests. It is not obtainable in other API requests (ie. the client must decide how to keep the API key token in e.g. a vault or similar). 
          * @summary Create API key
          * @param {string} userId 
@@ -10666,20 +14833,6 @@ export const UsersApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createApiKey(userId, apiKeyCreation, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.createApiKey']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Create a user within the referenced account. 
-         * @summary Create user
-         * @param {string} accountId 
-         * @param {UserCreation} userCreation 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createUserInAccount(accountId: string, userCreation: UserCreation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateUserInAccount201Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createUserInAccount(accountId, userCreation, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UsersApi.createUserInAccount']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -10739,13 +14892,28 @@ export const UsersApiFp = function(configuration?: Configuration) {
         /**
          * Get information about the currently authenticated user
          * @summary Get current user
+         * @param {Array<UserIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCurrentUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateUserInAccount201Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentUser(options);
+        async getCurrentUser(include?: Array<UserIncludeParam>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AddUserToAccount201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentUser(include, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.getCurrentUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getUserAccountMembership(accountId: string, userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserAccountMembership200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserAccountMembership(accountId, userId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.getUserAccountMembership']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -10765,11 +14933,12 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get user
          * @param {string} userId 
+         * @param {Array<UserIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserById(userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateUserInAccount201Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserById(userId, options);
+        async getUserById(userId: string, include?: Array<UserIncludeParam>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AddUserToAccount201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserById(userId, include, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.getUserById']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -10778,11 +14947,12 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * 
          * @summary List API keys for user
          * @param {string} userId 
+         * @param {string} [filterAccountId] Filter by specific account id
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listApiKeysByUserId(userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListApiKeysByAccountId200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listApiKeysByUserId(userId, options);
+        async listApiKeysByUserId(userId: string, filterAccountId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListApiKeysByAccountId200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listApiKeysByUserId(userId, filterAccountId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.listApiKeysByUserId']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -10792,6 +14962,7 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @summary List users for account
          * @param {string} accountId 
          * @param {UserPlatformRole} [filterPlatformRoles] Filter based on platform roles, e.g. super_admin
+         * @param {UserAccountRole} [filterAccountRoles] Filter based on account roles, e.g. &#x60;owner&#x60;
          * @param {string} [filterNameContains] Optional parameter used to search for users where the name contains a substring (case insensitive)
          * @param {UserSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
          * @param {number} [pageSize] The desired page size
@@ -10799,10 +14970,24 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListUsersByAccountId200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listUsersByAccountId(accountId, filterPlatformRoles, filterNameContains, sort, pageSize, pageAfter, options);
+        async listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterAccountRoles?: UserAccountRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListUsersByAccountId200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listUsersByAccountId(accountId, filterPlatformRoles, filterAccountRoles, filterNameContains, sort, pageSize, pageAfter, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.listUsersByAccountId']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Removes a user from the referenced account. 
+         * @summary Remove user from account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async removeUserFromAccount(accountId: string, userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.removeUserFromAccount(accountId, userId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.removeUserFromAccount']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -10822,13 +15007,28 @@ export const UsersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {UserAccountMembershipUpdate} userAccountMembershipUpdate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateUserAccountMembership(accountId: string, userId: string, userAccountMembershipUpdate: UserAccountMembershipUpdate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserAccountMembership200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUserAccountMembership(accountId, userId, userAccountMembershipUpdate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.updateUserAccountMembership']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Update user
          * @param {string} userId 
          * @param {UserMutation} userMutation 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateUserById(userId: string, userMutation: UserMutation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateUserInAccount201Response>> {
+        async updateUserById(userId: string, userMutation: UserMutation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AddUserToAccount201Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateUserById(userId, userMutation, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.updateUserById']?.[localVarOperationServerIndex]?.url;
@@ -10859,6 +15059,17 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = UsersApiFp(configuration)
     return {
         /**
+         * Adds a user to the referenced account. 
+         * @summary Add user to account
+         * @param {string} accountId 
+         * @param {AccountUserAddition} accountUserAddition 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addUserToAccount(accountId: string, accountUserAddition: AccountUserAddition, options?: RawAxiosRequestConfig): AxiosPromise<AddUserToAccount201Response> {
+            return localVarFp.addUserToAccount(accountId, accountUserAddition, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Create API key for the given user. When an API key is created, the `token` value will be exposed in the response. This token can be passed as the `X-API-KEY` header value for future requests. It is not obtainable in other API requests (ie. the client must decide how to keep the API key token in e.g. a vault or similar). 
          * @summary Create API key
          * @param {string} userId 
@@ -10866,19 +15077,8 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createApiKey(userId: string, apiKeyCreation: ApiKeyCreation, options?: any): AxiosPromise<CreateApiKey201Response> {
+        createApiKey(userId: string, apiKeyCreation: ApiKeyCreation, options?: RawAxiosRequestConfig): AxiosPromise<CreateApiKey201Response> {
             return localVarFp.createApiKey(userId, apiKeyCreation, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Create a user within the referenced account. 
-         * @summary Create user
-         * @param {string} accountId 
-         * @param {UserCreation} userCreation 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createUserInAccount(accountId: string, userCreation: UserCreation, options?: any): AxiosPromise<CreateUserInAccount201Response> {
-            return localVarFp.createUserInAccount(accountId, userCreation, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10888,7 +15088,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteApiKeyById(userId: string, keyId: string, options?: any): AxiosPromise<void> {
+        deleteApiKeyById(userId: string, keyId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteApiKeyById(userId, keyId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10898,7 +15098,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUserAvatar(userId: string, options?: any): AxiosPromise<void> {
+        deleteUserAvatar(userId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteUserAvatar(userId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10908,7 +15108,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUserById(userId: string, options?: any): AxiosPromise<void> {
+        deleteUserById(userId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteUserById(userId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10919,17 +15119,29 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApiKeyById(userId: string, keyId: string, options?: any): AxiosPromise<GetApiKeyById200Response> {
+        getApiKeyById(userId: string, keyId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetApiKeyById200Response> {
             return localVarFp.getApiKeyById(userId, keyId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get information about the currently authenticated user
          * @summary Get current user
+         * @param {Array<UserIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrentUser(options?: any): AxiosPromise<CreateUserInAccount201Response> {
-            return localVarFp.getCurrentUser(options).then((request) => request(axios, basePath));
+        getCurrentUser(include?: Array<UserIncludeParam>, options?: RawAxiosRequestConfig): AxiosPromise<AddUserToAccount201Response> {
+            return localVarFp.getCurrentUser(include, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserAccountMembership(accountId: string, userId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetUserAccountMembership200Response> {
+            return localVarFp.getUserAccountMembership(accountId, userId, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets the user avatar, if the image is hosted on the Digiseg platform. Refer to the user\'s `avatar_url` to get a non-authenticated and shareable URL for the avatar. 
@@ -10938,34 +15150,37 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserAvatar(userId: string, options?: any): AxiosPromise<void> {
+        getUserAvatar(userId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.getUserAvatar(userId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get user
          * @param {string} userId 
+         * @param {Array<UserIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserById(userId: string, options?: any): AxiosPromise<CreateUserInAccount201Response> {
-            return localVarFp.getUserById(userId, options).then((request) => request(axios, basePath));
+        getUserById(userId: string, include?: Array<UserIncludeParam>, options?: RawAxiosRequestConfig): AxiosPromise<AddUserToAccount201Response> {
+            return localVarFp.getUserById(userId, include, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary List API keys for user
          * @param {string} userId 
+         * @param {string} [filterAccountId] Filter by specific account id
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listApiKeysByUserId(userId: string, options?: any): AxiosPromise<ListApiKeysByAccountId200Response> {
-            return localVarFp.listApiKeysByUserId(userId, options).then((request) => request(axios, basePath));
+        listApiKeysByUserId(userId: string, filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListApiKeysByAccountId200Response> {
+            return localVarFp.listApiKeysByUserId(userId, filterAccountId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary List users for account
          * @param {string} accountId 
          * @param {UserPlatformRole} [filterPlatformRoles] Filter based on platform roles, e.g. super_admin
+         * @param {UserAccountRole} [filterAccountRoles] Filter based on account roles, e.g. &#x60;owner&#x60;
          * @param {string} [filterNameContains] Optional parameter used to search for users where the name contains a substring (case insensitive)
          * @param {UserSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
          * @param {number} [pageSize] The desired page size
@@ -10973,8 +15188,19 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: any): AxiosPromise<ListUsersByAccountId200Response> {
-            return localVarFp.listUsersByAccountId(accountId, filterPlatformRoles, filterNameContains, sort, pageSize, pageAfter, options).then((request) => request(axios, basePath));
+        listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterAccountRoles?: UserAccountRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListUsersByAccountId200Response> {
+            return localVarFp.listUsersByAccountId(accountId, filterPlatformRoles, filterAccountRoles, filterNameContains, sort, pageSize, pageAfter, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Removes a user from the referenced account. 
+         * @summary Remove user from account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeUserFromAccount(accountId: string, userId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.removeUserFromAccount(accountId, userId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10985,8 +15211,20 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateApiKeyById(userId: string, keyId: string, apiKeyMutation: ApiKeyMutation, options?: any): AxiosPromise<GetApiKeyById200Response> {
+        updateApiKeyById(userId: string, keyId: string, apiKeyMutation: ApiKeyMutation, options?: RawAxiosRequestConfig): AxiosPromise<GetApiKeyById200Response> {
             return localVarFp.updateApiKeyById(userId, keyId, apiKeyMutation, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update a user\'s membership with an account
+         * @param {string} accountId 
+         * @param {string} userId 
+         * @param {UserAccountMembershipUpdate} userAccountMembershipUpdate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserAccountMembership(accountId: string, userId: string, userAccountMembershipUpdate: UserAccountMembershipUpdate, options?: RawAxiosRequestConfig): AxiosPromise<GetUserAccountMembership200Response> {
+            return localVarFp.updateUserAccountMembership(accountId, userId, userAccountMembershipUpdate, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10996,7 +15234,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserById(userId: string, userMutation: UserMutation, options?: any): AxiosPromise<CreateUserInAccount201Response> {
+        updateUserById(userId: string, userMutation: UserMutation, options?: RawAxiosRequestConfig): AxiosPromise<AddUserToAccount201Response> {
             return localVarFp.updateUserById(userId, userMutation, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11007,7 +15245,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadUserAvatar(userId: string, body: File, options?: any): AxiosPromise<void> {
+        uploadUserAvatar(userId: string, body: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.uploadUserAvatar(userId, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -11021,6 +15259,19 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
  */
 export class UsersApi extends BaseAPI {
     /**
+     * Adds a user to the referenced account. 
+     * @summary Add user to account
+     * @param {string} accountId 
+     * @param {AccountUserAddition} accountUserAddition 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public addUserToAccount(accountId: string, accountUserAddition: AccountUserAddition, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).addUserToAccount(accountId, accountUserAddition, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Create API key for the given user. When an API key is created, the `token` value will be exposed in the response. This token can be passed as the `X-API-KEY` header value for future requests. It is not obtainable in other API requests (ie. the client must decide how to keep the API key token in e.g. a vault or similar). 
      * @summary Create API key
      * @param {string} userId 
@@ -11031,19 +15282,6 @@ export class UsersApi extends BaseAPI {
      */
     public createApiKey(userId: string, apiKeyCreation: ApiKeyCreation, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).createApiKey(userId, apiKeyCreation, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Create a user within the referenced account. 
-     * @summary Create user
-     * @param {string} accountId 
-     * @param {UserCreation} userCreation 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersApi
-     */
-    public createUserInAccount(accountId: string, userCreation: UserCreation, options?: RawAxiosRequestConfig) {
-        return UsersApiFp(this.configuration).createUserInAccount(accountId, userCreation, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -11099,12 +15337,26 @@ export class UsersApi extends BaseAPI {
     /**
      * Get information about the currently authenticated user
      * @summary Get current user
+     * @param {Array<UserIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public getCurrentUser(options?: RawAxiosRequestConfig) {
-        return UsersApiFp(this.configuration).getCurrentUser(options).then((request) => request(this.axios, this.basePath));
+    public getCurrentUser(include?: Array<UserIncludeParam>, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).getCurrentUser(include, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a user\'s membership with an account
+     * @param {string} accountId 
+     * @param {string} userId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public getUserAccountMembership(accountId: string, userId: string, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).getUserAccountMembership(accountId, userId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -11123,24 +15375,26 @@ export class UsersApi extends BaseAPI {
      * 
      * @summary Get user
      * @param {string} userId 
+     * @param {Array<UserIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public getUserById(userId: string, options?: RawAxiosRequestConfig) {
-        return UsersApiFp(this.configuration).getUserById(userId, options).then((request) => request(this.axios, this.basePath));
+    public getUserById(userId: string, include?: Array<UserIncludeParam>, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).getUserById(userId, include, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary List API keys for user
      * @param {string} userId 
+     * @param {string} [filterAccountId] Filter by specific account id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public listApiKeysByUserId(userId: string, options?: RawAxiosRequestConfig) {
-        return UsersApiFp(this.configuration).listApiKeysByUserId(userId, options).then((request) => request(this.axios, this.basePath));
+    public listApiKeysByUserId(userId: string, filterAccountId?: string, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).listApiKeysByUserId(userId, filterAccountId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -11148,6 +15402,7 @@ export class UsersApi extends BaseAPI {
      * @summary List users for account
      * @param {string} accountId 
      * @param {UserPlatformRole} [filterPlatformRoles] Filter based on platform roles, e.g. super_admin
+     * @param {UserAccountRole} [filterAccountRoles] Filter based on account roles, e.g. &#x60;owner&#x60;
      * @param {string} [filterNameContains] Optional parameter used to search for users where the name contains a substring (case insensitive)
      * @param {UserSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
      * @param {number} [pageSize] The desired page size
@@ -11156,8 +15411,21 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
-        return UsersApiFp(this.configuration).listUsersByAccountId(accountId, filterPlatformRoles, filterNameContains, sort, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
+    public listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterAccountRoles?: UserAccountRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).listUsersByAccountId(accountId, filterPlatformRoles, filterAccountRoles, filterNameContains, sort, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Removes a user from the referenced account. 
+     * @summary Remove user from account
+     * @param {string} accountId 
+     * @param {string} userId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public removeUserFromAccount(accountId: string, userId: string, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).removeUserFromAccount(accountId, userId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -11172,6 +15440,20 @@ export class UsersApi extends BaseAPI {
      */
     public updateApiKeyById(userId: string, keyId: string, apiKeyMutation: ApiKeyMutation, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).updateApiKeyById(userId, keyId, apiKeyMutation, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update a user\'s membership with an account
+     * @param {string} accountId 
+     * @param {string} userId 
+     * @param {UserAccountMembershipUpdate} userAccountMembershipUpdate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public updateUserAccountMembership(accountId: string, userId: string, userAccountMembershipUpdate: UserAccountMembershipUpdate, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).updateUserAccountMembership(accountId, userId, userAccountMembershipUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
