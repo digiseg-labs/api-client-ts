@@ -103,6 +103,18 @@ export interface AccountAux {
      * @memberof AccountAux
      */
     'stripe_customer_id'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AccountAux
+     */
+    'is_reseller'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountAux
+     */
+    'reseller_account_id'?: string;
 }
 
 
@@ -118,6 +130,12 @@ export interface AccountBase {
      * @memberof AccountBase
      */
     'name'?: string;
+    /**
+     * Custom platform URL for the account
+     * @type {string}
+     * @memberof AccountBase
+     */
+    'custom_platform_url'?: string;
     /**
      * The URL to the logo of the account
      * @type {string}
@@ -176,6 +194,12 @@ export interface AccountCreation {
      * @memberof AccountCreation
      */
     'name'?: string;
+    /**
+     * Custom platform URL for the account
+     * @type {string}
+     * @memberof AccountCreation
+     */
+    'custom_platform_url'?: string;
     /**
      * The URL to the logo of the account
      * @type {string}
@@ -304,6 +328,12 @@ export interface AccountFull {
      */
     'name'?: string;
     /**
+     * Custom platform URL for the account
+     * @type {string}
+     * @memberof AccountFull
+     */
+    'custom_platform_url'?: string;
+    /**
      * The URL to the logo of the account
      * @type {string}
      * @memberof AccountFull
@@ -389,6 +419,18 @@ export interface AccountFull {
      * @memberof AccountFull
      */
     'stripe_customer_id'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AccountFull
+     */
+    'is_reseller'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountFull
+     */
+    'reseller_account_id'?: string;
     /**
      * 
      * @type {PlanFeatureSet}
@@ -480,6 +522,12 @@ export interface AccountItem {
      */
     'name'?: string;
     /**
+     * Custom platform URL for the account
+     * @type {string}
+     * @memberof AccountItem
+     */
+    'custom_platform_url'?: string;
+    /**
      * The URL to the logo of the account
      * @type {string}
      * @memberof AccountItem
@@ -562,6 +610,12 @@ export interface AccountMutation {
      * @memberof AccountMutation
      */
     'name'?: string;
+    /**
+     * Custom platform URL for the account
+     * @type {string}
+     * @memberof AccountMutation
+     */
+    'custom_platform_url'?: string;
     /**
      * The URL to the logo of the account
      * @type {string}
@@ -648,6 +702,18 @@ export interface AccountMutation {
      * @memberof AccountMutation
      */
     'stripe_customer_id'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AccountMutation
+     */
+    'is_reseller'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountMutation
+     */
+    'reseller_account_id'?: string;
 }
 
 
@@ -1652,88 +1718,6 @@ export interface AudienceCategoryStats {
 /**
  * 
  * @export
- * @interface AudienceDataDailyUsage
- */
-export interface AudienceDataDailyUsage {
-    /**
-     * Date in ISO 8601 format
-     * @type {string}
-     * @memberof AudienceDataDailyUsage
-     */
-    'date': string;
-    /**
-     * 
-     * @type {AudienceDataUsage}
-     * @memberof AudienceDataDailyUsage
-     */
-    'usage': AudienceDataUsage;
-}
-/**
- * 
- * @export
- * @interface AudienceDataMonthlyUsage
- */
-export interface AudienceDataMonthlyUsage {
-    /**
-     * Year number
-     * @type {number}
-     * @memberof AudienceDataMonthlyUsage
-     */
-    'year': number;
-    /**
-     * Month number (1-12)
-     * @type {number}
-     * @memberof AudienceDataMonthlyUsage
-     */
-    'month': number;
-    /**
-     * 
-     * @type {AudienceDataUsage}
-     * @memberof AudienceDataMonthlyUsage
-     */
-    'usage': AudienceDataUsage;
-}
-/**
- * 
- * @export
- * @interface AudienceDataRealtimeUsage
- */
-export interface AudienceDataRealtimeUsage {
-    /**
-     * The point in time of recording the usage data
-     * @type {string}
-     * @memberof AudienceDataRealtimeUsage
-     */
-    'when': string;
-    /**
-     * 
-     * @type {AudienceDataUsage}
-     * @memberof AudienceDataRealtimeUsage
-     */
-    'usage': AudienceDataUsage;
-}
-/**
- * 
- * @export
- * @interface AudienceDataUsage
- */
-export interface AudienceDataUsage {
-    /**
-     * Number of records fulfilled
-     * @type {number}
-     * @memberof AudienceDataUsage
-     */
-    'records_fulfilled'?: number;
-    /**
-     * Number of records processed
-     * @type {number}
-     * @memberof AudienceDataUsage
-     */
-    'records_processed'?: number;
-}
-/**
- * 
- * @export
  * @interface AudienceExampleInput
  */
 export interface AudienceExampleInput {
@@ -2437,6 +2421,88 @@ export interface CustomerCommunicationMessage {
     'body': string;
 }
 /**
+ * 
+ * @export
+ * @interface DataDailyUsage
+ */
+export interface DataDailyUsage {
+    /**
+     * Date in ISO 8601 format
+     * @type {string}
+     * @memberof DataDailyUsage
+     */
+    'date': string;
+    /**
+     * 
+     * @type {DataUsage}
+     * @memberof DataDailyUsage
+     */
+    'usage': DataUsage;
+}
+/**
+ * 
+ * @export
+ * @interface DataMonthlyUsage
+ */
+export interface DataMonthlyUsage {
+    /**
+     * Year number
+     * @type {number}
+     * @memberof DataMonthlyUsage
+     */
+    'year': number;
+    /**
+     * Month number (1-12)
+     * @type {number}
+     * @memberof DataMonthlyUsage
+     */
+    'month': number;
+    /**
+     * 
+     * @type {DataUsage}
+     * @memberof DataMonthlyUsage
+     */
+    'usage': DataUsage;
+}
+/**
+ * 
+ * @export
+ * @interface DataRealtimeUsage
+ */
+export interface DataRealtimeUsage {
+    /**
+     * The point in time of recording the usage data
+     * @type {string}
+     * @memberof DataRealtimeUsage
+     */
+    'when': string;
+    /**
+     * 
+     * @type {DataUsage}
+     * @memberof DataRealtimeUsage
+     */
+    'usage': DataUsage;
+}
+/**
+ * 
+ * @export
+ * @interface DataUsage
+ */
+export interface DataUsage {
+    /**
+     * Number of records fulfilled
+     * @type {number}
+     * @memberof DataUsage
+     */
+    'records_fulfilled'?: number;
+    /**
+     * Number of records processed
+     * @type {number}
+     * @memberof DataUsage
+     */
+    'records_processed'?: number;
+}
+/**
  * Contains statistics about the day of the month that study activity has been measured. The time zone used to record these measurements is the time zone of the measured user, or UTC if the user\'s location cannot be resolved. 
  * @export
  * @interface DayOfMonthStats
@@ -2779,6 +2845,19 @@ export interface GetPopuplationByKey200Response {
      * @memberof GetPopuplationByKey200Response
      */
     'data'?: PopulationFull;
+}
+/**
+ * 
+ * @export
+ * @interface GetSubscriptionPlanFree200Response
+ */
+export interface GetSubscriptionPlanFree200Response {
+    /**
+     * 
+     * @type {SubscriptionPlanFree}
+     * @memberof GetSubscriptionPlanFree200Response
+     */
+    'data'?: SubscriptionPlanFree;
 }
 /**
  * 
@@ -3199,45 +3278,6 @@ export interface ListApiKeysByAccountId200Response {
 /**
  * 
  * @export
- * @interface ListAudienceDataDailyUsage200Response
- */
-export interface ListAudienceDataDailyUsage200Response {
-    /**
-     * 
-     * @type {Array<AudienceDataDailyUsage>}
-     * @memberof ListAudienceDataDailyUsage200Response
-     */
-    'data'?: Array<AudienceDataDailyUsage>;
-}
-/**
- * 
- * @export
- * @interface ListAudienceDataMonthlyUsage200Response
- */
-export interface ListAudienceDataMonthlyUsage200Response {
-    /**
-     * 
-     * @type {Array<AudienceDataMonthlyUsage>}
-     * @memberof ListAudienceDataMonthlyUsage200Response
-     */
-    'data'?: Array<AudienceDataMonthlyUsage>;
-}
-/**
- * 
- * @export
- * @interface ListAudienceDataRealtimeUsage200Response
- */
-export interface ListAudienceDataRealtimeUsage200Response {
-    /**
-     * 
-     * @type {Array<AudienceDataRealtimeUsage>}
-     * @memberof ListAudienceDataRealtimeUsage200Response
-     */
-    'data'?: Array<AudienceDataRealtimeUsage>;
-}
-/**
- * 
- * @export
  * @interface ListAudiencePlatforms200Response
  */
 export interface ListAudiencePlatforms200Response {
@@ -3279,6 +3319,45 @@ export interface ListCountries200Response {
      * @memberof ListCountries200Response
      */
     'data'?: Array<CountryItem>;
+}
+/**
+ * 
+ * @export
+ * @interface ListDataDailyUsage200Response
+ */
+export interface ListDataDailyUsage200Response {
+    /**
+     * 
+     * @type {Array<DataDailyUsage>}
+     * @memberof ListDataDailyUsage200Response
+     */
+    'data'?: Array<DataDailyUsage>;
+}
+/**
+ * 
+ * @export
+ * @interface ListDataMonthlyUsage200Response
+ */
+export interface ListDataMonthlyUsage200Response {
+    /**
+     * 
+     * @type {Array<DataMonthlyUsage>}
+     * @memberof ListDataMonthlyUsage200Response
+     */
+    'data'?: Array<DataMonthlyUsage>;
+}
+/**
+ * 
+ * @export
+ * @interface ListDataRealtimeUsage200Response
+ */
+export interface ListDataRealtimeUsage200Response {
+    /**
+     * 
+     * @type {Array<DataRealtimeUsage>}
+     * @memberof ListDataRealtimeUsage200Response
+     */
+    'data'?: Array<DataRealtimeUsage>;
 }
 /**
  * 
@@ -3852,7 +3931,7 @@ export interface PlanFeatureSet {
      * @type {number}
      * @memberof PlanFeatureSet
      */
-    'max_study_events_per_month': number;
+    'max_study_events_per_month'?: number;
     /**
      * 
      * @type {number}
@@ -5335,12 +5414,6 @@ export interface StudyAux {
      */
     'event_cap'?: number;
     /**
-     * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
-     * @type {string}
-     * @memberof StudyAux
-     */
-    'banner_image_url'?: string;
-    /**
      * 
      * @type {MeasurementIntegrationPlatform}
      * @memberof StudyAux
@@ -5389,6 +5462,12 @@ export interface StudyBase {
      * @memberof StudyBase
      */
     'end_date'?: string;
+    /**
+     * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
+     * @type {string}
+     * @memberof StudyBase
+     */
+    'banner_image_url'?: string;
     /**
      * 
      * @type {StudyLifecycleStage}
@@ -5484,6 +5563,12 @@ export interface StudyCreation {
      */
     'end_date'?: string;
     /**
+     * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
+     * @type {string}
+     * @memberof StudyCreation
+     */
+    'banner_image_url'?: string;
+    /**
      * 
      * @type {StudyLifecycleStage}
      * @memberof StudyCreation
@@ -5519,12 +5604,6 @@ export interface StudyCreation {
      * @memberof StudyCreation
      */
     'event_cap'?: number;
-    /**
-     * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
-     * @type {string}
-     * @memberof StudyCreation
-     */
-    'banner_image_url'?: string;
     /**
      * 
      * @type {MeasurementIntegrationPlatform}
@@ -5847,6 +5926,12 @@ export interface StudyFull {
      */
     'end_date'?: string;
     /**
+     * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
+     * @type {string}
+     * @memberof StudyFull
+     */
+    'banner_image_url'?: string;
+    /**
      * 
      * @type {StudyLifecycleStage}
      * @memberof StudyFull
@@ -5882,12 +5967,6 @@ export interface StudyFull {
      * @memberof StudyFull
      */
     'event_cap'?: number;
-    /**
-     * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
-     * @type {string}
-     * @memberof StudyFull
-     */
-    'banner_image_url'?: string;
     /**
      * 
      * @type {MeasurementIntegrationPlatform}
@@ -5987,6 +6066,12 @@ export interface StudyItem {
      * @memberof StudyItem
      */
     'end_date'?: string;
+    /**
+     * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
+     * @type {string}
+     * @memberof StudyItem
+     */
+    'banner_image_url'?: string;
     /**
      * 
      * @type {StudyLifecycleStage}
@@ -6111,6 +6196,12 @@ export interface StudyMutation {
      */
     'end_date'?: string;
     /**
+     * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
+     * @type {string}
+     * @memberof StudyMutation
+     */
+    'banner_image_url'?: string;
+    /**
      * 
      * @type {StudyLifecycleStage}
      * @memberof StudyMutation
@@ -6146,12 +6237,6 @@ export interface StudyMutation {
      * @memberof StudyMutation
      */
     'event_cap'?: number;
-    /**
-     * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
-     * @type {string}
-     * @memberof StudyMutation
-     */
-    'banner_image_url'?: string;
     /**
      * 
      * @type {MeasurementIntegrationPlatform}
@@ -6763,6 +6848,69 @@ export interface SubscriptionPlanBase {
      * @memberof SubscriptionPlanBase
      */
     'stripe_price_id'?: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface SubscriptionPlanFree
+ */
+export interface SubscriptionPlanFree {
+    /**
+     * The display name of the price/plan
+     * @type {string}
+     * @memberof SubscriptionPlanFree
+     */
+    'display_name'?: string;
+    /**
+     * An optional code, typically provided if the plan/price is public and advertised
+     * @type {string}
+     * @memberof SubscriptionPlanFree
+     */
+    'code'?: string;
+    /**
+     * Is the plan/price a public price or custom?
+     * @type {boolean}
+     * @memberof SubscriptionPlanFree
+     */
+    'is_public': boolean;
+    /**
+     * 
+     * @type {SubscriptionProductType}
+     * @memberof SubscriptionPlanFree
+     */
+    'product_type': SubscriptionProductType;
+    /**
+     * 
+     * @type {SubscriptionPrice}
+     * @memberof SubscriptionPlanFree
+     */
+    'list_price'?: SubscriptionPrice;
+    /**
+     * 
+     * @type {string}
+     * @memberof SubscriptionPlanFree
+     */
+    'stripe_product_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SubscriptionPlanFree
+     */
+    'stripe_price_id'?: string;
+    /**
+     * The ID of the plan/price that the account is subscribed to
+     * @type {string}
+     * @memberof SubscriptionPlanFree
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {PlanFeatureSet}
+     * @memberof SubscriptionPlanFree
+     */
+    'feature_set': PlanFeatureSet;
 }
 
 
@@ -11560,6 +11708,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
          * @summary List studies
          * @param {ListStudiesSortEnum} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
          * @param {StudyLifecycleStage} [filterLifeCycleStage] Optional parameter used to filter studies by their life cycle stage
+         * @param {StudyLifecycleStage} [filterLifeCycleStageNot] Optional parameter used to filter studies that do NOT match a specific life cycle stage
          * @param {boolean} [filterIsExample] Optional parameter used to filter for example studies
          * @param {string} [filterLabel] Optional parameter used to filter by study label
          * @param {string} [filterNameContains] Optional parameter used to search for studies where the name contains a substring (case insensitive)
@@ -11574,7 +11723,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listStudies: async (sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listStudies: async (sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterLifeCycleStageNot?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/studies`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -11607,6 +11756,10 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
 
             if (filterLifeCycleStage !== undefined) {
                 localVarQueryParameter['filter[life_cycle_stage]'] = filterLifeCycleStage;
+            }
+
+            if (filterLifeCycleStageNot !== undefined) {
+                localVarQueryParameter['filter[life_cycle_stage][not]'] = filterLifeCycleStageNot;
             }
 
             if (filterIsExample !== undefined) {
@@ -12233,6 +12386,7 @@ export const StudiesApiFp = function(configuration?: Configuration) {
          * @summary List studies
          * @param {ListStudiesSortEnum} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
          * @param {StudyLifecycleStage} [filterLifeCycleStage] Optional parameter used to filter studies by their life cycle stage
+         * @param {StudyLifecycleStage} [filterLifeCycleStageNot] Optional parameter used to filter studies that do NOT match a specific life cycle stage
          * @param {boolean} [filterIsExample] Optional parameter used to filter for example studies
          * @param {string} [filterLabel] Optional parameter used to filter by study label
          * @param {string} [filterNameContains] Optional parameter used to search for studies where the name contains a substring (case insensitive)
@@ -12247,8 +12401,8 @@ export const StudiesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listStudies(sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListStudies200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listStudies(sort, filterLifeCycleStage, filterIsExample, filterLabel, filterNameContains, filterStartDateAfter, filterStartDateBefore, filterEndDate, filterCreatedAtAfter, filterCreatedAtBefore, filterAccountId, pageSize, pageAfter, options);
+        async listStudies(sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterLifeCycleStageNot?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListStudies200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listStudies(sort, filterLifeCycleStage, filterLifeCycleStageNot, filterIsExample, filterLabel, filterNameContains, filterStartDateAfter, filterStartDateBefore, filterEndDate, filterCreatedAtAfter, filterCreatedAtBefore, filterAccountId, pageSize, pageAfter, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StudiesApi.listStudies']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12480,6 +12634,7 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * @summary List studies
          * @param {ListStudiesSortEnum} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
          * @param {StudyLifecycleStage} [filterLifeCycleStage] Optional parameter used to filter studies by their life cycle stage
+         * @param {StudyLifecycleStage} [filterLifeCycleStageNot] Optional parameter used to filter studies that do NOT match a specific life cycle stage
          * @param {boolean} [filterIsExample] Optional parameter used to filter for example studies
          * @param {string} [filterLabel] Optional parameter used to filter by study label
          * @param {string} [filterNameContains] Optional parameter used to search for studies where the name contains a substring (case insensitive)
@@ -12494,8 +12649,8 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listStudies(sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListStudies200Response> {
-            return localVarFp.listStudies(sort, filterLifeCycleStage, filterIsExample, filterLabel, filterNameContains, filterStartDateAfter, filterStartDateBefore, filterEndDate, filterCreatedAtAfter, filterCreatedAtBefore, filterAccountId, pageSize, pageAfter, options).then((request) => request(axios, basePath));
+        listStudies(sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterLifeCycleStageNot?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListStudies200Response> {
+            return localVarFp.listStudies(sort, filterLifeCycleStage, filterLifeCycleStageNot, filterIsExample, filterLabel, filterNameContains, filterStartDateAfter, filterStartDateBefore, filterEndDate, filterCreatedAtAfter, filterCreatedAtBefore, filterAccountId, pageSize, pageAfter, options).then((request) => request(axios, basePath));
         },
         /**
          * Query the audience statistics for a study, enabling the user to see the representation of matched household characteristics to impressions and clicks. These statistics can be compared to the Average Internet Population (globally or for a specific country), or to the audience stats of other studies. 
@@ -12720,6 +12875,7 @@ export class StudiesApi extends BaseAPI {
      * @summary List studies
      * @param {ListStudiesSortEnum} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
      * @param {StudyLifecycleStage} [filterLifeCycleStage] Optional parameter used to filter studies by their life cycle stage
+     * @param {StudyLifecycleStage} [filterLifeCycleStageNot] Optional parameter used to filter studies that do NOT match a specific life cycle stage
      * @param {boolean} [filterIsExample] Optional parameter used to filter for example studies
      * @param {string} [filterLabel] Optional parameter used to filter by study label
      * @param {string} [filterNameContains] Optional parameter used to search for studies where the name contains a substring (case insensitive)
@@ -12735,8 +12891,8 @@ export class StudiesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof StudiesApi
      */
-    public listStudies(sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
-        return StudiesApiFp(this.configuration).listStudies(sort, filterLifeCycleStage, filterIsExample, filterLabel, filterNameContains, filterStartDateAfter, filterStartDateBefore, filterEndDate, filterCreatedAtAfter, filterCreatedAtBefore, filterAccountId, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
+    public listStudies(sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterLifeCycleStageNot?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
+        return StudiesApiFp(this.configuration).listStudies(sort, filterLifeCycleStage, filterLifeCycleStageNot, filterIsExample, filterLabel, filterNameContains, filterStartDateAfter, filterStartDateBefore, filterEndDate, filterCreatedAtAfter, filterCreatedAtBefore, filterAccountId, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -12960,6 +13116,50 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @summary Gets the default/free subscription plan
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSubscriptionPlanFree: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/subscription_plans/free`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary List subscription offers
          * @param {string} [filterAccountId] Optional parameter used to filter on the account ID
          * @param {*} [options] Override http request option.
@@ -13120,6 +13320,18 @@ export const SubscriptionsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Gets the default/free subscription plan
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSubscriptionPlanFree(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetSubscriptionPlanFree200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSubscriptionPlanFree(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SubscriptionsApi.getSubscriptionPlanFree']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary List subscription offers
          * @param {string} [filterAccountId] Optional parameter used to filter on the account ID
          * @param {*} [options] Override http request option.
@@ -13182,6 +13394,15 @@ export const SubscriptionsApiFactory = function (configuration?: Configuration, 
         },
         /**
          * 
+         * @summary Gets the default/free subscription plan
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSubscriptionPlanFree(options?: RawAxiosRequestConfig): AxiosPromise<GetSubscriptionPlanFree200Response> {
+            return localVarFp.getSubscriptionPlanFree(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary List subscription offers
          * @param {string} [filterAccountId] Optional parameter used to filter on the account ID
          * @param {*} [options] Override http request option.
@@ -13238,6 +13459,17 @@ export class SubscriptionsApi extends BaseAPI {
      */
     public getAccountSubscriptions(accountId: string, options?: RawAxiosRequestConfig) {
         return SubscriptionsApiFp(this.configuration).getAccountSubscriptions(accountId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Gets the default/free subscription plan
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SubscriptionsApi
+     */
+    public getSubscriptionPlanFree(options?: RawAxiosRequestConfig) {
+        return SubscriptionsApiFp(this.configuration).getSubscriptionPlanFree(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13564,14 +13796,18 @@ export const UsageApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Provides usage stats on a daily basis. Results available for the last 2 months.
          * @summary List daily usage of Audience Data
+         * @param {ListDataDailyUsageDataEnum} data 
          * @param {string} [filterDateFrom] Date to query from
          * @param {string} [filterDateTo] Date to query to
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudienceDataDailyUsage: async (filterDateFrom?: string, filterDateTo?: string, filterAccountId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/usage/audience_data/daily`;
+        listDataDailyUsage: async (data: ListDataDailyUsageDataEnum, filterDateFrom?: string, filterDateTo?: string, filterAccountId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'data' is not null or undefined
+            assertParamExists('listDataDailyUsage', 'data', data)
+            const localVarPath = `/usage/{data}/daily`
+                .replace(`{${"data"}}`, encodeURIComponent(String(data)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13627,13 +13863,17 @@ export const UsageApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Provides usage stats on a monthly basis.
          * @summary List monthly usage of Audience Data
+         * @param {ListDataMonthlyUsageDataEnum} data 
          * @param {number} [filterYear] Year to filter by
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudienceDataMonthlyUsage: async (filterYear?: number, filterAccountId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/usage/audience_data/monthly`;
+        listDataMonthlyUsage: async (data: ListDataMonthlyUsageDataEnum, filterYear?: number, filterAccountId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'data' is not null or undefined
+            assertParamExists('listDataMonthlyUsage', 'data', data)
+            const localVarPath = `/usage/{data}/monthly`
+                .replace(`{${"data"}}`, encodeURIComponent(String(data)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13681,12 +13921,16 @@ export const UsageApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible. The results will be returned in usage objects, each representing 5 minutes of non-zero usage. 
          * @summary List realtime usage of Audience Data
+         * @param {ListDataRealtimeUsageDataEnum} data 
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudienceDataRealtimeUsage: async (filterAccountId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/usage/audience_data/realtime`;
+        listDataRealtimeUsage: async (data: ListDataRealtimeUsageDataEnum, filterAccountId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'data' is not null or undefined
+            assertParamExists('listDataRealtimeUsage', 'data', data)
+            const localVarPath = `/usage/{data}/realtime`
+                .replace(`{${"data"}}`, encodeURIComponent(String(data)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13740,43 +13984,46 @@ export const UsageApiFp = function(configuration?: Configuration) {
         /**
          * Provides usage stats on a daily basis. Results available for the last 2 months.
          * @summary List daily usage of Audience Data
+         * @param {ListDataDailyUsageDataEnum} data 
          * @param {string} [filterDateFrom] Date to query from
          * @param {string} [filterDateTo] Date to query to
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listAudienceDataDailyUsage(filterDateFrom?: string, filterDateTo?: string, filterAccountId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAudienceDataDailyUsage200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listAudienceDataDailyUsage(filterDateFrom, filterDateTo, filterAccountId, options);
+        async listDataDailyUsage(data: ListDataDailyUsageDataEnum, filterDateFrom?: string, filterDateTo?: string, filterAccountId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDataDailyUsage200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listDataDailyUsage(data, filterDateFrom, filterDateTo, filterAccountId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UsageApi.listAudienceDataDailyUsage']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UsageApi.listDataDailyUsage']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * Provides usage stats on a monthly basis.
          * @summary List monthly usage of Audience Data
+         * @param {ListDataMonthlyUsageDataEnum} data 
          * @param {number} [filterYear] Year to filter by
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listAudienceDataMonthlyUsage(filterYear?: number, filterAccountId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAudienceDataMonthlyUsage200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listAudienceDataMonthlyUsage(filterYear, filterAccountId, options);
+        async listDataMonthlyUsage(data: ListDataMonthlyUsageDataEnum, filterYear?: number, filterAccountId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDataMonthlyUsage200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listDataMonthlyUsage(data, filterYear, filterAccountId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UsageApi.listAudienceDataMonthlyUsage']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UsageApi.listDataMonthlyUsage']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible. The results will be returned in usage objects, each representing 5 minutes of non-zero usage. 
          * @summary List realtime usage of Audience Data
+         * @param {ListDataRealtimeUsageDataEnum} data 
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listAudienceDataRealtimeUsage(filterAccountId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAudienceDataRealtimeUsage200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listAudienceDataRealtimeUsage(filterAccountId, options);
+        async listDataRealtimeUsage(data: ListDataRealtimeUsageDataEnum, filterAccountId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDataRealtimeUsage200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listDataRealtimeUsage(data, filterAccountId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UsageApi.listAudienceDataRealtimeUsage']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UsageApi.listDataRealtimeUsage']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -13792,35 +14039,38 @@ export const UsageApiFactory = function (configuration?: Configuration, basePath
         /**
          * Provides usage stats on a daily basis. Results available for the last 2 months.
          * @summary List daily usage of Audience Data
+         * @param {ListDataDailyUsageDataEnum} data 
          * @param {string} [filterDateFrom] Date to query from
          * @param {string} [filterDateTo] Date to query to
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudienceDataDailyUsage(filterDateFrom?: string, filterDateTo?: string, filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListAudienceDataDailyUsage200Response> {
-            return localVarFp.listAudienceDataDailyUsage(filterDateFrom, filterDateTo, filterAccountId, options).then((request) => request(axios, basePath));
+        listDataDailyUsage(data: ListDataDailyUsageDataEnum, filterDateFrom?: string, filterDateTo?: string, filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListDataDailyUsage200Response> {
+            return localVarFp.listDataDailyUsage(data, filterDateFrom, filterDateTo, filterAccountId, options).then((request) => request(axios, basePath));
         },
         /**
          * Provides usage stats on a monthly basis.
          * @summary List monthly usage of Audience Data
+         * @param {ListDataMonthlyUsageDataEnum} data 
          * @param {number} [filterYear] Year to filter by
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudienceDataMonthlyUsage(filterYear?: number, filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListAudienceDataMonthlyUsage200Response> {
-            return localVarFp.listAudienceDataMonthlyUsage(filterYear, filterAccountId, options).then((request) => request(axios, basePath));
+        listDataMonthlyUsage(data: ListDataMonthlyUsageDataEnum, filterYear?: number, filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListDataMonthlyUsage200Response> {
+            return localVarFp.listDataMonthlyUsage(data, filterYear, filterAccountId, options).then((request) => request(axios, basePath));
         },
         /**
          * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible. The results will be returned in usage objects, each representing 5 minutes of non-zero usage. 
          * @summary List realtime usage of Audience Data
+         * @param {ListDataRealtimeUsageDataEnum} data 
          * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudienceDataRealtimeUsage(filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListAudienceDataRealtimeUsage200Response> {
-            return localVarFp.listAudienceDataRealtimeUsage(filterAccountId, options).then((request) => request(axios, basePath));
+        listDataRealtimeUsage(data: ListDataRealtimeUsageDataEnum, filterAccountId?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListDataRealtimeUsage200Response> {
+            return localVarFp.listDataRealtimeUsage(data, filterAccountId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -13835,6 +14085,7 @@ export class UsageApi extends BaseAPI {
     /**
      * Provides usage stats on a daily basis. Results available for the last 2 months.
      * @summary List daily usage of Audience Data
+     * @param {ListDataDailyUsageDataEnum} data 
      * @param {string} [filterDateFrom] Date to query from
      * @param {string} [filterDateTo] Date to query to
      * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
@@ -13842,36 +14093,62 @@ export class UsageApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsageApi
      */
-    public listAudienceDataDailyUsage(filterDateFrom?: string, filterDateTo?: string, filterAccountId?: string, options?: RawAxiosRequestConfig) {
-        return UsageApiFp(this.configuration).listAudienceDataDailyUsage(filterDateFrom, filterDateTo, filterAccountId, options).then((request) => request(this.axios, this.basePath));
+    public listDataDailyUsage(data: ListDataDailyUsageDataEnum, filterDateFrom?: string, filterDateTo?: string, filterAccountId?: string, options?: RawAxiosRequestConfig) {
+        return UsageApiFp(this.configuration).listDataDailyUsage(data, filterDateFrom, filterDateTo, filterAccountId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Provides usage stats on a monthly basis.
      * @summary List monthly usage of Audience Data
+     * @param {ListDataMonthlyUsageDataEnum} data 
      * @param {number} [filterYear] Year to filter by
      * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsageApi
      */
-    public listAudienceDataMonthlyUsage(filterYear?: number, filterAccountId?: string, options?: RawAxiosRequestConfig) {
-        return UsageApiFp(this.configuration).listAudienceDataMonthlyUsage(filterYear, filterAccountId, options).then((request) => request(this.axios, this.basePath));
+    public listDataMonthlyUsage(data: ListDataMonthlyUsageDataEnum, filterYear?: number, filterAccountId?: string, options?: RawAxiosRequestConfig) {
+        return UsageApiFp(this.configuration).listDataMonthlyUsage(data, filterYear, filterAccountId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Provides usage stats on a near-realtime basis. Results available for the last 24 hours, provided with as short delay as possible. The results will be returned in usage objects, each representing 5 minutes of non-zero usage. 
      * @summary List realtime usage of Audience Data
+     * @param {ListDataRealtimeUsageDataEnum} data 
      * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsageApi
      */
-    public listAudienceDataRealtimeUsage(filterAccountId?: string, options?: RawAxiosRequestConfig) {
-        return UsageApiFp(this.configuration).listAudienceDataRealtimeUsage(filterAccountId, options).then((request) => request(this.axios, this.basePath));
+    public listDataRealtimeUsage(data: ListDataRealtimeUsageDataEnum, filterAccountId?: string, options?: RawAxiosRequestConfig) {
+        return UsageApiFp(this.configuration).listDataRealtimeUsage(data, filterAccountId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
+/**
+ * @export
+ */
+export const ListDataDailyUsageDataEnum = {
+    AudienceData: 'audience_data',
+    AnalyticsData: 'analytics_data'
+} as const;
+export type ListDataDailyUsageDataEnum = typeof ListDataDailyUsageDataEnum[keyof typeof ListDataDailyUsageDataEnum];
+/**
+ * @export
+ */
+export const ListDataMonthlyUsageDataEnum = {
+    AudienceData: 'audience_data',
+    AnalyticsData: 'analytics_data'
+} as const;
+export type ListDataMonthlyUsageDataEnum = typeof ListDataMonthlyUsageDataEnum[keyof typeof ListDataMonthlyUsageDataEnum];
+/**
+ * @export
+ */
+export const ListDataRealtimeUsageDataEnum = {
+    AudienceData: 'audience_data',
+    AnalyticsData: 'analytics_data'
+} as const;
+export type ListDataRealtimeUsageDataEnum = typeof ListDataRealtimeUsageDataEnum[keyof typeof ListDataRealtimeUsageDataEnum];
 
 
 /**
