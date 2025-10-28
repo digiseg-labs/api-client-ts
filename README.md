@@ -17,12 +17,12 @@ Import the package and start using it:
 ```typescript
 import { AudiencesApi, Configuration } from "digiseg-api-client"
 
-# instantiate the API (for example AudiencesAPI) with your API key
+// instantiate the API (for example AudiencesAPI) with your API key
 const api = new AudiencesApi(new Configuration({
     apiKey: apiKey,
 }))
 
-# look up audiences
+// look up audiences
 api.resolveAudiencesOfSingle("152.115.123.174", "core,category").then(resp => {
     console.log("Status: " + resp.data.status)
     for (const audience of resp.data.audiences) {
