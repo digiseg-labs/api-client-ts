@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Digiseg API
- * ### Digiseg API documentation  # Introduction  This API let you harness the power of Digisegs powerful and tracking-free segmentation engine.  Audiences by Digiseg are available in 50+ countries, probablistically mapping neighborhood characteristics to the IP addresses observed on the internet - Household targeting & measurement for the post-cookie world.  ## Developer SDKs  In addition to using these APIs directly through any HTTP client, we provide a set of API client SDKs for popular programming languages:  <div class=\"api-clients\">   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-python\">     <i class=\"api-client-sdk-logo devicon-python-plain\"></i>     <p>API client for Python</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-ts\">     <i class=\"api-client-sdk-logo devicon-typescript-plain\"></i>     <p>API client for TypeScript</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-go\">     <i class=\"api-client-sdk-logo devicon-go-original-wordmark\"></i>     <p>API client for Go</p>   </a> </div> <div class=\"api-clients-breaker\" /> 
+ * ### Digiseg API documentation  # Introduction  This API let you harness the power of Digisegs powerful and tracking-free segmentation engine.  Audiences by Digiseg are available in 50+ countries, probablistically mapping neighborhood characteristics to the IP addresses observed on the internet - Household targeting & measurement for the post-cookie world.  ## Developer SDKs  In addition to using these APIs directly through any HTTP client, we provide a set of API client SDKs for popular programming languages:  <div class=\"api-clients\">   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-python\">     <i class=\"api-client-sdk-logo devicon-python-plain\"></i>     <p>API client for<br/>Python</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-ts\">     <i class=\"api-client-sdk-logo devicon-typescript-plain\"></i>     <p>API client for<br/>TypeScript</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-go\">     <i class=\"api-client-sdk-logo devicon-go-original-wordmark\"></i>     <p>API client for<br/>Go</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-dotnet\">     <i class=\"api-client-sdk-logo devicon-dot-net-plain\"></i>     <p>API client for<br/>.NET</p>   </a> </div> <div class=\"api-clients-breaker\" /> 
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: support@digiseg.io
@@ -23,448 +23,228 @@ import type { RequestArgs } from './base';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
-/**
- * 
- * @export
- * @interface AccessTokenData
- */
 export interface AccessTokenData {
     /**
      * A short-lived token (usable for 1 hour) to be used in subsequent requests
-     * @type {string}
-     * @memberof AccessTokenData
      */
     'access_token': string;
     /**
      * The type of access token returned
-     * @type {string}
-     * @memberof AccessTokenData
      */
     'token_type': string;
     /**
      * The duration of time (in seconds) the access token is granted for
-     * @type {number}
-     * @memberof AccessTokenData
      */
     'expires_in': number;
     /**
      * A long-lived token that can be used to generate new access tokens even after the returned access token expires.
-     * @type {string}
-     * @memberof AccessTokenData
      */
     'refresh_token'?: string;
 }
-/**
- * 
- * @export
- * @interface AccountAux
- */
 export interface AccountAux {
     /**
      * ID of the user who is the ultimate owner of the account. Deprecated in favor of the `owner` role of the user\'s account membership.
-     * @type {string}
-     * @memberof AccountAux
      * @deprecated
      */
     'owner_id'?: string;
     /**
      * The email address to send billing information to. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountAux
      */
     'billing_email'?: string;
-    /**
-     * 
-     * @type {PostalAddress}
-     * @memberof AccountAux
-     */
     'billing_address'?: PostalAddress;
     /**
      * A list of Tax IDs used by the account, for billing purposes.
-     * @type {Array<TaxId>}
-     * @memberof AccountAux
      */
     'billing_tax_ids'?: Array<TaxId>;
-    /**
-     * 
-     * @type {SubscriptionPriceCurrency}
-     * @memberof AccountAux
-     */
     'billing_currency'?: SubscriptionPriceCurrency;
     /**
      * An optional official name to use for billing purposes. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountAux
      */
     'billing_name'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountAux
-     */
     'stripe_customer_id'?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AccountAux
-     */
     'is_reseller'?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountAux
-     */
     'reseller_account_id'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface AccountBase
- */
 export interface AccountBase {
     /**
      * Human readable name of the account
-     * @type {string}
-     * @memberof AccountBase
      */
     'name'?: string;
     /**
      * Custom platform URL for the account
-     * @type {string}
-     * @memberof AccountBase
      */
     'custom_platform_url'?: string;
     /**
      * The URL to the logo of the account
-     * @type {string}
-     * @memberof AccountBase
      */
     'logo_url'?: string;
     /**
      * URL of the account\'s primary website
-     * @type {string}
-     * @memberof AccountBase
      */
     'website_url'?: string;
     /**
      * Country code of the account. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountBase
      */
     'billing_country'?: string;
     /**
      * The type of company that the account represents. Note that for forward-compatibility the data type here is simply a string. The values, if present, will however typically originate from the `CompanyType` enum. 
-     * @type {string}
-     * @memberof AccountBase
      */
     'company_type'?: string;
-    /**
-     * 
-     * @type {CompanySize}
-     * @memberof AccountBase
-     */
     'company_size'?: CompanySize;
     /**
      * Determines whether the account has clients that they work for, or if their activities are for themselves.
-     * @type {boolean}
-     * @memberof AccountBase
      */
     'has_clients'?: boolean;
     /**
      * A short human-readable name to identify the account. Must be lower-case and between 4 and 16 characters.
-     * @type {string}
-     * @memberof AccountBase
      * @deprecated
      */
     'slug'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface AccountCreation
- */
 export interface AccountCreation {
     /**
      * Human readable name of the account
-     * @type {string}
-     * @memberof AccountCreation
      */
     'name'?: string;
     /**
      * Custom platform URL for the account
-     * @type {string}
-     * @memberof AccountCreation
      */
     'custom_platform_url'?: string;
     /**
      * The URL to the logo of the account
-     * @type {string}
-     * @memberof AccountCreation
      */
     'logo_url'?: string;
     /**
      * URL of the account\'s primary website
-     * @type {string}
-     * @memberof AccountCreation
      */
     'website_url'?: string;
     /**
      * Country code of the account. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountCreation
      */
     'billing_country'?: string;
-    /**
-     * 
-     * @type {CompanyType}
-     * @memberof AccountCreation
-     */
     'company_type'?: CompanyType;
-    /**
-     * 
-     * @type {CompanySize}
-     * @memberof AccountCreation
-     */
     'company_size'?: CompanySize;
     /**
      * Determines whether the account has clients that they work for, or if their activities are for themselves.
-     * @type {boolean}
-     * @memberof AccountCreation
      */
     'has_clients'?: boolean;
     /**
      * A short human-readable name to identify the account. Must be lower-case and between 4 and 16 characters.
-     * @type {string}
-     * @memberof AccountCreation
      * @deprecated
      */
     'slug'?: string;
-    /**
-     * 
-     * @type {AccountOwnerCreation}
-     * @memberof AccountCreation
-     */
     'owner'?: AccountOwnerCreation;
     /**
      * ID of the user who is the ultimate owner of the account. Deprecated in favor of the `owner` role of the user\'s account membership.
-     * @type {string}
-     * @memberof AccountCreation
      * @deprecated
      */
     'owner_id'?: string;
     /**
      * The email address to send billing information to. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountCreation
      */
     'billing_email'?: string;
-    /**
-     * 
-     * @type {PostalAddress}
-     * @memberof AccountCreation
-     */
     'billing_address'?: PostalAddress;
     /**
      * Whether or not to notify the user that they have been registered
-     * @type {boolean}
-     * @memberof AccountCreation
      */
     'notify_user'?: boolean;
 }
 
 
-/**
- * 
- * @export
- * @interface AccountCreationAux
- */
 export interface AccountCreationAux {
-    /**
-     * 
-     * @type {AccountOwnerCreation}
-     * @memberof AccountCreationAux
-     */
     'owner'?: AccountOwnerCreation;
     /**
      * ID of the user who is the ultimate owner of the account. Deprecated in favor of the `owner` role of the user\'s account membership.
-     * @type {string}
-     * @memberof AccountCreationAux
      * @deprecated
      */
     'owner_id'?: string;
     /**
      * The email address to send billing information to. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountCreationAux
      */
     'billing_email'?: string;
-    /**
-     * 
-     * @type {PostalAddress}
-     * @memberof AccountCreationAux
-     */
     'billing_address'?: PostalAddress;
 }
-/**
- * 
- * @export
- * @interface AccountFull
- */
 export interface AccountFull {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof AccountFull
      */
     'id'?: string;
     /**
      * Human readable name of the account
-     * @type {string}
-     * @memberof AccountFull
      */
     'name'?: string;
     /**
      * Custom platform URL for the account
-     * @type {string}
-     * @memberof AccountFull
      */
     'custom_platform_url'?: string;
     /**
      * The URL to the logo of the account
-     * @type {string}
-     * @memberof AccountFull
      */
     'logo_url'?: string;
     /**
      * URL of the account\'s primary website
-     * @type {string}
-     * @memberof AccountFull
      */
     'website_url'?: string;
     /**
      * Country code of the account. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountFull
      */
     'billing_country'?: string;
     /**
      * The type of company that the account represents. Note that for forward-compatibility the data type here is simply a string. The values, if present, will however typically originate from the `CompanyType` enum. 
-     * @type {string}
-     * @memberof AccountFull
      */
     'company_type'?: string;
-    /**
-     * 
-     * @type {CompanySize}
-     * @memberof AccountFull
-     */
     'company_size'?: CompanySize;
     /**
      * Determines whether the account has clients that they work for, or if their activities are for themselves.
-     * @type {boolean}
-     * @memberof AccountFull
      */
     'has_clients'?: boolean;
     /**
      * A short human-readable name to identify the account. Must be lower-case and between 4 and 16 characters.
-     * @type {string}
-     * @memberof AccountFull
      * @deprecated
      */
     'slug'?: string;
     /**
      * ID of the user who is the ultimate owner of the account. Deprecated in favor of the `owner` role of the user\'s account membership.
-     * @type {string}
-     * @memberof AccountFull
      * @deprecated
      */
     'owner_id'?: string;
     /**
      * The email address to send billing information to. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountFull
      */
     'billing_email'?: string;
-    /**
-     * 
-     * @type {PostalAddress}
-     * @memberof AccountFull
-     */
     'billing_address'?: PostalAddress;
     /**
      * A list of Tax IDs used by the account, for billing purposes.
-     * @type {Array<TaxId>}
-     * @memberof AccountFull
      */
     'billing_tax_ids'?: Array<TaxId>;
-    /**
-     * 
-     * @type {SubscriptionPriceCurrency}
-     * @memberof AccountFull
-     */
     'billing_currency'?: SubscriptionPriceCurrency;
     /**
      * An optional official name to use for billing purposes. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountFull
      */
     'billing_name'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountFull
-     */
     'stripe_customer_id'?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AccountFull
-     */
     'is_reseller'?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountFull
-     */
     'reseller_account_id'?: string;
-    /**
-     * 
-     * @type {PlanFeatureSet}
-     * @memberof AccountFull
-     */
     'feature_set'?: PlanFeatureSet;
-    /**
-     * 
-     * @type {Array<AccountSubscriptionItem>}
-     * @memberof AccountFull
-     */
     'subscriptions'?: Array<AccountSubscriptionItem>;
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof AccountFull
      */
     'created_at'?: string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof AccountFull
      */
     'created_by'?: string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof AccountFull
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof AccountFull
      */
     'updated_by'?: string;
 }
@@ -472,28 +252,11 @@ export interface AccountFull {
 
 /**
  * Additional properties that may appear as read-only properties depending on the `include` parameter
- * @export
- * @interface AccountIncludeAux
  */
 export interface AccountIncludeAux {
-    /**
-     * 
-     * @type {PlanFeatureSet}
-     * @memberof AccountIncludeAux
-     */
     'feature_set'?: PlanFeatureSet;
-    /**
-     * 
-     * @type {Array<AccountSubscriptionItem>}
-     * @memberof AccountIncludeAux
-     */
     'subscriptions'?: Array<AccountSubscriptionItem>;
 }
-/**
- * 
- * @export
- * @enum {string}
- */
 
 export const AccountIncludeParam = {
     None: 'none',
@@ -503,265 +266,135 @@ export const AccountIncludeParam = {
 export type AccountIncludeParam = typeof AccountIncludeParam[keyof typeof AccountIncludeParam];
 
 
-/**
- * 
- * @export
- * @interface AccountItem
- */
 export interface AccountItem {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof AccountItem
      */
     'id'?: string;
     /**
      * Human readable name of the account
-     * @type {string}
-     * @memberof AccountItem
      */
     'name'?: string;
     /**
      * Custom platform URL for the account
-     * @type {string}
-     * @memberof AccountItem
      */
     'custom_platform_url'?: string;
     /**
      * The URL to the logo of the account
-     * @type {string}
-     * @memberof AccountItem
      */
     'logo_url'?: string;
     /**
      * URL of the account\'s primary website
-     * @type {string}
-     * @memberof AccountItem
      */
     'website_url'?: string;
     /**
      * Country code of the account. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountItem
      */
     'billing_country'?: string;
     /**
      * The type of company that the account represents. Note that for forward-compatibility the data type here is simply a string. The values, if present, will however typically originate from the `CompanyType` enum. 
-     * @type {string}
-     * @memberof AccountItem
      */
     'company_type'?: string;
-    /**
-     * 
-     * @type {CompanySize}
-     * @memberof AccountItem
-     */
     'company_size'?: CompanySize;
     /**
      * Determines whether the account has clients that they work for, or if their activities are for themselves.
-     * @type {boolean}
-     * @memberof AccountItem
      */
     'has_clients'?: boolean;
     /**
      * A short human-readable name to identify the account. Must be lower-case and between 4 and 16 characters.
-     * @type {string}
-     * @memberof AccountItem
      * @deprecated
      */
     'slug'?: string;
-    /**
-     * 
-     * @type {PlanFeatureSet}
-     * @memberof AccountItem
-     */
     'feature_set'?: PlanFeatureSet;
-    /**
-     * 
-     * @type {Array<AccountSubscriptionItem>}
-     * @memberof AccountItem
-     */
     'subscriptions'?: Array<AccountSubscriptionItem>;
 }
 
 
-/**
- * 
- * @export
- * @interface AccountLinks
- */
 export interface AccountLinks {
     /**
      * Link for getting to the account\'s users
-     * @type {string}
-     * @memberof AccountLinks
      */
     'users'?: string;
 }
-/**
- * 
- * @export
- * @interface AccountMutation
- */
 export interface AccountMutation {
     /**
      * Human readable name of the account
-     * @type {string}
-     * @memberof AccountMutation
      */
     'name'?: string;
     /**
      * Custom platform URL for the account
-     * @type {string}
-     * @memberof AccountMutation
      */
     'custom_platform_url'?: string;
     /**
      * The URL to the logo of the account
-     * @type {string}
-     * @memberof AccountMutation
      */
     'logo_url'?: string;
     /**
      * URL of the account\'s primary website
-     * @type {string}
-     * @memberof AccountMutation
      */
     'website_url'?: string;
     /**
      * Country code of the account. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountMutation
      */
     'billing_country'?: string;
-    /**
-     * 
-     * @type {CompanyType}
-     * @memberof AccountMutation
-     */
     'company_type'?: CompanyType;
-    /**
-     * 
-     * @type {CompanySize}
-     * @memberof AccountMutation
-     */
     'company_size'?: CompanySize;
     /**
      * Determines whether the account has clients that they work for, or if their activities are for themselves.
-     * @type {boolean}
-     * @memberof AccountMutation
      */
     'has_clients'?: boolean;
     /**
      * A short human-readable name to identify the account. Must be lower-case and between 4 and 16 characters.
-     * @type {string}
-     * @memberof AccountMutation
      * @deprecated
      */
     'slug'?: string;
     /**
      * ID of the user who is the ultimate owner of the account. Deprecated in favor of the `owner` role of the user\'s account membership.
-     * @type {string}
-     * @memberof AccountMutation
      * @deprecated
      */
     'owner_id'?: string;
     /**
      * The email address to send billing information to. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountMutation
      */
     'billing_email'?: string;
-    /**
-     * 
-     * @type {PostalAddress}
-     * @memberof AccountMutation
-     */
     'billing_address'?: PostalAddress;
     /**
      * A list of Tax IDs used by the account, for billing purposes.
-     * @type {Array<TaxId>}
-     * @memberof AccountMutation
      */
     'billing_tax_ids'?: Array<TaxId>;
-    /**
-     * 
-     * @type {SubscriptionPriceCurrency}
-     * @memberof AccountMutation
-     */
     'billing_currency'?: SubscriptionPriceCurrency;
     /**
      * An optional official name to use for billing purposes. Requires `owner` role to change.
-     * @type {string}
-     * @memberof AccountMutation
      */
     'billing_name'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountMutation
-     */
     'stripe_customer_id'?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AccountMutation
-     */
     'is_reseller'?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountMutation
-     */
     'reseller_account_id'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface AccountMutationAux
- */
 export interface AccountMutationAux {
-    /**
-     * 
-     * @type {CompanyType}
-     * @memberof AccountMutationAux
-     */
     'company_type'?: CompanyType;
 }
 
 
 /**
  * Information about the account owner of a newly created account. Can only be specified by super-admins.
- * @export
- * @interface AccountOwnerCreation
  */
 export interface AccountOwnerCreation {
     /**
      * The account owner\'s name
-     * @type {string}
-     * @memberof AccountOwnerCreation
      */
     'name': string;
     /**
      * The account owner\'s email
-     * @type {string}
-     * @memberof AccountOwnerCreation
      */
     'email': string;
     /**
      * The account owner\'s password
-     * @type {string}
-     * @memberof AccountOwnerCreation
      */
     'password'?: string;
 }
-/**
- * 
- * @export
- * @enum {string}
- */
 
 export const AccountSortOption = {
     CreatedAt: 'created_at',
@@ -773,338 +406,164 @@ export const AccountSortOption = {
 export type AccountSortOption = typeof AccountSortOption[keyof typeof AccountSortOption];
 
 
-/**
- * 
- * @export
- * @interface AccountStripeBillingInfo
- */
 export interface AccountStripeBillingInfo {
     [key: string]: any;
 
     /**
      * The URL to take the user to, to configure their billing information
-     * @type {string}
-     * @memberof AccountStripeBillingInfo
      */
     'billing_portal_url'?: string;
 }
-/**
- * 
- * @export
- * @interface AccountSubscriptionBase
- */
 export interface AccountSubscriptionBase {
     /**
      * The ID of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionBase
      */
     'id': string;
     /**
      * Start date (inclusive) of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionBase
      */
     'start_date': string;
     /**
      * End date (inclusive) of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionBase
      */
     'end_date'?: string;
     /**
      * Is the subscription currently active or not?
-     * @type {boolean}
-     * @memberof AccountSubscriptionBase
      */
     'is_active': boolean;
     /**
      * Time of cancelling the subscription, if it has been cancelled. Note that a cancelled subscription may still be active, if it has been prepaid for the current period. 
-     * @type {string}
-     * @memberof AccountSubscriptionBase
      */
     'cancelled_at'?: string;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof AccountSubscriptionBase
-     */
     'actual_price'?: SubscriptionPrice;
-    /**
-     * 
-     * @type {AccountSubscriptionPaymentConfiguration}
-     * @memberof AccountSubscriptionBase
-     */
     'payment_configuration'?: AccountSubscriptionPaymentConfiguration;
 }
-/**
- * 
- * @export
- * @interface AccountSubscriptionCreation
- */
 export interface AccountSubscriptionCreation {
     /**
      * The ID of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionCreation
      */
     'id': string;
     /**
      * Start date (inclusive) of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionCreation
      */
     'start_date': string;
     /**
      * End date (inclusive) of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionCreation
      */
     'end_date'?: string;
     /**
      * Is the subscription currently active or not?
-     * @type {boolean}
-     * @memberof AccountSubscriptionCreation
      */
     'is_active': boolean;
     /**
      * Time of cancelling the subscription, if it has been cancelled. Note that a cancelled subscription may still be active, if it has been prepaid for the current period. 
-     * @type {string}
-     * @memberof AccountSubscriptionCreation
      */
     'cancelled_at'?: string;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof AccountSubscriptionCreation
-     */
     'actual_price'?: SubscriptionPrice;
-    /**
-     * 
-     * @type {AccountSubscriptionPaymentConfiguration}
-     * @memberof AccountSubscriptionCreation
-     */
     'payment_configuration'?: AccountSubscriptionPaymentConfiguration;
     /**
      * The ID of the plan to subscribe to
-     * @type {string}
-     * @memberof AccountSubscriptionCreation
      */
     'plan_id': string;
 }
-/**
- * 
- * @export
- * @interface AccountSubscriptionFull
- */
 export interface AccountSubscriptionFull {
     /**
      * The ID of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionFull
      */
     'id': string;
     /**
      * Start date (inclusive) of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionFull
      */
     'start_date': string;
     /**
      * End date (inclusive) of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionFull
      */
     'end_date'?: string;
     /**
      * Is the subscription currently active or not?
-     * @type {boolean}
-     * @memberof AccountSubscriptionFull
      */
     'is_active': boolean;
     /**
      * Time of cancelling the subscription, if it has been cancelled. Note that a cancelled subscription may still be active, if it has been prepaid for the current period. 
-     * @type {string}
-     * @memberof AccountSubscriptionFull
      */
     'cancelled_at'?: string;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof AccountSubscriptionFull
-     */
     'actual_price'?: SubscriptionPrice;
-    /**
-     * 
-     * @type {AccountSubscriptionPaymentConfiguration}
-     * @memberof AccountSubscriptionFull
-     */
     'payment_configuration'?: AccountSubscriptionPaymentConfiguration;
-    /**
-     * 
-     * @type {SubscriptionPlanFull}
-     * @memberof AccountSubscriptionFull
-     */
     'plan': SubscriptionPlanFull;
     /**
      * The ID of the account
-     * @type {string}
-     * @memberof AccountSubscriptionFull
      */
     'account_id': string;
     /**
      * Timestamp of the last processed payment
-     * @type {string}
-     * @memberof AccountSubscriptionFull
      */
     'last_paid_at'?: string;
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof AccountSubscriptionFull
      */
     'created_at'?: string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof AccountSubscriptionFull
      */
     'created_by'?: string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof AccountSubscriptionFull
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof AccountSubscriptionFull
      */
     'updated_by'?: string;
 }
-/**
- * 
- * @export
- * @interface AccountSubscriptionFullAux
- */
 export interface AccountSubscriptionFullAux {
     /**
      * The ID of the account
-     * @type {string}
-     * @memberof AccountSubscriptionFullAux
      */
     'account_id': string;
-    /**
-     * 
-     * @type {SubscriptionPlanFull}
-     * @memberof AccountSubscriptionFullAux
-     */
     'plan': SubscriptionPlanFull;
     /**
      * Timestamp of the last processed payment
-     * @type {string}
-     * @memberof AccountSubscriptionFullAux
      */
     'last_paid_at'?: string;
 }
-/**
- * 
- * @export
- * @interface AccountSubscriptionItem
- */
 export interface AccountSubscriptionItem {
     /**
      * The ID of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionItem
      */
     'id': string;
     /**
      * Start date (inclusive) of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionItem
      */
     'start_date': string;
     /**
      * End date (inclusive) of the subscription
-     * @type {string}
-     * @memberof AccountSubscriptionItem
      */
     'end_date'?: string;
     /**
      * Is the subscription currently active or not?
-     * @type {boolean}
-     * @memberof AccountSubscriptionItem
      */
     'is_active': boolean;
     /**
      * Time of cancelling the subscription, if it has been cancelled. Note that a cancelled subscription may still be active, if it has been prepaid for the current period. 
-     * @type {string}
-     * @memberof AccountSubscriptionItem
      */
     'cancelled_at'?: string;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof AccountSubscriptionItem
-     */
     'actual_price'?: SubscriptionPrice;
-    /**
-     * 
-     * @type {AccountSubscriptionPaymentConfiguration}
-     * @memberof AccountSubscriptionItem
-     */
     'payment_configuration'?: AccountSubscriptionPaymentConfiguration;
-    /**
-     * 
-     * @type {SubscriptionPlanItem}
-     * @memberof AccountSubscriptionItem
-     */
     'plan'?: SubscriptionPlanItem;
 }
-/**
- * 
- * @export
- * @interface AccountSubscriptionItemAux
- */
 export interface AccountSubscriptionItemAux {
-    /**
-     * 
-     * @type {SubscriptionPlanItem}
-     * @memberof AccountSubscriptionItemAux
-     */
     'plan'?: SubscriptionPlanItem;
 }
 /**
  * Describes the payment configuration of an account subscription
- * @export
- * @interface AccountSubscriptionPaymentConfiguration
  */
 export interface AccountSubscriptionPaymentConfiguration {
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountSubscriptionPaymentConfiguration
-     */
     'platform': AccountSubscriptionPaymentConfigurationPlatformEnum;
     /**
      * Is the subscription pre-paid or post-paid?
-     * @type {string}
-     * @memberof AccountSubscriptionPaymentConfiguration
      */
     'timing': AccountSubscriptionPaymentConfigurationTimingEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountSubscriptionPaymentConfiguration
-     */
     'stripe_subscription_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountSubscriptionPaymentConfiguration
-     */
     'stripe_subscription_item_id'?: string;
 }
 
@@ -1123,505 +582,270 @@ export type AccountSubscriptionPaymentConfigurationTimingEnum = typeof AccountSu
 
 /**
  * Summarizes an account\'s current subscription(s) and the feature set available
- * @export
- * @interface AccountSubscriptionsSummary
  */
 export interface AccountSubscriptionsSummary {
     /**
      * The ID of the account
-     * @type {string}
-     * @memberof AccountSubscriptionsSummary
      */
     'account_id': string;
-    /**
-     * 
-     * @type {Array<AccountSubscriptionItem>}
-     * @memberof AccountSubscriptionsSummary
-     */
     'subscriptions': Array<AccountSubscriptionItem>;
-    /**
-     * 
-     * @type {PlanFeatureSet}
-     * @memberof AccountSubscriptionsSummary
-     */
     'feature_set': PlanFeatureSet;
 }
-/**
- * 
- * @export
- * @interface AccountUserAddition
- */
 export interface AccountUserAddition {
     /**
      * The email of the user (used as username when authenticating with password)
-     * @type {string}
-     * @memberof AccountUserAddition
      */
     'email': string;
     /**
      * Human readable name of the user
-     * @type {string}
-     * @memberof AccountUserAddition
      */
     'name'?: string;
     /**
      * The roles that the user will have within the account
-     * @type {Array<UserAccountRole>}
-     * @memberof AccountUserAddition
      */
     'roles'?: Array<UserAccountRole>;
 }
-/**
- * 
- * @export
- * @interface AddUserToAccount201Response
- */
 export interface AddUserToAccount201Response {
-    /**
-     * 
-     * @type {UserFull}
-     * @memberof AddUserToAccount201Response
-     */
     'data'?: UserFull;
-    /**
-     * 
-     * @type {UserLinks}
-     * @memberof AddUserToAccount201Response
-     */
     'links'?: UserLinks;
 }
-/**
- * 
- * @export
- * @interface ApiKeyAux
- */
 export interface ApiKeyAux {
-    /**
-     * 
-     * @type {PermissionScopes}
-     * @memberof ApiKeyAux
-     */
     'scopes'?: PermissionScopes;
 }
-/**
- * 
- * @export
- * @interface ApiKeyBase
- */
 export interface ApiKeyBase {
     /**
      * Human readable name of the API key
-     * @type {string}
-     * @memberof ApiKeyBase
      */
     'name'?: string;
-    /**
-     * 
-     * @type {ApiKeyStatus}
-     * @memberof ApiKeyBase
-     */
     'status'?: ApiKeyStatus;
     /**
      * Optional date/time that the key will expire
-     * @type {string}
-     * @memberof ApiKeyBase
      */
     'expires_at'?: string;
     /**
      * The ID of the API key\'s user. 
-     * @type {string}
-     * @memberof ApiKeyBase
      */
     'user_id'?: string;
     /**
      * The ID of account that the API key is associated with. 
-     * @type {string}
-     * @memberof ApiKeyBase
      */
     'account_id'?: string;
     /**
      * The approximate last time that the API key was used to authenticate API requests
-     * @type {string}
-     * @memberof ApiKeyBase
      */
     'last_used_at'?: string;
     /**
      * A prefix of the API key
-     * @type {string}
-     * @memberof ApiKeyBase
      */
     'token_prefix'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface ApiKeyCreation
- */
 export interface ApiKeyCreation {
     /**
      * Human readable name of the API key
-     * @type {string}
-     * @memberof ApiKeyCreation
      */
     'name'?: string;
-    /**
-     * 
-     * @type {ApiKeyStatus}
-     * @memberof ApiKeyCreation
-     */
     'status'?: ApiKeyStatus;
     /**
      * Optional date/time that the key will expire
-     * @type {string}
-     * @memberof ApiKeyCreation
      */
     'expires_at'?: string;
     /**
      * The ID of the API key\'s user. 
-     * @type {string}
-     * @memberof ApiKeyCreation
      */
     'user_id'?: string;
     /**
      * The ID of account that the API key is associated with. 
-     * @type {string}
-     * @memberof ApiKeyCreation
      */
     'account_id'?: string;
     /**
      * The approximate last time that the API key was used to authenticate API requests
-     * @type {string}
-     * @memberof ApiKeyCreation
      */
     'last_used_at'?: string;
     /**
      * A prefix of the API key
-     * @type {string}
-     * @memberof ApiKeyCreation
      */
     'token_prefix'?: string;
-    /**
-     * 
-     * @type {PermissionScopes}
-     * @memberof ApiKeyCreation
-     */
     'scopes'?: PermissionScopes;
 }
 
 
-/**
- * 
- * @export
- * @interface ApiKeyFull
- */
 export interface ApiKeyFull {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof ApiKeyFull
      */
     'id'?: string;
     /**
      * Human readable name of the API key
-     * @type {string}
-     * @memberof ApiKeyFull
      */
     'name'?: string;
-    /**
-     * 
-     * @type {ApiKeyStatus}
-     * @memberof ApiKeyFull
-     */
     'status'?: ApiKeyStatus;
     /**
      * Optional date/time that the key will expire
-     * @type {string}
-     * @memberof ApiKeyFull
      */
     'expires_at'?: string;
     /**
      * The ID of the API key\'s user. 
-     * @type {string}
-     * @memberof ApiKeyFull
      */
     'user_id'?: string;
     /**
      * The ID of account that the API key is associated with. 
-     * @type {string}
-     * @memberof ApiKeyFull
      */
     'account_id'?: string;
     /**
      * The approximate last time that the API key was used to authenticate API requests
-     * @type {string}
-     * @memberof ApiKeyFull
      */
     'last_used_at'?: string;
     /**
      * A prefix of the API key
-     * @type {string}
-     * @memberof ApiKeyFull
      */
     'token_prefix'?: string;
-    /**
-     * 
-     * @type {PermissionScopes}
-     * @memberof ApiKeyFull
-     */
     'scopes'?: PermissionScopes;
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof ApiKeyFull
      */
     'created_at'?: string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof ApiKeyFull
      */
     'created_by'?: string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof ApiKeyFull
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof ApiKeyFull
      */
     'updated_by'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface ApiKeyFullWithToken
- */
 export interface ApiKeyFullWithToken {
     /**
      * The actual API key token to use with the `X-API-KEY` header to authenticate with the key
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'token'?: string;
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'id'?: string;
     /**
      * Human readable name of the API key
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'name'?: string;
-    /**
-     * 
-     * @type {ApiKeyStatus}
-     * @memberof ApiKeyFullWithToken
-     */
     'status'?: ApiKeyStatus;
     /**
      * Optional date/time that the key will expire
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'expires_at'?: string;
     /**
      * The ID of the API key\'s user. 
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'user_id'?: string;
     /**
      * The ID of account that the API key is associated with. 
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'account_id'?: string;
     /**
      * The approximate last time that the API key was used to authenticate API requests
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'last_used_at'?: string;
     /**
      * A prefix of the API key
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'token_prefix'?: string;
-    /**
-     * 
-     * @type {PermissionScopes}
-     * @memberof ApiKeyFullWithToken
-     */
     'scopes'?: PermissionScopes;
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'created_at'?: string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'created_by'?: string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof ApiKeyFullWithToken
      */
     'updated_by'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface ApiKeyItem
- */
 export interface ApiKeyItem {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof ApiKeyItem
      */
     'id'?: string;
     /**
      * Human readable name of the API key
-     * @type {string}
-     * @memberof ApiKeyItem
      */
     'name'?: string;
-    /**
-     * 
-     * @type {ApiKeyStatus}
-     * @memberof ApiKeyItem
-     */
     'status'?: ApiKeyStatus;
     /**
      * Optional date/time that the key will expire
-     * @type {string}
-     * @memberof ApiKeyItem
      */
     'expires_at'?: string;
     /**
      * The ID of the API key\'s user. 
-     * @type {string}
-     * @memberof ApiKeyItem
      */
     'user_id'?: string;
     /**
      * The ID of account that the API key is associated with. 
-     * @type {string}
-     * @memberof ApiKeyItem
      */
     'account_id'?: string;
     /**
      * The approximate last time that the API key was used to authenticate API requests
-     * @type {string}
-     * @memberof ApiKeyItem
      */
     'last_used_at'?: string;
     /**
      * A prefix of the API key
-     * @type {string}
-     * @memberof ApiKeyItem
      */
     'token_prefix'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface ApiKeyLinks
- */
 export interface ApiKeyLinks {
     /**
      * Link for getting to the api key\'s user
-     * @type {string}
-     * @memberof ApiKeyLinks
      */
     'user'?: string;
 }
-/**
- * 
- * @export
- * @interface ApiKeyMutation
- */
 export interface ApiKeyMutation {
     /**
      * Human readable name of the API key
-     * @type {string}
-     * @memberof ApiKeyMutation
      */
     'name'?: string;
-    /**
-     * 
-     * @type {ApiKeyStatus}
-     * @memberof ApiKeyMutation
-     */
     'status'?: ApiKeyStatus;
     /**
      * Optional date/time that the key will expire
-     * @type {string}
-     * @memberof ApiKeyMutation
      */
     'expires_at'?: string;
     /**
      * The ID of the API key\'s user. 
-     * @type {string}
-     * @memberof ApiKeyMutation
      */
     'user_id'?: string;
     /**
      * The ID of account that the API key is associated with. 
-     * @type {string}
-     * @memberof ApiKeyMutation
      */
     'account_id'?: string;
     /**
      * The approximate last time that the API key was used to authenticate API requests
-     * @type {string}
-     * @memberof ApiKeyMutation
      */
     'last_used_at'?: string;
     /**
      * A prefix of the API key
-     * @type {string}
-     * @memberof ApiKeyMutation
      */
     'token_prefix'?: string;
-    /**
-     * 
-     * @type {PermissionScopes}
-     * @memberof ApiKeyMutation
-     */
     'scopes'?: PermissionScopes;
 }
 
 
 /**
  * Describes the status of the API key. The status can be set to active or disabled manually. It will become expired automatically, if the expiry date has been surpassed. 
- * @export
- * @enum {string}
  */
 
 export const ApiKeyStatus = {
@@ -1635,311 +859,144 @@ export type ApiKeyStatus = typeof ApiKeyStatus[keyof typeof ApiKeyStatus];
 
 /**
  * Contains the generated API key which is only revealed right after generation
- * @export
- * @interface ApiKeyToken
  */
 export interface ApiKeyToken {
     /**
      * The actual API key token to use with the `X-API-KEY` header to authenticate with the key
-     * @type {string}
-     * @memberof ApiKeyToken
      */
     'token'?: string;
 }
 /**
  * An object that represents an audience matched to the request
- * @export
- * @interface Audience
  */
 export interface Audience {
     /**
      * The audience category
-     * @type {string}
-     * @memberof Audience
      */
     'category'?: string;
     /**
      * The unique audience code
-     * @type {string}
-     * @memberof Audience
      */
     'code'?: string;
     /**
      * The name of the audience, typically of the form \"{category name} > {audience name}\"
-     * @type {string}
-     * @memberof Audience
      */
     'name'?: string;
 }
-/**
- * 
- * @export
- * @interface AudienceCategoryItem
- */
 export interface AudienceCategoryItem {
     /**
      * A code used to represent the audience category
-     * @type {string}
-     * @memberof AudienceCategoryItem
      */
     'code': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AudienceCategoryItem
-     */
     'display_name': string;
-    /**
-     * 
-     * @type {Array<AudienceItem>}
-     * @memberof AudienceCategoryItem
-     */
     'audiences': Array<AudienceItem>;
 }
-/**
- * 
- * @export
- * @interface AudienceCategoryStats
- */
 export interface AudienceCategoryStats {
     /**
      * The name of the audience category
-     * @type {string}
-     * @memberof AudienceCategoryStats
      */
     'name': string;
-    /**
-     * 
-     * @type {Array<AudienceStats>}
-     * @memberof AudienceCategoryStats
-     */
     'audiences': Array<AudienceStats>;
 }
-/**
- * 
- * @export
- * @interface AudienceExampleInput
- */
 export interface AudienceExampleInput {
     /**
      * The IP address to resolve audiences for
-     * @type {string}
-     * @memberof AudienceExampleInput
      */
     'ip_address'?: string;
 }
-/**
- * 
- * @export
- * @interface AudienceExampleInputsResponse
- */
 export interface AudienceExampleInputsResponse {
-    /**
-     * 
-     * @type {Array<AudienceExampleInput>}
-     * @memberof AudienceExampleInputsResponse
-     */
     'data': Array<AudienceExampleInput>;
 }
-/**
- * 
- * @export
- * @interface AudienceItem
- */
 export interface AudienceItem {
     /**
      * A code used to represent the audience
-     * @type {string}
-     * @memberof AudienceItem
      */
     'code': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AudienceItem
-     */
     'display_name': string;
     /**
      * A textual description of the audience
-     * @type {string}
-     * @memberof AudienceItem
      */
     'description'?: string;
     /**
      * A list of audience codes that this audience is composed from
-     * @type {Array<string>}
-     * @memberof AudienceItem
      */
     'composition'?: Array<string>;
     /**
      * Platform-specific code, provided when `platform` (and `country` if needed for the platform) is provided
-     * @type {string}
-     * @memberof AudienceItem
      */
     'platform_code'?: string;
-    /**
-     * 
-     * @type {AudienceReachStats}
-     * @memberof AudienceItem
-     */
     'reach_stats'?: AudienceReachStats;
 }
-/**
- * 
- * @export
- * @interface AudiencePlatformItem
- */
 export interface AudiencePlatformItem {
     /**
      * A code used to represent the platform when querying platform-specific information
-     * @type {string}
-     * @memberof AudiencePlatformItem
      */
     'code': string;
     /**
      * Name of the audience platform
-     * @type {string}
-     * @memberof AudiencePlatformItem
      */
     'display_name': string;
     /**
      * Whether the platform-specific codes for the particular platform are global (or country-specific when NOT global)
-     * @type {boolean}
-     * @memberof AudiencePlatformItem
      */
     'has_global_taxonomy': boolean;
     /**
      * A list of supported countries, each represented by their country code
-     * @type {Array<string>}
-     * @memberof AudiencePlatformItem
      */
     'supported_countries': Array<string>;
 }
 /**
  * Reach statistics for an audience in a particular country
- * @export
- * @interface AudienceReachStats
  */
 export interface AudienceReachStats {
     /**
      * A measure of accuracy, ie. the amount of in-target reach (as opposed to excess reach) of the audience.
-     * @type {number}
-     * @memberof AudienceReachStats
      */
     'in_target_reach'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof AudienceReachStats
-     */
     'num_households'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof AudienceReachStats
-     */
     'num_persons'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof AudienceReachStats
-     */
     'num_devices'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof AudienceReachStats
-     */
     'num_daily_impressions'?: number;
 }
-/**
- * 
- * @export
- * @interface AudienceRecommendationRecommendationItem
- */
 export interface AudienceRecommendationRecommendationItem {
-    /**
-     * 
-     * @type {string}
-     * @memberof AudienceRecommendationRecommendationItem
-     */
     'reason': string;
-    /**
-     * 
-     * @type {AudienceItem}
-     * @memberof AudienceRecommendationRecommendationItem
-     */
     'audience': AudienceItem;
 }
 /**
  * A user\'s message in an audience recommendation conversation
- * @export
- * @interface AudienceRecommendationRequestMessage
  */
 export interface AudienceRecommendationRequestMessage {
     /**
      * The ID of the conversation to add this message to. Do not provide a conversation ID in the initial/first message.
-     * @type {string}
-     * @memberof AudienceRecommendationRequestMessage
      */
     'conversation_id'?: string;
     /**
      * The text message to send to the audience recommendation conversation.
-     * @type {string}
-     * @memberof AudienceRecommendationRequestMessage
      */
     'message_text': string;
 }
 /**
  * A service response message in an audience recommendation conversation. A response will always contain a `message_text`, and may also contain `recommendations`.
- * @export
- * @interface AudienceRecommendationResponseMessage
  */
 export interface AudienceRecommendationResponseMessage {
     /**
      * The ID of the conversation that this message pertains to.
-     * @type {string}
-     * @memberof AudienceRecommendationResponseMessage
      */
     'conversation_id': string;
     /**
      * The text message sent back to the audience recommendation conversation.
-     * @type {string}
-     * @memberof AudienceRecommendationResponseMessage
      */
     'message_text': string;
-    /**
-     * 
-     * @type {Array<AudienceRecommendationRecommendationItem>}
-     * @memberof AudienceRecommendationResponseMessage
-     */
     'recommendations'?: Array<AudienceRecommendationRecommendationItem>;
 }
-/**
- * 
- * @export
- * @interface AudienceResponse
- */
 export interface AudienceResponse {
-    /**
-     * 
-     * @type {Array<Audience>}
-     * @memberof AudienceResponse
-     */
     'audiences'?: Array<Audience>;
-    /**
-     * 
-     * @type {AudienceResponseStatus}
-     * @memberof AudienceResponse
-     */
     'status': AudienceResponseStatus;
 }
 
 
 /**
  * Describes the result of resolving the audiences of an IP address. `resolved` means that the IP was resolved and audiences are returned. `unresolved` means that the IP could not be resolved and no audiences are returned. `forbidden` means that the authenticated user did not have grants to resolve audiences in the country of the IP. 
- * @export
- * @enum {string}
  */
 
 export const AudienceResponseStatus = {
@@ -1951,90 +1008,38 @@ export const AudienceResponseStatus = {
 export type AudienceResponseStatus = typeof AudienceResponseStatus[keyof typeof AudienceResponseStatus];
 
 
-/**
- * 
- * @export
- * @interface AudienceSetItem
- */
 export interface AudienceSetItem {
     /**
      * A code used to represent the audience set
-     * @type {string}
-     * @memberof AudienceSetItem
      */
     'code': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AudienceSetItem
-     */
     'display_name': string;
-    /**
-     * 
-     * @type {Array<AudienceCategoryItem>}
-     * @memberof AudienceSetItem
-     */
     'categories': Array<AudienceCategoryItem>;
 }
-/**
- * 
- * @export
- * @interface AudienceSetListResponseMeta
- */
 export interface AudienceSetListResponseMeta {
-    /**
-     * 
-     * @type {CountryItem}
-     * @memberof AudienceSetListResponseMeta
-     */
     'country'?: CountryItem;
-    /**
-     * 
-     * @type {AudiencePlatformItem}
-     * @memberof AudienceSetListResponseMeta
-     */
     'platform'?: AudiencePlatformItem;
 }
-/**
- * 
- * @export
- * @interface AudienceStats
- */
 export interface AudienceStats {
     /**
      * Measurements related to this object
-     * @type {Array<Measurement>}
-     * @memberof AudienceStats
      */
     'measurements': Array<Measurement>;
-    /**
-     * 
-     * @type {Array<Comparison>}
-     * @memberof AudienceStats
-     */
     'comparisons'?: Array<Comparison>;
     /**
      * The code of the audience
-     * @type {string}
-     * @memberof AudienceStats
      */
     'code': string;
     /**
      * The name of the audience
-     * @type {string}
-     * @memberof AudienceStats
      */
     'name': string;
 }
-/**
- * 
- * @export
- * @enum {string}
- */
 
 export const AudiencesIncludeParam = {
     Core: 'core',
     Composite: 'composite',
+    Iab: 'iab',
     Name: 'name',
     Category: 'category'
 } as const;
@@ -2042,129 +1047,65 @@ export const AudiencesIncludeParam = {
 export type AudiencesIncludeParam = typeof AudiencesIncludeParam[keyof typeof AudiencesIncludeParam];
 
 
-/**
- * 
- * @export
- * @interface AuthTokenRequest
- */
 export interface AuthTokenRequest {
     /**
      * The username (typically an email address) of the user to authenticate
-     * @type {string}
-     * @memberof AuthTokenRequest
      */
     'username': string;
     /**
      * A one-time password provided to perform passwordless auth
-     * @type {string}
-     * @memberof AuthTokenRequest
      */
     'otp'?: string;
     /**
      * The password for the given username
-     * @type {string}
-     * @memberof AuthTokenRequest
      */
     'password'?: string;
     /**
      * Optional account_id to authenticate for, if the user has multiple account memberships
-     * @type {string}
-     * @memberof AuthTokenRequest
      */
     'account_id'?: string;
     /**
      * A previously issued refresh token for the given username
-     * @type {string}
-     * @memberof AuthTokenRequest
      */
     'refresh_token'?: string;
-    /**
-     * 
-     * @type {PermissionScopes}
-     * @memberof AuthTokenRequest
-     */
     'scopes'?: PermissionScopes;
 }
-/**
- * 
- * @export
- * @interface AuthTokenResponse
- */
 export interface AuthTokenResponse {
     /**
      * A short-lived token (usable for 1 hour) to be used in subsequent requests
-     * @type {string}
-     * @memberof AuthTokenResponse
      */
     'access_token': string;
     /**
      * The type of access token returned
-     * @type {string}
-     * @memberof AuthTokenResponse
      */
     'token_type': string;
     /**
      * The duration of time (in seconds) the access token is granted for
-     * @type {number}
-     * @memberof AuthTokenResponse
      */
     'expires_in': number;
     /**
      * A long-lived token that can be used to generate new access tokens even after the returned access token expires.
-     * @type {string}
-     * @memberof AuthTokenResponse
      */
     'refresh_token'?: string;
 }
 /**
  * Measurements (overall and per audience) for traffic resolved as business users
- * @export
- * @interface BusinessAudienceStats
  */
 export interface BusinessAudienceStats {
     /**
      * Measurements related to this object
-     * @type {Array<Measurement>}
-     * @memberof BusinessAudienceStats
      */
     'measurements': Array<Measurement>;
-    /**
-     * 
-     * @type {BusinessAudienceStatsAudienceCategories}
-     * @memberof BusinessAudienceStats
-     */
     'audience_categories'?: BusinessAudienceStatsAudienceCategories;
 }
-/**
- * 
- * @export
- * @interface BusinessAudienceStatsAudienceCategories
- */
 export interface BusinessAudienceStatsAudienceCategories {
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof BusinessAudienceStatsAudienceCategories
-     */
     'size': AudienceCategoryStats;
 }
-/**
- * 
- * @export
- * @interface CategoryPopulationsFull
- */
 export interface CategoryPopulationsFull {
-    /**
-     * 
-     * @type {Array<PopulationItem>}
-     * @memberof CategoryPopulationsFull
-     */
     'populations'?: Array<PopulationItem>;
 }
 /**
  * Describes the size of a company
- * @export
- * @enum {string}
  */
 
 export const CompanySize = {
@@ -2184,8 +1125,6 @@ export type CompanySize = typeof CompanySize[keyof typeof CompanySize];
 
 /**
  * A type of company that an account can represent
- * @export
- * @enum {string}
  */
 
 export const CompanyType = {
@@ -2201,1046 +1140,501 @@ export type CompanyType = typeof CompanyType[keyof typeof CompanyType];
 
 /**
  * Represents a comparison of measurements with another source
- * @export
- * @interface Comparison
  */
 export interface Comparison {
     /**
      * The name of the comparison source
-     * @type {string}
-     * @memberof Comparison
      */
     'name': string;
     /**
      * The code of the comparison source
-     * @type {string}
-     * @memberof Comparison
      */
     'code': string;
     /**
      * The \"fraction of total\" value that is being compared with. 
-     * @type {number}
-     * @memberof Comparison
      */
     'fraction_of_total': number;
     /**
      * The comparison index where 100 means that the measurement is completely aligned with the compared metric. Values below 100 means that the measurement is below the compared metric, and values above 100 means that the measurement is above the compared metric. 
-     * @type {number}
-     * @memberof Comparison
      */
     'index': number;
 }
 /**
  * An object containing comparisons
- * @export
- * @interface ComparisonsContainer
  */
 export interface ComparisonsContainer {
-    /**
-     * 
-     * @type {Array<Comparison>}
-     * @memberof ComparisonsContainer
-     */
     'comparisons'?: Array<Comparison>;
 }
-/**
- * 
- * @export
- * @interface CountryItem
- */
 export interface CountryItem {
     /**
      * 2-letter country code
-     * @type {string}
-     * @memberof CountryItem
      */
     'code': string;
     /**
      * Name of the country
-     * @type {string}
-     * @memberof CountryItem
      */
     'display_name': string;
-    /**
-     * 
-     * @type {CountryReachStats}
-     * @memberof CountryItem
-     */
     'reach_stats'?: CountryReachStats;
 }
 /**
  * Reach statistics for a country
- * @export
- * @interface CountryReachStats
  */
 export interface CountryReachStats {
-    /**
-     * 
-     * @type {number}
-     * @memberof CountryReachStats
-     */
     'num_households'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CountryReachStats
-     */
     'num_persons'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CountryReachStats
-     */
     'num_devices'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CountryReachStats
-     */
     'num_daily_impressions'?: number;
 }
-/**
- * 
- * @export
- * @interface CountryStats
- */
 export interface CountryStats {
     /**
      * Measurements related to this object
-     * @type {Array<Measurement>}
-     * @memberof CountryStats
      */
     'measurements': Array<Measurement>;
     /**
      * Country code of the country
-     * @type {string}
-     * @memberof CountryStats
      */
     'code': string;
 }
-/**
- * 
- * @export
- * @interface CreateAccount201Response
- */
 export interface CreateAccount201Response {
-    /**
-     * 
-     * @type {AccountFull}
-     * @memberof CreateAccount201Response
-     */
     'data'?: AccountFull;
-    /**
-     * 
-     * @type {AccountLinks}
-     * @memberof CreateAccount201Response
-     */
     'links'?: AccountLinks;
 }
-/**
- * 
- * @export
- * @interface CreateApiKey201Response
- */
 export interface CreateApiKey201Response {
-    /**
-     * 
-     * @type {ApiKeyFullWithToken}
-     * @memberof CreateApiKey201Response
-     */
     'data'?: ApiKeyFullWithToken;
 }
-/**
- * 
- * @export
- * @interface CreateMeasurementClient201Response
- */
 export interface CreateMeasurementClient201Response {
-    /**
-     * 
-     * @type {MeasurementClientFull}
-     * @memberof CreateMeasurementClient201Response
-     */
     'data'?: MeasurementClientFull;
 }
-/**
- * 
- * @export
- * @interface CreateSharedReport201Response
- */
 export interface CreateSharedReport201Response {
-    /**
-     * 
-     * @type {SharedReportFull}
-     * @memberof CreateSharedReport201Response
-     */
     'data'?: SharedReportFull;
 }
-/**
- * 
- * @export
- * @interface CreateStudy201Response
- */
 export interface CreateStudy201Response {
-    /**
-     * 
-     * @type {StudyFull}
-     * @memberof CreateStudy201Response
-     */
     'data'?: StudyFull;
-    /**
-     * 
-     * @type {StudyLinks}
-     * @memberof CreateStudy201Response
-     */
     'links'?: StudyLinks;
-    /**
-     * 
-     * @type {StudyMeta}
-     * @memberof CreateStudy201Response
-     */
     'meta'?: StudyMeta;
 }
-/**
- * 
- * @export
- * @interface CustomerCommunicationMessage
- */
 export interface CustomerCommunicationMessage {
-    /**
-     * 
-     * @type {string}
-     * @memberof CustomerCommunicationMessage
-     */
     'subject': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CustomerCommunicationMessage
-     */
     'body': string;
 }
-/**
- * 
- * @export
- * @interface DataDailyUsage
- */
 export interface DataDailyUsage {
     /**
      * Date in ISO 8601 format
-     * @type {string}
-     * @memberof DataDailyUsage
      */
     'date': string;
-    /**
-     * 
-     * @type {DataUsage}
-     * @memberof DataDailyUsage
-     */
     'usage': DataUsage;
 }
-/**
- * 
- * @export
- * @interface DataMonthlyUsage
- */
 export interface DataMonthlyUsage {
     /**
      * Year number
-     * @type {number}
-     * @memberof DataMonthlyUsage
      */
     'year': number;
     /**
      * Month number (1-12)
-     * @type {number}
-     * @memberof DataMonthlyUsage
      */
     'month': number;
-    /**
-     * 
-     * @type {DataUsage}
-     * @memberof DataMonthlyUsage
-     */
     'usage': DataUsage;
 }
-/**
- * 
- * @export
- * @interface DataRealtimeUsage
- */
 export interface DataRealtimeUsage {
     /**
      * The point in time of recording the usage data
-     * @type {string}
-     * @memberof DataRealtimeUsage
      */
     'when': string;
-    /**
-     * 
-     * @type {DataUsage}
-     * @memberof DataRealtimeUsage
-     */
     'usage': DataUsage;
 }
-/**
- * 
- * @export
- * @interface DataUsage
- */
 export interface DataUsage {
     /**
      * Number of records fulfilled
-     * @type {number}
-     * @memberof DataUsage
      */
     'records_fulfilled'?: number;
     /**
      * Number of records processed
-     * @type {number}
-     * @memberof DataUsage
      */
     'records_processed'?: number;
 }
 /**
  * Contains statistics about the day of the month that study activity has been measured. The time zone used to record these measurements is the time zone of the measured user, or UTC if the user\'s location cannot be resolved. 
- * @export
- * @interface DayOfMonthStats
  */
 export interface DayOfMonthStats {
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '0'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '1'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '2'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '3'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '4'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '5'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '6'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '7'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '8'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '9'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '10'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '11'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '12'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '13'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '14'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '15'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '16'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '17'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '18'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '19'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '20'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '21'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '22'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '23'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '24'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '25'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '26'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '27'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '28'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '29'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '30'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfMonthStats
-     */
     '31'?: MeasurementsContainer;
 }
 /**
  * Contains statistics about the week days that study activity has been measured. The time zone used to record these measurements is the time zone of the measured user, or UTC if the user\'s location cannot be resolved. 
- * @export
- * @interface DayOfWeekStats
  */
 export interface DayOfWeekStats {
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfWeekStats
-     */
     'Monday'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfWeekStats
-     */
     'Tuesday'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfWeekStats
-     */
     'Wednesday'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfWeekStats
-     */
     'Thursday'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfWeekStats
-     */
     'Friday'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfWeekStats
-     */
     'Saturday'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof DayOfWeekStats
-     */
     'Sunday'?: MeasurementsContainer;
 }
-/**
- * 
- * @export
- * @interface ErrorResponse
- */
-export interface ErrorResponse {
+export interface EnrichmentJobAux {
+    'estimated_records'?: number;
+    'estimated_ips'?: number;
+    'file_source'?: EnrichmentJobFileSource;
+}
+export interface EnrichmentJobBase {
     /**
-     * 
-     * @type {number}
-     * @memberof ErrorResponse
+     * A human-readable name for the job
      */
+    'name': string;
+    'status'?: EnrichmentJobStatus;
+    /**
+     * Date and time of the trigger to start the job
+     */
+    'starting_at'?: string;
+    /**
+     * Date and time of the job started running
+     */
+    'started_at'?: string;
+    /**
+     * Date and time of the job finishing
+     */
+    'finished_at'?: string;
+    /**
+     * Date and time of the job failing
+     */
+    'failed_at'?: string;
+    'result'?: EnrichmentJobResult;
+}
+
+
+export interface EnrichmentJobFileSource {
+    'content_type': EnrichmentJobFileSourceContentTypeEnum;
+    'separator'?: string;
+    'quote_character'?: string;
+    'has_header'?: boolean;
+}
+
+export const EnrichmentJobFileSourceContentTypeEnum = {
+    Csv: 'csv',
+    Plain: 'plain'
+} as const;
+
+export type EnrichmentJobFileSourceContentTypeEnum = typeof EnrichmentJobFileSourceContentTypeEnum[keyof typeof EnrichmentJobFileSourceContentTypeEnum];
+
+export interface EnrichmentJobFull {
+    /**
+     * Unique ID for the object
+     */
+    'id'?: string;
+    /**
+     * A human-readable name for the job
+     */
+    'name': string;
+    'status'?: EnrichmentJobStatus;
+    /**
+     * Date and time of the trigger to start the job
+     */
+    'starting_at'?: string;
+    /**
+     * Date and time of the job started running
+     */
+    'started_at'?: string;
+    /**
+     * Date and time of the job finishing
+     */
+    'finished_at'?: string;
+    /**
+     * Date and time of the job failing
+     */
+    'failed_at'?: string;
+    'result'?: EnrichmentJobResult;
+    'estimated_records'?: number;
+    'estimated_ips'?: number;
+    'file_source'?: EnrichmentJobFileSource;
+    /**
+     * Date and time of the object creation
+     */
+    'created_at'?: string;
+    /**
+     * ID of the user who created the object
+     */
+    'created_by'?: string;
+    /**
+     * Date and time of the latest update to the object
+     */
+    'updated_at'?: string;
+    /**
+     * ID of the user who last updated the object
+     */
+    'updated_by'?: string;
+}
+
+
+export interface EnrichmentJobItem {
+    /**
+     * Unique ID for the object
+     */
+    'id'?: string;
+    /**
+     * A human-readable name for the job
+     */
+    'name': string;
+    'status'?: EnrichmentJobStatus;
+    /**
+     * Date and time of the trigger to start the job
+     */
+    'starting_at'?: string;
+    /**
+     * Date and time of the job started running
+     */
+    'started_at'?: string;
+    /**
+     * Date and time of the job finishing
+     */
+    'finished_at'?: string;
+    /**
+     * Date and time of the job failing
+     */
+    'failed_at'?: string;
+    'result'?: EnrichmentJobResult;
+}
+
+
+export interface EnrichmentJobListResponse {
+    'data': Array<EnrichmentJobItem>;
+    'meta'?: ListPaginationMeta;
+    'links'?: ListPaginationLinks;
+}
+export interface EnrichmentJobResult {
+    /**
+     * Link to the downloadable result (if available)
+     */
+    'download_link'?: string;
+    /**
+     * Indicates whether the downloadable result is available
+     */
+    'download_available': boolean;
+    /**
+     * Date and time for the downloadable result (data is automatically deleted after this time)
+     */
+    'available_until'?: string;
+    'count_private'?: number;
+    'count_business'?: number;
+    'count_total'?: number;
+    'count_not_resolved'?: number;
+    'count_skipped'?: number;
+    'count_out_of_quota'?: number;
+}
+export interface EnrichmentJobSingleResponse {
+    'data': EnrichmentJobFull;
+}
+
+export const EnrichmentJobSortOption = {
+    CreatedAt: 'created_at',
+    CreatedAt2: '-created_at'
+} as const;
+
+export type EnrichmentJobSortOption = typeof EnrichmentJobSortOption[keyof typeof EnrichmentJobSortOption];
+
+
+export interface EnrichmentJobSourceDataColumnDefinition {
+    /**
+     * The name of the column
+     */
+    'name': string;
+}
+export interface EnrichmentJobSourceDataPreview {
+    'columns'?: Array<EnrichmentJobSourceDataColumnDefinition>;
+    'rows'?: Array<Array<string>>;
+}
+export interface EnrichmentJobSourceDataPreviewResponse {
+    'data': EnrichmentJobSourceDataPreview;
+}
+
+export const EnrichmentJobStatus = {
+    NoSourceData: 'no_source_data',
+    Ready: 'ready',
+    Started: 'started',
+    Finished: 'finished',
+    Failed: 'failed'
+} as const;
+
+export type EnrichmentJobStatus = typeof EnrichmentJobStatus[keyof typeof EnrichmentJobStatus];
+
+
+export interface EnrichmentJobUpdate {
+    /**
+     * A human-readable name for the job
+     */
+    'name': string;
+    'status'?: EnrichmentJobStatus;
+    /**
+     * Date and time of the trigger to start the job
+     */
+    'starting_at'?: string;
+    /**
+     * Date and time of the job started running
+     */
+    'started_at'?: string;
+    /**
+     * Date and time of the job finishing
+     */
+    'finished_at'?: string;
+    /**
+     * Date and time of the job failing
+     */
+    'failed_at'?: string;
+    'result'?: EnrichmentJobResult;
+    'estimated_records'?: number;
+    'estimated_ips'?: number;
+    'file_source'?: EnrichmentJobFileSource;
+}
+
+
+export interface ErrorResponse {
     'code': number;
     /**
      * A human-readable error message
-     * @type {string}
-     * @memberof ErrorResponse
      */
     'message': string;
 }
-/**
- * 
- * @export
- * @interface FrequencyStats
- */
 export interface FrequencyStats {
     /**
      * A frequency of study events to users. * The value 1 means that the study has been exposed just once. * The value 2 means that the study has been exposed twice. * And so on... 
-     * @type {number}
-     * @memberof FrequencyStats
      */
     'frequency'?: number;
     /**
      * The number of users that have generated events at the corresponding frequency
-     * @type {number}
-     * @memberof FrequencyStats
      */
     'count'?: number;
 }
-/**
- * 
- * @export
- * @interface GetAccountSubscriptionById200Response
- */
 export interface GetAccountSubscriptionById200Response {
-    /**
-     * 
-     * @type {AccountSubscriptionFull}
-     * @memberof GetAccountSubscriptionById200Response
-     */
     'data'?: AccountSubscriptionFull;
 }
-/**
- * 
- * @export
- * @interface GetAccountSubscriptions200Response
- */
 export interface GetAccountSubscriptions200Response {
-    /**
-     * 
-     * @type {AccountSubscriptionsSummary}
-     * @memberof GetAccountSubscriptions200Response
-     */
     'data'?: AccountSubscriptionsSummary;
 }
-/**
- * 
- * @export
- * @interface GetApiKeyById200Response
- */
 export interface GetApiKeyById200Response {
-    /**
-     * 
-     * @type {ApiKeyFull}
-     * @memberof GetApiKeyById200Response
-     */
     'data'?: ApiKeyFull;
-    /**
-     * 
-     * @type {ApiKeyLinks}
-     * @memberof GetApiKeyById200Response
-     */
     'links'?: ApiKeyLinks;
 }
-/**
- * 
- * @export
- * @interface GetPopuplationByKey200Response
- */
 export interface GetPopuplationByKey200Response {
-    /**
-     * 
-     * @type {PopulationFull}
-     * @memberof GetPopuplationByKey200Response
-     */
     'data'?: PopulationFull;
 }
-/**
- * 
- * @export
- * @interface GetSubscriptionPlanFree200Response
- */
 export interface GetSubscriptionPlanFree200Response {
-    /**
-     * 
-     * @type {SubscriptionPlanFree}
-     * @memberof GetSubscriptionPlanFree200Response
-     */
     'data'?: SubscriptionPlanFree;
 }
-/**
- * 
- * @export
- * @interface GetUserAccountMembership200Response
- */
 export interface GetUserAccountMembership200Response {
-    /**
-     * 
-     * @type {UserAccountMembership}
-     * @memberof GetUserAccountMembership200Response
-     */
     'data'?: UserAccountMembership;
 }
 /**
  * Contains statistics about the time of day that study activity has been measured. The 24 hour time format is used to represent measurements for each hour. The time zone used to record these measurements is the time zone of the measured user, or UTC if the user\'s location cannot be resolved. 
- * @export
- * @interface HourOfDayStats
  */
 export interface HourOfDayStats {
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '10'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '11'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '12'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '13'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '14'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '15'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '16'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '17'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '18'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '19'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '20'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '21'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '22'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '23'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '00'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '01'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '02'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '03'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '04'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '05'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '06'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '07'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '08'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof HourOfDayStats
-     */
     '09'?: MeasurementsContainer;
 }
-/**
- * 
- * @export
- * @interface IdentifyableObject
- */
 export interface IdentifyableObject {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof IdentifyableObject
      */
     'id'?: string;
 }
-/**
- * 
- * @export
- * @interface IdentifyableObject1
- */
 export interface IdentifyableObject1 {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof IdentifyableObject1
      */
     'id': string;
 }
-/**
- * 
- * @export
- * @interface InlineObject
- */
 export interface InlineObject {
-    /**
-     * 
-     * @type {RegistrationCreationResponseData}
-     * @memberof InlineObject
-     */
     'data'?: RegistrationCreationResponseData;
 }
-/**
- * 
- * @export
- * @interface InlineObject1
- */
 export interface InlineObject1 {
-    /**
-     * 
-     * @type {RegistrationVerificationResponseData}
-     * @memberof InlineObject1
-     */
     'data'?: RegistrationVerificationResponseData;
-    /**
-     * 
-     * @type {RegistrationVerificationResponseLinks}
-     * @memberof InlineObject1
-     */
     'links'?: RegistrationVerificationResponseLinks;
 }
-/**
- * 
- * @export
- * @interface InlineObject10
- */
 export interface InlineObject10 {
-    /**
-     * 
-     * @type {PopulationSource}
-     * @memberof InlineObject10
-     */
     'data'?: PopulationSource;
 }
-/**
- * 
- * @export
- * @interface InlineObject11
- */
 export interface InlineObject11 {
-    /**
-     * 
-     * @type {{ [key: string]: string; }}
-     * @memberof InlineObject11
-     */
     'data'?: { [key: string]: string; };
 }
-/**
- * 
- * @export
- * @interface InlineObject12
- */
 export interface InlineObject12 {
-    /**
-     * 
-     * @type {AudienceRecommendationResponseMessage}
-     * @memberof InlineObject12
-     */
     'data'?: AudienceRecommendationResponseMessage;
 }
-/**
- * 
- * @export
- * @interface InlineObject2
- */
 export interface InlineObject2 {
-    /**
-     * 
-     * @type {RegistrationByIdResponseData}
-     * @memberof InlineObject2
-     */
     'data'?: RegistrationByIdResponseData;
 }
-/**
- * 
- * @export
- * @interface InlineObject3
- */
 export interface InlineObject3 {
-    /**
-     * 
-     * @type {SubscriptionPlanFull}
-     * @memberof InlineObject3
-     */
     'data'?: SubscriptionPlanFull;
 }
-/**
- * 
- * @export
- * @interface InlineObject4
- */
 export interface InlineObject4 {
-    /**
-     * 
-     * @type {SubscriptionOfferFull}
-     * @memberof InlineObject4
-     */
     'data'?: SubscriptionOfferFull;
 }
-/**
- * 
- * @export
- * @interface InlineObject5
- */
 export interface InlineObject5 {
-    /**
-     * 
-     * @type {ListPaginationMeta}
-     * @memberof InlineObject5
-     */
     'meta'?: ListPaginationMeta;
-    /**
-     * 
-     * @type {ListPaginationLinks}
-     * @memberof InlineObject5
-     */
     'links'?: ListPaginationLinks;
-    /**
-     * 
-     * @type {Array<AccountItem>}
-     * @memberof InlineObject5
-     */
     'data'?: Array<AccountItem>;
 }
-/**
- * 
- * @export
- * @interface InlineObject6
- */
 export interface InlineObject6 {
-    /**
-     * 
-     * @type {StripeAccountSubscriptionCheckoutSession}
-     * @memberof InlineObject6
-     */
     'data'?: StripeAccountSubscriptionCheckoutSession;
 }
-/**
- * 
- * @export
- * @interface InlineObject7
- */
 export interface InlineObject7 {
-    /**
-     * 
-     * @type {AccountStripeBillingInfo}
-     * @memberof InlineObject7
-     */
     'data'?: AccountStripeBillingInfo;
 }
-/**
- * 
- * @export
- * @interface InlineObject8
- */
 export interface InlineObject8 {
-    /**
-     * 
-     * @type {SharedReportPublicData}
-     * @memberof InlineObject8
-     */
     'data'?: SharedReportPublicData;
 }
-/**
- * 
- * @export
- * @interface InlineObject9
- */
 export interface InlineObject9 {
-    /**
-     * 
-     * @type {StudyOlapQueryResult}
-     * @memberof InlineObject9
-     */
     'data'?: StudyOlapQueryResult;
 }
-/**
- * 
- * @export
- * @enum {string}
- */
 
 export const LimitedOrFullFeature = {
     Full: 'full',
@@ -3250,572 +1644,227 @@ export const LimitedOrFullFeature = {
 export type LimitedOrFullFeature = typeof LimitedOrFullFeature[keyof typeof LimitedOrFullFeature];
 
 
-/**
- * 
- * @export
- * @interface ListApiKeysByAccountId200Response
- */
 export interface ListApiKeysByAccountId200Response {
-    /**
-     * 
-     * @type {ListPaginationMeta}
-     * @memberof ListApiKeysByAccountId200Response
-     */
     'meta'?: ListPaginationMeta;
-    /**
-     * 
-     * @type {ListPaginationLinks}
-     * @memberof ListApiKeysByAccountId200Response
-     */
     'links'?: ListPaginationLinks;
-    /**
-     * 
-     * @type {Array<ApiKeyItem>}
-     * @memberof ListApiKeysByAccountId200Response
-     */
     'data'?: Array<ApiKeyItem>;
 }
-/**
- * 
- * @export
- * @interface ListAudiencePlatforms200Response
- */
 export interface ListAudiencePlatforms200Response {
-    /**
-     * 
-     * @type {Array<AudiencePlatformItem>}
-     * @memberof ListAudiencePlatforms200Response
-     */
     'data'?: Array<AudiencePlatformItem>;
 }
-/**
- * 
- * @export
- * @interface ListAudiences200Response
- */
 export interface ListAudiences200Response {
-    /**
-     * 
-     * @type {AudienceSetListResponseMeta}
-     * @memberof ListAudiences200Response
-     */
     'meta'?: AudienceSetListResponseMeta;
-    /**
-     * 
-     * @type {Array<AudienceSetItem>}
-     * @memberof ListAudiences200Response
-     */
     'data'?: Array<AudienceSetItem>;
 }
-/**
- * 
- * @export
- * @interface ListCountries200Response
- */
 export interface ListCountries200Response {
-    /**
-     * 
-     * @type {Array<CountryItem>}
-     * @memberof ListCountries200Response
-     */
     'data'?: Array<CountryItem>;
 }
-/**
- * 
- * @export
- * @interface ListDataDailyUsage200Response
- */
 export interface ListDataDailyUsage200Response {
-    /**
-     * 
-     * @type {Array<DataDailyUsage>}
-     * @memberof ListDataDailyUsage200Response
-     */
     'data'?: Array<DataDailyUsage>;
 }
-/**
- * 
- * @export
- * @interface ListDataMonthlyUsage200Response
- */
 export interface ListDataMonthlyUsage200Response {
-    /**
-     * 
-     * @type {Array<DataMonthlyUsage>}
-     * @memberof ListDataMonthlyUsage200Response
-     */
     'data'?: Array<DataMonthlyUsage>;
 }
-/**
- * 
- * @export
- * @interface ListDataRealtimeUsage200Response
- */
 export interface ListDataRealtimeUsage200Response {
-    /**
-     * 
-     * @type {Array<DataRealtimeUsage>}
-     * @memberof ListDataRealtimeUsage200Response
-     */
     'data'?: Array<DataRealtimeUsage>;
 }
-/**
- * 
- * @export
- * @interface ListMeasurementClients200Response
- */
 export interface ListMeasurementClients200Response {
-    /**
-     * 
-     * @type {Array<MeasurementClientItem>}
-     * @memberof ListMeasurementClients200Response
-     */
     'data'?: Array<MeasurementClientItem>;
-    /**
-     * 
-     * @type {ListPaginationMeta}
-     * @memberof ListMeasurementClients200Response
-     */
     'meta'?: ListPaginationMeta;
-    /**
-     * 
-     * @type {ListPaginationLinks}
-     * @memberof ListMeasurementClients200Response
-     */
     'links'?: ListPaginationLinks;
 }
-/**
- * 
- * @export
- * @interface ListMeasurementLabels200Response
- */
 export interface ListMeasurementLabels200Response {
     /**
      * A set of labels that users can use to categorize their measurements. Can be used to indicate type of study, customer names or other traits. 
-     * @type {Array<string>}
-     * @memberof ListMeasurementLabels200Response
      */
     'data'?: Array<string>;
 }
-/**
- * 
- * @export
- * @interface ListPaginationLinks
- */
 export interface ListPaginationLinks {
     /**
      * Link to the first page of the list
-     * @type {string}
-     * @memberof ListPaginationLinks
      */
     'first'?: string;
     /**
      * Link to the next page of the list
-     * @type {string}
-     * @memberof ListPaginationLinks
      */
     'next'?: string;
 }
-/**
- * 
- * @export
- * @interface ListPaginationMeta
- */
 export interface ListPaginationMeta {
-    /**
-     * 
-     * @type {ListPaginationMetaPage}
-     * @memberof ListPaginationMeta
-     */
     'page'?: ListPaginationMetaPage;
 }
-/**
- * 
- * @export
- * @interface ListPaginationMetaPage
- */
 export interface ListPaginationMetaPage {
     /**
      * The total amount of elements in the list (the returned `data` may be paginated)
-     * @type {number}
-     * @memberof ListPaginationMetaPage
      */
     'total'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ListPaginationMetaPage
-     */
     'first_cursor'?: string;
     /**
      * Indicates the cursor value to use in `page[after]`, when paginating to the next page
-     * @type {string}
-     * @memberof ListPaginationMetaPage
      */
     'last_cursor'?: string;
     /**
      * Indicates whether the list has been truncated (ie. more items can be queried using pagination)
-     * @type {boolean}
-     * @memberof ListPaginationMetaPage
      */
     'rangeTruncated': boolean;
 }
-/**
- * 
- * @export
- * @interface ListPopuplations200Response
- */
 export interface ListPopuplations200Response {
-    /**
-     * 
-     * @type {CategoryPopulationsFull}
-     * @memberof ListPopuplations200Response
-     */
     'data'?: CategoryPopulationsFull;
 }
-/**
- * 
- * @export
- * @interface ListSharedReportsByStudyId200Response
- */
 export interface ListSharedReportsByStudyId200Response {
-    /**
-     * 
-     * @type {Array<SharedReportItem>}
-     * @memberof ListSharedReportsByStudyId200Response
-     */
     'data'?: Array<SharedReportItem>;
 }
-/**
- * 
- * @export
- * @interface ListStudies200Response
- */
 export interface ListStudies200Response {
-    /**
-     * 
-     * @type {ListPaginationMeta}
-     * @memberof ListStudies200Response
-     */
     'meta'?: ListPaginationMeta;
-    /**
-     * 
-     * @type {Array<StudyItem>}
-     * @memberof ListStudies200Response
-     */
     'data'?: Array<StudyItem>;
-    /**
-     * 
-     * @type {ListPaginationLinks}
-     * @memberof ListStudies200Response
-     */
     'links'?: ListPaginationLinks;
 }
-/**
- * 
- * @export
- * @interface ListSubscriptionOffers200Response
- */
 export interface ListSubscriptionOffers200Response {
-    /**
-     * 
-     * @type {Array<SubscriptionOfferItem>}
-     * @memberof ListSubscriptionOffers200Response
-     */
     'data'?: Array<SubscriptionOfferItem>;
-    /**
-     * 
-     * @type {ListPaginationMeta}
-     * @memberof ListSubscriptionOffers200Response
-     */
     'meta'?: ListPaginationMeta;
-    /**
-     * 
-     * @type {ListPaginationLinks}
-     * @memberof ListSubscriptionOffers200Response
-     */
     'links'?: ListPaginationLinks;
 }
-/**
- * 
- * @export
- * @interface ListSubscriptionPlans200Response
- */
 export interface ListSubscriptionPlans200Response {
-    /**
-     * 
-     * @type {Array<SubscriptionPlanItem>}
-     * @memberof ListSubscriptionPlans200Response
-     */
     'data'?: Array<SubscriptionPlanItem>;
-    /**
-     * 
-     * @type {ListPaginationMeta}
-     * @memberof ListSubscriptionPlans200Response
-     */
     'meta'?: ListPaginationMeta;
-    /**
-     * 
-     * @type {ListPaginationLinks}
-     * @memberof ListSubscriptionPlans200Response
-     */
     'links'?: ListPaginationLinks;
 }
-/**
- * 
- * @export
- * @interface ListUsersByAccountId200Response
- */
 export interface ListUsersByAccountId200Response {
-    /**
-     * 
-     * @type {ListPaginationMeta}
-     * @memberof ListUsersByAccountId200Response
-     */
     'meta'?: ListPaginationMeta;
-    /**
-     * 
-     * @type {ListPaginationLinks}
-     * @memberof ListUsersByAccountId200Response
-     */
     'links'?: ListPaginationLinks;
-    /**
-     * 
-     * @type {Array<UserItem>}
-     * @memberof ListUsersByAccountId200Response
-     */
     'data'?: Array<UserItem>;
 }
 /**
  * Represents a single measurement
- * @export
- * @interface Measurement
  */
 export interface Measurement {
     /**
      * The event that triggered the measurement, typically `impression` or `click`
-     * @type {string}
-     * @memberof Measurement
      */
     'event': string;
     /**
      * An indicator that will be `true` when the measurement is not delivered because the account is limited (typically due to subscription terms). 
-     * @type {boolean}
-     * @memberof Measurement
      */
     'restricted'?: boolean;
     /**
      * The real value of the measurement, typically a counter value (integer)
-     * @type {number}
-     * @memberof Measurement
      */
     'count'?: number;
     /**
      * The fraction of events that fall within this object compared to the total of the category or segment (usually represented by the measurement\'s parent\'s parent). For example, if the measurement is \"impression\" on the `home_type` \"Apartment\" object, then the `fraction_of_total` represents the number of impressions on apartments compared to impressions from other `home_type` values. 
-     * @type {number}
-     * @memberof Measurement
      */
     'fraction_of_total'?: number;
     /**
      * The rate of conversion to this measurement. Typically applies to measurements like \"click\" where it will represent the rate of impressions that turn into a click. 
-     * @type {number}
-     * @memberof Measurement
      */
     'conversion_rate'?: number;
 }
-/**
- * 
- * @export
- * @interface MeasurementClientBase
- */
 export interface MeasurementClientBase {
     /**
      * The name of the measurement client
-     * @type {string}
-     * @memberof MeasurementClientBase
      */
     'name'?: string;
     /**
      * The ID of the account that owns this client
-     * @type {string}
-     * @memberof MeasurementClientBase
      */
     'account_id'?: string;
     /**
      * The URL of an image representing the measurement client
-     * @type {string}
-     * @memberof MeasurementClientBase
      */
     'logo_url'?: string;
 }
-/**
- * 
- * @export
- * @interface MeasurementClientFull
- */
 export interface MeasurementClientFull {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof MeasurementClientFull
      */
     'id': string;
     /**
      * The name of the measurement client
-     * @type {string}
-     * @memberof MeasurementClientFull
      */
     'name'?: string;
     /**
      * The ID of the account that owns this client
-     * @type {string}
-     * @memberof MeasurementClientFull
      */
     'account_id'?: string;
     /**
      * The URL of an image representing the measurement client
-     * @type {string}
-     * @memberof MeasurementClientFull
      */
     'logo_url'?: string;
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof MeasurementClientFull
      */
     'created_at': string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof MeasurementClientFull
      */
     'created_by': string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof MeasurementClientFull
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof MeasurementClientFull
      */
     'updated_by'?: string;
 }
-/**
- * 
- * @export
- * @interface MeasurementClientItem
- */
 export interface MeasurementClientItem {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof MeasurementClientItem
      */
     'id': string;
     /**
      * The name of the measurement client
-     * @type {string}
-     * @memberof MeasurementClientItem
      */
     'name'?: string;
     /**
      * The ID of the account that owns this client
-     * @type {string}
-     * @memberof MeasurementClientItem
      */
     'account_id'?: string;
     /**
      * The URL of an image representing the measurement client
-     * @type {string}
-     * @memberof MeasurementClientItem
      */
     'logo_url'?: string;
 }
-/**
- * 
- * @export
- * @interface MeasurementClientMutation
- */
 export interface MeasurementClientMutation {
     /**
      * The name of the measurement client
-     * @type {string}
-     * @memberof MeasurementClientMutation
      */
     'name'?: string;
     /**
      * The ID of the account that owns this client
-     * @type {string}
-     * @memberof MeasurementClientMutation
      */
     'account_id'?: string;
     /**
      * The URL of an image representing the measurement client
-     * @type {string}
-     * @memberof MeasurementClientMutation
      */
     'logo_url'?: string;
 }
-/**
- * 
- * @export
- * @interface MeasurementEventLink
- */
 export interface MeasurementEventLink {
     /**
      * The base URI of the link to an event
-     * @type {string}
-     * @memberof MeasurementEventLink
      */
     'link'?: string;
     /**
      * Describes any parameters that can be added to the event link
-     * @type {{ [key: string]: MeasurementEventLinkParameterInfo; }}
-     * @memberof MeasurementEventLink
      */
     'parameters'?: { [key: string]: MeasurementEventLinkParameterInfo; };
 }
-/**
- * 
- * @export
- * @interface MeasurementEventLinkParameterInfo
- */
 export interface MeasurementEventLinkParameterInfo {
     /**
      * A description of what the parameter is used for
-     * @type {string}
-     * @memberof MeasurementEventLinkParameterInfo
      */
     'description'?: string;
 }
 /**
  * Links to trigger activity and events in this study. Two events are well-known and available in every study: impression and click. 
- * @export
- * @interface MeasurementEventLinks
  */
 export interface MeasurementEventLinks {
     [key: string]: MeasurementEventLink | any;
 
-    /**
-     * 
-     * @type {MeasurementEventLink}
-     * @memberof MeasurementEventLinks
-     */
     'impression'?: MeasurementEventLink;
-    /**
-     * 
-     * @type {MeasurementEventLink}
-     * @memberof MeasurementEventLinks
-     */
     'click'?: MeasurementEventLink;
 }
 /**
  * The set of events to create for the study. 
- * @export
- * @enum {string}
  */
 
 export const MeasurementEventSet = {
@@ -3828,1286 +1877,414 @@ export type MeasurementEventSet = typeof MeasurementEventSet[keyof typeof Measur
 
 /**
  * The integration/platform with which a study is being delivered 
- * @export
- * @interface MeasurementIntegrationPlatform
  */
 export interface MeasurementIntegrationPlatform {
     /**
      * An ID for the integration platform, if the integration platform is a known platform. Note that integration platform ID uniqueness is a responsibility of the client since this is simply an optional reference point to keep. Can be null/omitted if the platform name is a one-off value with just a string. 
-     * @type {string}
-     * @memberof MeasurementIntegrationPlatform
      */
     'id'?: string;
     /**
      * The name of the integration platform.
-     * @type {string}
-     * @memberof MeasurementIntegrationPlatform
      */
     'name'?: string;
 }
 /**
  * An object containing measurements
- * @export
- * @interface MeasurementsContainer
  */
 export interface MeasurementsContainer {
     /**
      * Measurements related to this object
-     * @type {Array<Measurement>}
-     * @memberof MeasurementsContainer
      */
     'measurements': Array<Measurement>;
 }
-/**
- * 
- * @export
- * @interface PasswordlessAuthRequest
- */
 export interface PasswordlessAuthRequest {
     /**
      * The email of the user
-     * @type {string}
-     * @memberof PasswordlessAuthRequest
      */
     'email': string;
 }
 /**
  * Defines the scopes of a token or API key. If omitted, the default set of grants that are available to non-admin and non-owner users of the account will be added.
- * @export
- * @interface PermissionScopes
  */
 export interface PermissionScopes {
     /**
      * A list of origin domains that will be allowed access through CORS and Referrer checks with the token or API key. A missing value, empty array or the value `*` grants access from any domain.
-     * @type {Array<string>}
-     * @memberof PermissionScopes
      */
     'origin_domains'?: Array<string>;
     /**
      * A list of service grants to allow access to use. A missing value, empty array or the value `*` grants access to all of the services that are available to non-admin and non-owner users of the account.
-     * @type {Array<string>}
-     * @memberof PermissionScopes
      */
     'service_grants'?: Array<string>;
     /**
      * A list of country-specific data sources to allow access to. A missing value, empty array or the value `*` grants access to any data source.
-     * @type {Array<string>}
-     * @memberof PermissionScopes
      */
     'country_data'?: Array<string>;
 }
-/**
- * 
- * @export
- * @interface PlanFeatureSet
- */
 export interface PlanFeatureSet {
-    /**
-     * 
-     * @type {number}
-     * @memberof PlanFeatureSet
-     */
     'max_users': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlanFeatureSet
-     */
     'max_clients': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlanFeatureSet
-     */
     'max_active_studies': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlanFeatureSet
-     */
     'max_events_per_study': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlanFeatureSet
-     */
     'max_study_events_per_month'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlanFeatureSet
-     */
     'max_audience_lookups_per_month': number;
-    /**
-     * 
-     * @type {LimitedOrFullFeature}
-     * @memberof PlanFeatureSet
-     */
     'study_audience_set': LimitedOrFullFeature;
-    /**
-     * 
-     * @type {LimitedOrFullFeature}
-     * @memberof PlanFeatureSet
-     */
     'study_event_set': LimitedOrFullFeature;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlanFeatureSet
-     */
     'has_audience_recommendations': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlanFeatureSet
-     */
     'has_report_customization': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlanFeatureSet
-     */
     'has_report_sharing_clients': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlanFeatureSet
-     */
     'has_report_sharing_public': boolean;
 }
 
 
-/**
- * 
- * @export
- * @interface PopulationAudienceCategorySetBusinessSection
- */
 export interface PopulationAudienceCategorySetBusinessSection {
     /**
      * The fraction of events that fall within this object compared to the total of the category or segment (usually represented by the measurement\'s parent\'s parent). For example, if the measurement is \"impression\" on the `home_type` \"Apartment\" object, then the `fraction_of_total` represents the number of impressions on apartments compared to impressions from other `home_type` values. 
-     * @type {number}
-     * @memberof PopulationAudienceCategorySetBusinessSection
      */
     'fraction_of_total'?: number;
     /**
      * An object with category codes as keys, objects with audience codes and fractions of totals as keys.
-     * @type {{ [key: string]: { [key: string]: number; }; }}
-     * @memberof PopulationAudienceCategorySetBusinessSection
      */
     'audience_categories'?: { [key: string]: { [key: string]: number; }; };
 }
-/**
- * 
- * @export
- * @interface PopulationAudienceCategorySetPrivateSection
- */
 export interface PopulationAudienceCategorySetPrivateSection {
     /**
      * The fraction of events that fall within this object compared to the total of the category or segment (usually represented by the measurement\'s parent\'s parent). For example, if the measurement is \"impression\" on the `home_type` \"Apartment\" object, then the `fraction_of_total` represents the number of impressions on apartments compared to impressions from other `home_type` values. 
-     * @type {number}
-     * @memberof PopulationAudienceCategorySetPrivateSection
      */
     'fraction_of_total'?: number;
     /**
      * An object with category codes as keys, objects with audience codes and fractions of totals as keys.
-     * @type {{ [key: string]: { [key: string]: number; }; }}
-     * @memberof PopulationAudienceCategorySetPrivateSection
      */
     'audience_categories'?: { [key: string]: { [key: string]: number; }; };
 }
-/**
- * 
- * @export
- * @interface PopulationAudienceCategorySetSection
- */
 export interface PopulationAudienceCategorySetSection {
     /**
      * The fraction of events that fall within this object compared to the total of the category or segment (usually represented by the measurement\'s parent\'s parent). For example, if the measurement is \"impression\" on the `home_type` \"Apartment\" object, then the `fraction_of_total` represents the number of impressions on apartments compared to impressions from other `home_type` values. 
-     * @type {number}
-     * @memberof PopulationAudienceCategorySetSection
      */
     'fraction_of_total'?: number;
     /**
      * An object with category codes as keys, objects with audience codes and fractions of totals as keys.
-     * @type {{ [key: string]: { [key: string]: number; }; }}
-     * @memberof PopulationAudienceCategorySetSection
      */
     'audience_categories'?: { [key: string]: { [key: string]: number; }; };
 }
 /**
  * Describes the audience composition of a population. Every metric is delivered in relative measures (ie. fractions of total rather than counts) to make enable the comparison or adjustment of populations. 
- * @export
- * @interface PopulationFull
  */
 export interface PopulationFull {
     /**
      * A humanly readable name of the population
-     * @type {string}
-     * @memberof PopulationFull
      */
     'name'?: string;
-    /**
-     * 
-     * @type {PopulationAudienceCategorySetPrivateSection}
-     * @memberof PopulationFull
-     */
     'private'?: PopulationAudienceCategorySetPrivateSection;
-    /**
-     * 
-     * @type {PopulationAudienceCategorySetBusinessSection}
-     * @memberof PopulationFull
-     */
     'business'?: PopulationAudienceCategorySetBusinessSection;
 }
-/**
- * 
- * @export
- * @interface PopulationItem
- */
 export interface PopulationItem {
     /**
      * A unique key for the population
-     * @type {string}
-     * @memberof PopulationItem
      */
     'key': string;
 }
 /**
  * Source data for a population
- * @export
- * @interface PopulationSource
  */
 export interface PopulationSource {
     /**
      * A humanly readable name of the population
-     * @type {string}
-     * @memberof PopulationSource
      */
     'name': string;
     /**
      * Name or description of the data source
-     * @type {string}
-     * @memberof PopulationSource
      */
     'source': string;
-    /**
-     * 
-     * @type {object}
-     * @memberof PopulationSource
-     */
     'meta': object;
-    /**
-     * 
-     * @type {PopulationSourceNotResolvedSection}
-     * @memberof PopulationSource
-     */
     'not_resolved'?: PopulationSourceNotResolvedSection;
-    /**
-     * 
-     * @type {PopulationSourcePrivateSection}
-     * @memberof PopulationSource
-     */
     'private': PopulationSourcePrivateSection;
-    /**
-     * 
-     * @type {PopulationSourceBusinessSection}
-     * @memberof PopulationSource
-     */
     'business': PopulationSourceBusinessSection;
 }
-/**
- * 
- * @export
- * @interface PopulationSourceBusinessCategorySet
- */
 export interface PopulationSourceBusinessCategorySet {
-    /**
-     * 
-     * @type {PopulationSourceBusinessCategorySetSize}
-     * @memberof PopulationSourceBusinessCategorySet
-     */
     'size': PopulationSourceBusinessCategorySetSize;
 }
-/**
- * 
- * @export
- * @interface PopulationSourceBusinessCategorySetSize
- */
 export interface PopulationSourceBusinessCategorySetSize {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourceBusinessCategorySetSize
-     */
     'ba1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourceBusinessCategorySetSize
-     */
     'ba2': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourceBusinessCategorySetSize
-     */
     'ba3': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourceBusinessSection
- */
 export interface PopulationSourceBusinessSection {
-    /**
-     * 
-     * @type {PopulationSourceBusinessCategorySet}
-     * @memberof PopulationSourceBusinessSection
-     */
     'audience_categories'?: PopulationSourceBusinessCategorySet;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourceBusinessSection
-     */
     'count'?: number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourceNotResolvedSection
- */
 export interface PopulationSourceNotResolvedSection {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourceNotResolvedSection
-     */
     'count'?: number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySet
- */
 export interface PopulationSourcePrivateCategorySet {
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetHomeType}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'home_type': PopulationSourcePrivateCategorySetHomeType;
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetSavings}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'savings': PopulationSourcePrivateCategorySetSavings;
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetLifecycle}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'lifecycle': PopulationSourcePrivateCategorySetLifecycle;
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetCars}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'cars': PopulationSourcePrivateCategorySetCars;
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetChildren}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'children': PopulationSourcePrivateCategorySetChildren;
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetEducation}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'education': PopulationSourcePrivateCategorySetEducation;
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetNeighbourhoodType}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'neighbourhood_type': PopulationSourcePrivateCategorySetNeighbourhoodType;
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetIncome}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'income': PopulationSourcePrivateCategorySetIncome;
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetHomeOwnership}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'home_ownership': PopulationSourcePrivateCategorySetHomeOwnership;
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetBuildingAge}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'building_age': PopulationSourcePrivateCategorySetBuildingAge;
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetLivingSpace}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'living_space': PopulationSourcePrivateCategorySetLivingSpace;
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySetTechLevel}
-     * @memberof PopulationSourcePrivateCategorySet
-     */
     'tech_level': PopulationSourcePrivateCategorySetTechLevel;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetBuildingAge
- */
 export interface PopulationSourcePrivateCategorySetBuildingAge {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetBuildingAge
-     */
     'k1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetBuildingAge
-     */
     'k2': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetBuildingAge
-     */
     'k3': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetCars
- */
 export interface PopulationSourcePrivateCategorySetCars {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetCars
-     */
     'd1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetCars
-     */
     'd2': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetCars
-     */
     'd3': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetChildren
- */
 export interface PopulationSourcePrivateCategorySetChildren {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetChildren
-     */
     'e1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetChildren
-     */
     'e2': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetChildren
-     */
     'e3': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetEducation
- */
 export interface PopulationSourcePrivateCategorySetEducation {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetEducation
-     */
     'f1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetEducation
-     */
     'f2': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetEducation
-     */
     'f3': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetHomeOwnership
- */
 export interface PopulationSourcePrivateCategorySetHomeOwnership {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetHomeOwnership
-     */
     'j1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetHomeOwnership
-     */
     'j2': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetHomeType
- */
 export interface PopulationSourcePrivateCategorySetHomeType {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetHomeType
-     */
     'a1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetHomeType
-     */
     'a2': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetIncome
- */
 export interface PopulationSourcePrivateCategorySetIncome {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetIncome
-     */
     'h1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetIncome
-     */
     'h2': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetIncome
-     */
     'h3': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetIncome
-     */
     'h4': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetIncome
-     */
     'h5': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetLifecycle
- */
 export interface PopulationSourcePrivateCategorySetLifecycle {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetLifecycle
-     */
     'c1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetLifecycle
-     */
     'c2': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetLifecycle
-     */
     'c3': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetLifecycle
-     */
     'c4': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetLifecycle
-     */
     'c5': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetLivingSpace
- */
 export interface PopulationSourcePrivateCategorySetLivingSpace {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetLivingSpace
-     */
     'l1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetLivingSpace
-     */
     'l2': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetLivingSpace
-     */
     'l3': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetNeighbourhoodType
- */
 export interface PopulationSourcePrivateCategorySetNeighbourhoodType {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetNeighbourhoodType
-     */
     'g1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetNeighbourhoodType
-     */
     'g2': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetNeighbourhoodType
-     */
     'g3': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetNeighbourhoodType
-     */
     'g4': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetSavings
- */
 export interface PopulationSourcePrivateCategorySetSavings {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetSavings
-     */
     'b1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetSavings
-     */
     'b2': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetSavings
-     */
     'b3': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateCategorySetTechLevel
- */
 export interface PopulationSourcePrivateCategorySetTechLevel {
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetTechLevel
-     */
     'n1': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetTechLevel
-     */
     'n2': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateCategorySetTechLevel
-     */
     'n3': number;
 }
-/**
- * 
- * @export
- * @interface PopulationSourcePrivateSection
- */
 export interface PopulationSourcePrivateSection {
-    /**
-     * 
-     * @type {PopulationSourcePrivateCategorySet}
-     * @memberof PopulationSourcePrivateSection
-     */
     'audience_categories'?: PopulationSourcePrivateCategorySet;
-    /**
-     * 
-     * @type {number}
-     * @memberof PopulationSourcePrivateSection
-     */
     'count'?: number;
 }
-/**
- * 
- * @export
- * @interface PostalAddress
- */
 export interface PostalAddress {
     /**
      * The first line of the postal address
-     * @type {string}
-     * @memberof PostalAddress
      */
     'line1'?: string;
     /**
      * The second line of the postal address
-     * @type {string}
-     * @memberof PostalAddress
      */
     'line2'?: string;
     /**
      * The city of the billing address
-     * @type {string}
-     * @memberof PostalAddress
      */
     'city'?: string;
     /**
      * The postal code of the billing address
-     * @type {string}
-     * @memberof PostalAddress
      */
     'postal_code'?: string;
     /**
      * The state of the billing address
-     * @type {string}
-     * @memberof PostalAddress
      */
     'state'?: string;
 }
 /**
  * Measurements (overall and per audience) for traffic resolved as private users
- * @export
- * @interface PrivateAudienceStats
  */
 export interface PrivateAudienceStats {
     /**
      * Measurements related to this object
-     * @type {Array<Measurement>}
-     * @memberof PrivateAudienceStats
      */
     'measurements': Array<Measurement>;
-    /**
-     * 
-     * @type {PrivateAudienceStatsAudienceCategories}
-     * @memberof PrivateAudienceStats
-     */
     'audience_categories': PrivateAudienceStatsAudienceCategories;
 }
-/**
- * 
- * @export
- * @interface PrivateAudienceStatsAudienceCategories
- */
 export interface PrivateAudienceStatsAudienceCategories {
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'home_type': AudienceCategoryStats;
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'savings': AudienceCategoryStats;
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'lifecycle': AudienceCategoryStats;
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'cars': AudienceCategoryStats;
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'children': AudienceCategoryStats;
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'education': AudienceCategoryStats;
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'neighbourhood_type': AudienceCategoryStats;
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'income': AudienceCategoryStats;
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'home_ownership': AudienceCategoryStats;
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'building_age': AudienceCategoryStats;
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'living_space': AudienceCategoryStats;
-    /**
-     * 
-     * @type {AudienceCategoryStats}
-     * @memberof PrivateAudienceStatsAudienceCategories
-     */
     'tech_level': AudienceCategoryStats;
 }
-/**
- * 
- * @export
- * @interface QueryStudyAudienceStats200Response
- */
 export interface QueryStudyAudienceStats200Response {
-    /**
-     * 
-     * @type {StudyAudienceStats}
-     * @memberof QueryStudyAudienceStats200Response
-     */
     'data'?: StudyAudienceStats;
 }
-/**
- * 
- * @export
- * @interface QueryStudyCountryStats200Response
- */
 export interface QueryStudyCountryStats200Response {
-    /**
-     * 
-     * @type {StudyCountryStats}
-     * @memberof QueryStudyCountryStats200Response
-     */
     'data'?: StudyCountryStats;
 }
-/**
- * 
- * @export
- * @interface QueryStudyDeviceStats200Response
- */
 export interface QueryStudyDeviceStats200Response {
-    /**
-     * 
-     * @type {StudyDeviceStats}
-     * @memberof QueryStudyDeviceStats200Response
-     */
     'data'?: StudyDeviceStats;
 }
-/**
- * 
- * @export
- * @interface QueryStudyFrequencyStats200Response
- */
 export interface QueryStudyFrequencyStats200Response {
-    /**
-     * 
-     * @type {StudyFrequencyStats}
-     * @memberof QueryStudyFrequencyStats200Response
-     */
     'data'?: StudyFrequencyStats;
 }
-/**
- * 
- * @export
- * @interface QueryStudyTimelineStats200Response
- */
 export interface QueryStudyTimelineStats200Response {
-    /**
-     * 
-     * @type {StudyTimelineStats}
-     * @memberof QueryStudyTimelineStats200Response
-     */
     'data'?: StudyTimelineStats;
 }
-/**
- * 
- * @export
- * @interface QueryStudyTimingStats200Response
- */
 export interface QueryStudyTimingStats200Response {
-    /**
-     * 
-     * @type {StudyTimingStats}
-     * @memberof QueryStudyTimingStats200Response
-     */
     'data'?: StudyTimingStats;
 }
-/**
- * 
- * @export
- * @interface RegistrationByIdResponseData
- */
 export interface RegistrationByIdResponseData {
     /**
      * The ID of the registration
-     * @type {string}
-     * @memberof RegistrationByIdResponseData
      */
     'id'?: string;
-    /**
-     * 
-     * @type {RegistrationRequest}
-     * @memberof RegistrationByIdResponseData
-     */
     'request'?: RegistrationRequest;
     /**
      * Date and time of the registration expiry
-     * @type {string}
-     * @memberof RegistrationByIdResponseData
      */
     'expires_at'?: string;
     /**
      * Date and time of the verification, if verified
-     * @type {string}
-     * @memberof RegistrationByIdResponseData
      */
     'verified_at'?: string;
     /**
      * The code needed to verify this registration
-     * @type {string}
-     * @memberof RegistrationByIdResponseData
      */
     'verification_code'?: string;
 }
-/**
- * 
- * @export
- * @interface RegistrationCreationResponseData
- */
 export interface RegistrationCreationResponseData {
-    /**
-     * 
-     * @type {string}
-     * @memberof RegistrationCreationResponseData
-     */
     'id'?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RegistrationCreationResponseData
-     */
     'email_sent'?: boolean;
 }
-/**
- * 
- * @export
- * @interface RegistrationRequest
- */
 export interface RegistrationRequest {
     /**
      * The name of the account to create
-     * @type {string}
-     * @memberof RegistrationRequest
      */
     'account_name': string;
     /**
      * The email of the account owner
-     * @type {string}
-     * @memberof RegistrationRequest
      */
     'owner_email': string;
     /**
      * The name of the account owner
-     * @type {string}
-     * @memberof RegistrationRequest
      */
     'owner_name': string;
 }
-/**
- * 
- * @export
- * @interface RegistrationVerificationResponseData
- */
 export interface RegistrationVerificationResponseData {
     /**
      * A short-lived token (usable for 1 hour) to be used in subsequent requests
-     * @type {string}
-     * @memberof RegistrationVerificationResponseData
      */
     'access_token': string;
     /**
      * The type of access token returned
-     * @type {string}
-     * @memberof RegistrationVerificationResponseData
      */
     'token_type': string;
     /**
      * The duration of time (in seconds) the access token is granted for
-     * @type {number}
-     * @memberof RegistrationVerificationResponseData
      */
     'expires_in': number;
     /**
      * A long-lived token that can be used to generate new access tokens even after the returned access token expires.
-     * @type {string}
-     * @memberof RegistrationVerificationResponseData
      */
     'refresh_token'?: string;
 }
-/**
- * 
- * @export
- * @interface RegistrationVerificationResponseLinks
- */
 export interface RegistrationVerificationResponseLinks {
     /**
      * Link of the created user
-     * @type {string}
-     * @memberof RegistrationVerificationResponseLinks
      */
     'user'?: string;
     /**
      * Link of the created account
-     * @type {string}
-     * @memberof RegistrationVerificationResponseLinks
      */
     'account'?: string;
 }
-/**
- * 
- * @export
- * @interface ResolveAudiencesOfMultipleRequest
- */
 export interface ResolveAudiencesOfMultipleRequest {
-    /**
-     * 
-     * @type {Array<ResolveAudiencesOfMultipleRequestItem>}
-     * @memberof ResolveAudiencesOfMultipleRequest
-     */
     'queries': Array<ResolveAudiencesOfMultipleRequestItem>;
 }
-/**
- * 
- * @export
- * @interface ResolveAudiencesOfMultipleRequestItem
- */
 export interface ResolveAudiencesOfMultipleRequestItem {
     /**
      * An optional identifier for the item. The identifier will also be available in the response.
-     * @type {string}
-     * @memberof ResolveAudiencesOfMultipleRequestItem
      */
     'id'?: string;
     /**
      * The IP address to resolve audiences for
-     * @type {string}
-     * @memberof ResolveAudiencesOfMultipleRequestItem
      */
     'ip_address': string;
 }
-/**
- * 
- * @export
- * @interface ResolveAudiencesOfMultipleResponse
- */
 export interface ResolveAudiencesOfMultipleResponse {
-    /**
-     * 
-     * @type {Array<ResolveAudiencesOfMultipleResponseItem>}
-     * @memberof ResolveAudiencesOfMultipleResponse
-     */
     'results'?: Array<ResolveAudiencesOfMultipleResponseItem>;
 }
-/**
- * 
- * @export
- * @interface ResolveAudiencesOfMultipleResponseItem
- */
 export interface ResolveAudiencesOfMultipleResponseItem {
     /**
      * The identifier (if provided) of the item as it was provided in the request.
-     * @type {string}
-     * @memberof ResolveAudiencesOfMultipleResponseItem
      */
     'id'?: string;
-    /**
-     * 
-     * @type {Array<Audience>}
-     * @memberof ResolveAudiencesOfMultipleResponseItem
-     */
     'audiences'?: Array<Audience>;
-    /**
-     * 
-     * @type {AudienceResponseStatus}
-     * @memberof ResolveAudiencesOfMultipleResponseItem
-     */
     'status': AudienceResponseStatus;
 }
 
 
-/**
- * 
- * @export
- * @interface ResourceSharingTokenRequest
- */
 export interface ResourceSharingTokenRequest {
     /**
      * An optional ID to encode into the token to enable future identification of it
-     * @type {string}
-     * @memberof ResourceSharingTokenRequest
      */
     'id'?: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ResourceSharingTokenRequest
-     */
     'resource_urls'?: Array<string>;
     /**
      * The ID of the account to create the resource sharing token for. The account ID will be encoded into the token and ensure that e.g. subscription limitations and account settings are carried over to the interactions provided with the token. 
-     * @type {string}
-     * @memberof ResourceSharingTokenRequest
      */
     'account_id'?: string;
     /**
      * The duration of time (in seconds) the resource sharing token is granted for
-     * @type {number}
-     * @memberof ResourceSharingTokenRequest
      */
     'expires_in'?: number;
 }
-/**
- * 
- * @export
- * @interface SendEmailQuery
- */
 export interface SendEmailQuery {
     /**
      * The ID of the email template to use.
-     * @type {string}
-     * @memberof SendEmailQuery
      */
     'template_id': string;
     /**
      * Model data to pass to the email template. Note that the following model data fields will be automatically populated by the service:  * `user_id`: The ID of the recipient user  * `user_name`: The name of the recipient user  * `user_email`: The email of the recipient user  * `account_id`: The ID of the recipient user\'s account  * `account_name`: The name of the recipient user\'s account 
-     * @type {{ [key: string]: string; }}
-     * @memberof SendEmailQuery
      */
     'model_data'?: { [key: string]: string; };
-    /**
-     * 
-     * @type {SendEmailUserFilters}
-     * @memberof SendEmailQuery
-     */
     'include_users': SendEmailUserFilters;
 }
 /**
  * Queries users to be recipients for an email. Depending on the `query_type`, other properties must be set as follows:   * If `single_user` is selected, `user_id` must be provided.   * If `users_filter` is selected, at least one of the `users_filter_*` properties should be provided.     They map directly to the filter properties on the `/users` endpoint.   * If `everyone` is selected, ALL users in the platform is emailed. Use with caution. 
- * @export
- * @interface SendEmailUserFilters
  */
 export interface SendEmailUserFilters {
-    /**
-     * 
-     * @type {string}
-     * @memberof SendEmailUserFilters
-     */
     'query_type': SendEmailUserFiltersQueryTypeEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof SendEmailUserFilters
-     */
     'user_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SendEmailUserFilters
-     */
     'filter_account_id'?: string;
-    /**
-     * 
-     * @type {UserPlatformRole}
-     * @memberof SendEmailUserFilters
-     */
     'filter_platform_role'?: UserPlatformRole;
-    /**
-     * 
-     * @type {UserAccountRole}
-     * @memberof SendEmailUserFilters
-     */
     'filter_account_role'?: UserAccountRole;
 }
 
@@ -5119,216 +2296,117 @@ export const SendEmailUserFiltersQueryTypeEnum = {
 
 export type SendEmailUserFiltersQueryTypeEnum = typeof SendEmailUserFiltersQueryTypeEnum[keyof typeof SendEmailUserFiltersQueryTypeEnum];
 
-/**
- * 
- * @export
- * @interface SharedReportAux
- */
 export interface SharedReportAux {
     /**
      * ID of the account that owns the study
-     * @type {string}
-     * @memberof SharedReportAux
      */
     'account_id'?: string;
 }
-/**
- * 
- * @export
- * @interface SharedReportBase
- */
 export interface SharedReportBase {
     /**
      * URL of the publicly available asset
-     * @type {string}
-     * @memberof SharedReportBase
      */
     'asset_url'?: string;
-    /**
-     * 
-     * @type {SharedReportType}
-     * @memberof SharedReportBase
-     */
     'report_type': SharedReportType;
     /**
      * Optional date/time that the shared report will expire. Default is 28 days after the time of creation.
-     * @type {string}
-     * @memberof SharedReportBase
      */
     'expires_at'?: string;
     /**
      * ID of the study to which the report belongs
-     * @type {string}
-     * @memberof SharedReportBase
      */
     'study_id'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface SharedReportCreation
- */
 export interface SharedReportCreation {
     /**
      * URL of the publicly available asset
-     * @type {string}
-     * @memberof SharedReportCreation
      */
     'asset_url'?: string;
-    /**
-     * 
-     * @type {SharedReportType}
-     * @memberof SharedReportCreation
-     */
     'report_type': SharedReportType;
     /**
      * Optional date/time that the shared report will expire. Default is 28 days after the time of creation.
-     * @type {string}
-     * @memberof SharedReportCreation
      */
     'expires_at'?: string;
     /**
      * ID of the study to which the report belongs
-     * @type {string}
-     * @memberof SharedReportCreation
      */
     'study_id'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface SharedReportFull
- */
 export interface SharedReportFull {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof SharedReportFull
      */
     'id': string;
     /**
      * URL of the publicly available asset
-     * @type {string}
-     * @memberof SharedReportFull
      */
     'asset_url'?: string;
-    /**
-     * 
-     * @type {SharedReportType}
-     * @memberof SharedReportFull
-     */
     'report_type': SharedReportType;
     /**
      * Optional date/time that the shared report will expire. Default is 28 days after the time of creation.
-     * @type {string}
-     * @memberof SharedReportFull
      */
     'expires_at'?: string;
     /**
      * ID of the study to which the report belongs
-     * @type {string}
-     * @memberof SharedReportFull
      */
     'study_id'?: string;
     /**
      * ID of the account that owns the study
-     * @type {string}
-     * @memberof SharedReportFull
      */
     'account_id'?: string;
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof SharedReportFull
      */
     'created_at': string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof SharedReportFull
      */
     'created_by': string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof SharedReportFull
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof SharedReportFull
      */
     'updated_by'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface SharedReportItem
- */
 export interface SharedReportItem {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof SharedReportItem
      */
     'id': string;
     /**
      * URL of the publicly available asset
-     * @type {string}
-     * @memberof SharedReportItem
      */
     'asset_url'?: string;
-    /**
-     * 
-     * @type {SharedReportType}
-     * @memberof SharedReportItem
-     */
     'report_type': SharedReportType;
     /**
      * Optional date/time that the shared report will expire. Default is 28 days after the time of creation.
-     * @type {string}
-     * @memberof SharedReportItem
      */
     'expires_at'?: string;
     /**
      * ID of the study to which the report belongs
-     * @type {string}
-     * @memberof SharedReportItem
      */
     'study_id'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface SharedReportPublicData
- */
 export interface SharedReportPublicData {
-    /**
-     * 
-     * @type {string}
-     * @memberof SharedReportPublicData
-     */
     'study_id': string;
     /**
      * Access token that can be used for API requests, if the user is not already authenticated
-     * @type {string}
-     * @memberof SharedReportPublicData
      */
     'access_token'?: string;
 }
 /**
  * The type of shared report
- * @export
- * @enum {string}
  */
 
 export const SharedReportType = {
@@ -5338,369 +2416,148 @@ export const SharedReportType = {
 export type SharedReportType = typeof SharedReportType[keyof typeof SharedReportType];
 
 
-/**
- * 
- * @export
- * @interface StripeAccountSubscriptionCheckoutSession
- */
 export interface StripeAccountSubscriptionCheckoutSession {
-    /**
-     * 
-     * @type {string}
-     * @memberof StripeAccountSubscriptionCheckoutSession
-     */
     'session_id'?: string;
     /**
      * The URL to take the user to, to set up payment
-     * @type {string}
-     * @memberof StripeAccountSubscriptionCheckoutSession
      */
     'redirect_url'?: string;
 }
-/**
- * 
- * @export
- * @interface StripeAccountSubscriptionPurchaseCreation
- */
 export interface StripeAccountSubscriptionPurchaseCreation {
     /**
      * The ID of the plan to subscribe to
-     * @type {string}
-     * @memberof StripeAccountSubscriptionPurchaseCreation
      */
     'plan_id': string;
 }
-/**
- * 
- * @export
- * @interface StudyAudienceStats
- */
 export interface StudyAudienceStats {
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof StudyAudienceStats
-     */
     'not_resolved'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {BusinessAudienceStats}
-     * @memberof StudyAudienceStats
-     */
     'business'?: BusinessAudienceStats;
-    /**
-     * 
-     * @type {PrivateAudienceStats}
-     * @memberof StudyAudienceStats
-     */
     'private'?: PrivateAudienceStats;
 }
-/**
- * 
- * @export
- * @interface StudyAux
- */
 export interface StudyAux {
-    /**
-     * 
-     * @type {MeasurementEventLinks}
-     * @memberof StudyAux
-     */
     'event_links'?: MeasurementEventLinks;
     /**
      * If present, an upper limit on the number of events that will be processed in this study.
-     * @type {number}
-     * @memberof StudyAux
      */
     'event_cap'?: number;
-    /**
-     * 
-     * @type {MeasurementIntegrationPlatform}
-     * @memberof StudyAux
-     */
     'integration_platform'?: MeasurementIntegrationPlatform;
     /**
      * Determines if the study is an example study, used to demonstrate product capabilities
-     * @type {boolean}
-     * @memberof StudyAux
      */
     'is_example'?: boolean;
 }
-/**
- * 
- * @export
- * @interface StudyBase
- */
 export interface StudyBase {
-    /**
-     * 
-     * @type {string}
-     * @memberof StudyBase
-     */
     'name'?: string;
     /**
      * A set of labels that users can use to categorize their measurements. Can be used to indicate type of study, customer names or other traits. 
-     * @type {Array<string>}
-     * @memberof StudyBase
      */
     'labels'?: Array<string>;
     /**
      * The ID of the account that owns this study
-     * @type {string}
-     * @memberof StudyBase
      */
     'account_id'?: string;
     /**
      * The date for which the study and its data ingestion will start
-     * @type {string}
-     * @memberof StudyBase
      */
     'start_date'?: string;
     /**
      * The date for which the study and its data ingestion will end
-     * @type {string}
-     * @memberof StudyBase
      */
     'end_date'?: string;
     /**
      * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
-     * @type {string}
-     * @memberof StudyBase
      */
     'banner_image_url'?: string;
-    /**
-     * 
-     * @type {StudyLifecycleStage}
-     * @memberof StudyBase
-     */
     'life_cycle_stage'?: StudyLifecycleStage;
-    /**
-     * 
-     * @type {StudyIngestionStatus}
-     * @memberof StudyBase
-     */
     'ingestion_status'?: StudyIngestionStatus;
-    /**
-     * 
-     * @type {StudySummaryStats}
-     * @memberof StudyBase
-     */
     'summary_stats'?: StudySummaryStats;
-    /**
-     * 
-     * @type {MeasurementClientItem}
-     * @memberof StudyBase
-     */
     'client'?: MeasurementClientItem;
 }
 
 
-/**
- * 
- * @export
- * @interface StudyCountryStats
- */
 export interface StudyCountryStats {
     /**
      * The country code of the predominant country of the study
-     * @type {string}
-     * @memberof StudyCountryStats
      */
     'predominant_country'?: string;
     /**
      * A listing of each countries observed and the relevant measurements for each
-     * @type {Array<CountryStats>}
-     * @memberof StudyCountryStats
      */
     'countries'?: Array<CountryStats>;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof StudyCountryStats
-     */
     'resolved'?: MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof StudyCountryStats
-     */
     'not_resolved'?: MeasurementsContainer;
 }
-/**
- * 
- * @export
- * @interface StudyCreation
- */
 export interface StudyCreation {
-    /**
-     * 
-     * @type {string}
-     * @memberof StudyCreation
-     */
     'name': string;
     /**
      * A set of labels that users can use to categorize their measurements. Can be used to indicate type of study, customer names or other traits. 
-     * @type {Array<string>}
-     * @memberof StudyCreation
      */
     'labels'?: Array<string>;
     /**
      * The ID of the account that owns this study
-     * @type {string}
-     * @memberof StudyCreation
      */
     'account_id'?: string;
     /**
      * The date for which the study and its data ingestion will start
-     * @type {string}
-     * @memberof StudyCreation
      */
     'start_date'?: string;
     /**
      * The date for which the study and its data ingestion will end
-     * @type {string}
-     * @memberof StudyCreation
      */
     'end_date'?: string;
     /**
      * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
-     * @type {string}
-     * @memberof StudyCreation
      */
     'banner_image_url'?: string;
-    /**
-     * 
-     * @type {StudyLifecycleStage}
-     * @memberof StudyCreation
-     */
     'life_cycle_stage'?: StudyLifecycleStage;
-    /**
-     * 
-     * @type {StudyIngestionStatus}
-     * @memberof StudyCreation
-     */
     'ingestion_status'?: StudyIngestionStatus;
-    /**
-     * 
-     * @type {StudySummaryStats}
-     * @memberof StudyCreation
-     */
     'summary_stats'?: StudySummaryStats;
-    /**
-     * 
-     * @type {MeasurementClientItem}
-     * @memberof StudyCreation
-     */
     'client'?: MeasurementClientItem;
-    /**
-     * 
-     * @type {MeasurementEventLinks}
-     * @memberof StudyCreation
-     */
     'event_links'?: MeasurementEventLinks;
     /**
      * If present, an upper limit on the number of events that will be processed in this study.
-     * @type {number}
-     * @memberof StudyCreation
      */
     'event_cap'?: number;
-    /**
-     * 
-     * @type {MeasurementIntegrationPlatform}
-     * @memberof StudyCreation
-     */
     'integration_platform'?: MeasurementIntegrationPlatform;
     /**
      * Determines if the study is an example study, used to demonstrate product capabilities
-     * @type {boolean}
-     * @memberof StudyCreation
      */
     'is_example'?: boolean;
-    /**
-     * 
-     * @type {MeasurementEventSet}
-     * @memberof StudyCreation
-     */
     'event_set': MeasurementEventSet;
     /**
      * The ID of the measurement client that this study is for
-     * @type {string}
-     * @memberof StudyCreation
      */
     'client_id'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface StudyCreationData
- */
 export interface StudyCreationData {
-    /**
-     * 
-     * @type {MeasurementEventSet}
-     * @memberof StudyCreationData
-     */
     'event_set': MeasurementEventSet;
     /**
      * The ID of the measurement client that this study is for
-     * @type {string}
-     * @memberof StudyCreationData
      */
     'client_id'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface StudyDeviceStats
- */
 export interface StudyDeviceStats {
-    /**
-     * 
-     * @type {Array<StudyDeviceTypeCategoryStats>}
-     * @memberof StudyDeviceStats
-     */
     'device_types': Array<StudyDeviceTypeCategoryStats>;
 }
-/**
- * 
- * @export
- * @interface StudyDeviceSubTypeStats
- */
 export interface StudyDeviceSubTypeStats {
-    /**
-     * 
-     * @type {string}
-     * @memberof StudyDeviceSubTypeStats
-     */
     'name': string;
     /**
      * The total count of events recorded for the device.
-     * @type {number}
-     * @memberof StudyDeviceSubTypeStats
      */
     'count': number;
     /**
      * The total count of impressions recorded for the device.
-     * @type {number}
-     * @memberof StudyDeviceSubTypeStats
      */
     'impressions'?: number;
     /**
      * The total count of clicks recorded for the device.
-     * @type {number}
-     * @memberof StudyDeviceSubTypeStats
      */
     'clicks'?: number;
 }
-/**
- * 
- * @export
- * @enum {string}
- */
 
 export const StudyDeviceTypeCategory = {
     Mobile: 'mobile',
@@ -5714,293 +2571,145 @@ export const StudyDeviceTypeCategory = {
 export type StudyDeviceTypeCategory = typeof StudyDeviceTypeCategory[keyof typeof StudyDeviceTypeCategory];
 
 
-/**
- * 
- * @export
- * @interface StudyDeviceTypeCategoryStats
- */
 export interface StudyDeviceTypeCategoryStats {
-    /**
-     * 
-     * @type {StudyDeviceTypeCategory}
-     * @memberof StudyDeviceTypeCategoryStats
-     */
     'category': StudyDeviceTypeCategory;
     /**
      * The total count of events recorded for the device category.
-     * @type {number}
-     * @memberof StudyDeviceTypeCategoryStats
      */
     'count': number;
     /**
      * The total count of impressions recorded for the device category.
-     * @type {number}
-     * @memberof StudyDeviceTypeCategoryStats
      */
     'impressions'?: number;
     /**
      * The total count of clicks recorded for the device category.
-     * @type {number}
-     * @memberof StudyDeviceTypeCategoryStats
      */
     'clicks'?: number;
-    /**
-     * 
-     * @type {Array<StudyDeviceSubTypeStats>}
-     * @memberof StudyDeviceTypeCategoryStats
-     */
     'sub_types'?: Array<StudyDeviceSubTypeStats>;
 }
 
 
 /**
  * Defines the creation of one or more study events. If creating a single event, the `events` array is not needed. If creating a bulk of events, repeated attributes (for example event_type) can be entered once and reused across the `events` array. 
- * @export
- * @interface StudyEventCreation
  */
 export interface StudyEventCreation {
-    /**
-     * 
-     * @type {Array<StudyEventCreationBase>}
-     * @memberof StudyEventCreation
-     */
     'events'?: Array<StudyEventCreationBase>;
-    /**
-     * 
-     * @type {string}
-     * @memberof StudyEventCreation
-     */
     'ip_address'?: string;
     /**
      * The user agent of the event
-     * @type {string}
-     * @memberof StudyEventCreation
      */
     'user_agent'?: string;
     /**
      * The referer value of the event
-     * @type {string}
-     * @memberof StudyEventCreation
      */
     'referer'?: string;
     /**
      * Optionally, the time of the event
-     * @type {string}
-     * @memberof StudyEventCreation
      */
     'event_time'?: string;
     /**
      * The event type to ingest, typically `impression` or `click`
-     * @type {string}
-     * @memberof StudyEventCreation
      */
     'event_type'?: string;
 }
-/**
- * 
- * @export
- * @interface StudyEventCreationBase
- */
 export interface StudyEventCreationBase {
-    /**
-     * 
-     * @type {string}
-     * @memberof StudyEventCreationBase
-     */
     'ip_address'?: string;
     /**
      * The user agent of the event
-     * @type {string}
-     * @memberof StudyEventCreationBase
      */
     'user_agent'?: string;
     /**
      * The referer value of the event
-     * @type {string}
-     * @memberof StudyEventCreationBase
      */
     'referer'?: string;
     /**
      * Optionally, the time of the event
-     * @type {string}
-     * @memberof StudyEventCreationBase
      */
     'event_time'?: string;
     /**
      * The event type to ingest, typically `impression` or `click`
-     * @type {string}
-     * @memberof StudyEventCreationBase
      */
     'event_type'?: string;
 }
-/**
- * 
- * @export
- * @interface StudyEventCreationBulk
- */
 export interface StudyEventCreationBulk {
-    /**
-     * 
-     * @type {Array<StudyEventCreationBase>}
-     * @memberof StudyEventCreationBulk
-     */
     'events'?: Array<StudyEventCreationBase>;
 }
-/**
- * 
- * @export
- * @interface StudyFrequencyStats
- */
 export interface StudyFrequencyStats {
     /**
      * The event that is represented in this frequency stats. Current values include `all` (all events), `impression` or `click`
-     * @type {string}
-     * @memberof StudyFrequencyStats
      */
     'event_type'?: string;
     /**
      * Optionally an array of additional frequency stats for more fine-grained event types
-     * @type {Array<StudyFrequencyStats>}
-     * @memberof StudyFrequencyStats
      */
     'sub_frequencies'?: Array<StudyFrequencyStats>;
     /**
      * The average frequency of events per user. 
-     * @type {number}
-     * @memberof StudyFrequencyStats
      */
     'average_frequency'?: number;
     /**
      * A listing of frequencies observed and the relevant measurements for each. The returned list may be truncated to cut off the \"long tail\" of frequency values. 
-     * @type {Array<FrequencyStats>}
-     * @memberof StudyFrequencyStats
      */
     'frequencies'?: Array<FrequencyStats>;
     /**
      * The number of users that have generated events at a frequency value greater than those represented in `frequencies`. 
-     * @type {number}
-     * @memberof StudyFrequencyStats
      */
     'count_above_cap'?: number;
 }
-/**
- * 
- * @export
- * @interface StudyFull
- */
 export interface StudyFull {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof StudyFull
      */
     'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof StudyFull
-     */
     'name'?: string;
     /**
      * A set of labels that users can use to categorize their measurements. Can be used to indicate type of study, customer names or other traits. 
-     * @type {Array<string>}
-     * @memberof StudyFull
      */
     'labels'?: Array<string>;
     /**
      * The ID of the account that owns this study
-     * @type {string}
-     * @memberof StudyFull
      */
     'account_id'?: string;
     /**
      * The date for which the study and its data ingestion will start
-     * @type {string}
-     * @memberof StudyFull
      */
     'start_date'?: string;
     /**
      * The date for which the study and its data ingestion will end
-     * @type {string}
-     * @memberof StudyFull
      */
     'end_date'?: string;
     /**
      * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
-     * @type {string}
-     * @memberof StudyFull
      */
     'banner_image_url'?: string;
-    /**
-     * 
-     * @type {StudyLifecycleStage}
-     * @memberof StudyFull
-     */
     'life_cycle_stage'?: StudyLifecycleStage;
-    /**
-     * 
-     * @type {StudyIngestionStatus}
-     * @memberof StudyFull
-     */
     'ingestion_status'?: StudyIngestionStatus;
-    /**
-     * 
-     * @type {StudySummaryStats}
-     * @memberof StudyFull
-     */
     'summary_stats'?: StudySummaryStats;
-    /**
-     * 
-     * @type {MeasurementClientItem}
-     * @memberof StudyFull
-     */
     'client'?: MeasurementClientItem;
-    /**
-     * 
-     * @type {MeasurementEventLinks}
-     * @memberof StudyFull
-     */
     'event_links'?: MeasurementEventLinks;
     /**
      * If present, an upper limit on the number of events that will be processed in this study.
-     * @type {number}
-     * @memberof StudyFull
      */
     'event_cap'?: number;
-    /**
-     * 
-     * @type {MeasurementIntegrationPlatform}
-     * @memberof StudyFull
-     */
     'integration_platform'?: MeasurementIntegrationPlatform;
     /**
      * Determines if the study is an example study, used to demonstrate product capabilities
-     * @type {boolean}
-     * @memberof StudyFull
      */
     'is_example'?: boolean;
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof StudyFull
      */
     'created_at': string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof StudyFull
      */
     'created_by': string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof StudyFull
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof StudyFull
      */
     'updated_by'?: string;
 }
@@ -6008,8 +2717,6 @@ export interface StudyFull {
 
 /**
  * The status of the data collection of the study, indicating whether stats are available and representative.  * `no_data` means that the study has been created but no data has been received. * `active_ramping_up` means that data has been received, but not enough to provide meaningful stats yet. * `active_fulfilled` means that the study has received a good amount of data, but more data can still be added. * `paused_limited` means that the study was paused because of exceeded limits (typically when `event_cap` is exceeded) * `finished_complete` means that the study has finished and is no longer open to receive data. * `finished_expired` means that the study has finished but not enough data was collected to provide meaningful stats. 
- * @export
- * @enum {string}
  */
 
 export const StudyIngestionStatus = {
@@ -6024,85 +2731,41 @@ export const StudyIngestionStatus = {
 export type StudyIngestionStatus = typeof StudyIngestionStatus[keyof typeof StudyIngestionStatus];
 
 
-/**
- * 
- * @export
- * @interface StudyItem
- */
 export interface StudyItem {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof StudyItem
      */
     'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof StudyItem
-     */
     'name'?: string;
     /**
      * A set of labels that users can use to categorize their measurements. Can be used to indicate type of study, customer names or other traits. 
-     * @type {Array<string>}
-     * @memberof StudyItem
      */
     'labels'?: Array<string>;
     /**
      * The ID of the account that owns this study
-     * @type {string}
-     * @memberof StudyItem
      */
     'account_id'?: string;
     /**
      * The date for which the study and its data ingestion will start
-     * @type {string}
-     * @memberof StudyItem
      */
     'start_date'?: string;
     /**
      * The date for which the study and its data ingestion will end
-     * @type {string}
-     * @memberof StudyItem
      */
     'end_date'?: string;
     /**
      * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
-     * @type {string}
-     * @memberof StudyItem
      */
     'banner_image_url'?: string;
-    /**
-     * 
-     * @type {StudyLifecycleStage}
-     * @memberof StudyItem
-     */
     'life_cycle_stage'?: StudyLifecycleStage;
-    /**
-     * 
-     * @type {StudyIngestionStatus}
-     * @memberof StudyItem
-     */
     'ingestion_status'?: StudyIngestionStatus;
-    /**
-     * 
-     * @type {StudySummaryStats}
-     * @memberof StudyItem
-     */
     'summary_stats'?: StudySummaryStats;
-    /**
-     * 
-     * @type {MeasurementClientItem}
-     * @memberof StudyItem
-     */
     'client'?: MeasurementClientItem;
 }
 
 
 /**
  * The life cycle stage of the study. 
- * @export
- * @enum {string}
  */
 
 export const StudyLifecycleStage = {
@@ -6115,171 +2778,75 @@ export const StudyLifecycleStage = {
 export type StudyLifecycleStage = typeof StudyLifecycleStage[keyof typeof StudyLifecycleStage];
 
 
-/**
- * 
- * @export
- * @interface StudyLinks
- */
 export interface StudyLinks {
     /**
      * Link to the country statistics for the study
-     * @type {string}
-     * @memberof StudyLinks
      */
     'stats_countries'?: string;
     /**
      * Link to the audience statistics for the study
-     * @type {string}
-     * @memberof StudyLinks
      */
     'stats_audiences'?: string;
     /**
      * Link to the timing statistics for the study
-     * @type {string}
-     * @memberof StudyLinks
      */
     'stats_timing'?: string;
     /**
      * Link to the frequency statistics for the study
-     * @type {string}
-     * @memberof StudyLinks
      */
     'stats_frequencies'?: string;
 }
-/**
- * 
- * @export
- * @interface StudyMeta
- */
 export interface StudyMeta {
-    /**
-     * 
-     * @type {StudyPermissions}
-     * @memberof StudyMeta
-     */
     'permissions'?: StudyPermissions;
 }
-/**
- * 
- * @export
- * @interface StudyMutation
- */
 export interface StudyMutation {
-    /**
-     * 
-     * @type {string}
-     * @memberof StudyMutation
-     */
     'name'?: string;
     /**
      * A set of labels that users can use to categorize their measurements. Can be used to indicate type of study, customer names or other traits. 
-     * @type {Array<string>}
-     * @memberof StudyMutation
      */
     'labels'?: Array<string>;
     /**
      * The ID of the account that owns this study
-     * @type {string}
-     * @memberof StudyMutation
      */
     'account_id'?: string;
     /**
      * The date for which the study and its data ingestion will start
-     * @type {string}
-     * @memberof StudyMutation
      */
     'start_date'?: string;
     /**
      * The date for which the study and its data ingestion will end
-     * @type {string}
-     * @memberof StudyMutation
      */
     'end_date'?: string;
     /**
      * The URL to a banner image for the study. Note that the banner image is used only for Digiseg study reporting and presentation, it does NOT represent any delivered banner ad creatives or similar. 
-     * @type {string}
-     * @memberof StudyMutation
      */
     'banner_image_url'?: string;
-    /**
-     * 
-     * @type {StudyLifecycleStage}
-     * @memberof StudyMutation
-     */
     'life_cycle_stage'?: StudyLifecycleStage;
-    /**
-     * 
-     * @type {StudyIngestionStatus}
-     * @memberof StudyMutation
-     */
     'ingestion_status'?: StudyIngestionStatus;
-    /**
-     * 
-     * @type {StudySummaryStats}
-     * @memberof StudyMutation
-     */
     'summary_stats'?: StudySummaryStats;
-    /**
-     * 
-     * @type {MeasurementClientItem}
-     * @memberof StudyMutation
-     */
     'client'?: MeasurementClientItem;
-    /**
-     * 
-     * @type {MeasurementEventLinks}
-     * @memberof StudyMutation
-     */
     'event_links'?: MeasurementEventLinks;
     /**
      * If present, an upper limit on the number of events that will be processed in this study.
-     * @type {number}
-     * @memberof StudyMutation
      */
     'event_cap'?: number;
-    /**
-     * 
-     * @type {MeasurementIntegrationPlatform}
-     * @memberof StudyMutation
-     */
     'integration_platform'?: MeasurementIntegrationPlatform;
     /**
      * Determines if the study is an example study, used to demonstrate product capabilities
-     * @type {boolean}
-     * @memberof StudyMutation
      */
     'is_example'?: boolean;
-    /**
-     * 
-     * @type {MeasurementEventSet}
-     * @memberof StudyMutation
-     */
     'event_set'?: MeasurementEventSet;
     /**
      * The ID of the measurement client that this study is for
-     * @type {string}
-     * @memberof StudyMutation
      */
     'client_id'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface StudyMutationData
- */
 export interface StudyMutationData {
-    /**
-     * 
-     * @type {MeasurementEventSet}
-     * @memberof StudyMutationData
-     */
     'event_set'?: MeasurementEventSet;
     /**
      * The ID of the measurement client that this study is for
-     * @type {string}
-     * @memberof StudyMutationData
      */
     'client_id'?: string;
 }
@@ -6287,8 +2854,6 @@ export interface StudyMutationData {
 
 /**
  * The dimensions that are queryable in the OLAP endpoint.  Notes about the values you can expect in these dimensions:  * The `record_type` is either `private`, `business` or `not_resolved` * Time-based values (`date` and `hour`) are UTC based * The `country` dimension returns 2-letter ISO country codes * The audience dimension values are audience codes such as `a1`, `b2` etc. * If a value is not present, an empty string will be returned 
- * @export
- * @enum {string}
  */
 
 export const StudyOlapDimensionKey = {
@@ -6320,806 +2885,364 @@ export const StudyOlapDimensionKey = {
 export type StudyOlapDimensionKey = typeof StudyOlapDimensionKey[keyof typeof StudyOlapDimensionKey];
 
 
-/**
- * 
- * @export
- * @interface StudyOlapFilterItem
- */
 export interface StudyOlapFilterItem {
-    /**
-     * 
-     * @type {StudyOlapDimensionKey}
-     * @memberof StudyOlapFilterItem
-     */
     'k': StudyOlapDimensionKey;
     /**
      * Represents a value for a `StudyOlapDimensionKey`.
-     * @type {string}
-     * @memberof StudyOlapFilterItem
      */
     'v': string;
 }
 
 
-/**
- * 
- * @export
- * @interface StudyOlapQuery
- */
 export interface StudyOlapQuery {
     /**
      * The from-date of the events to query
-     * @type {string}
-     * @memberof StudyOlapQuery
      */
     'filter_time_from'?: string;
     /**
      * The to-date of the events to query
-     * @type {string}
-     * @memberof StudyOlapQuery
      */
     'filter_time_to'?: string;
-    /**
-     * 
-     * @type {Array<StudyOlapDimensionKey>}
-     * @memberof StudyOlapQuery
-     */
     'group_by'?: Array<StudyOlapDimensionKey>;
-    /**
-     * 
-     * @type {Array<StudyOlapFilterItem>}
-     * @memberof StudyOlapQuery
-     */
     'filter_dimensions_include'?: Array<StudyOlapFilterItem>;
-    /**
-     * 
-     * @type {Array<StudyOlapFilterItem>}
-     * @memberof StudyOlapQuery
-     */
     'filter_dimensions_exclude'?: Array<StudyOlapFilterItem>;
 }
-/**
- * 
- * @export
- * @interface StudyOlapQueryResult
- */
 export interface StudyOlapQueryResult {
-    /**
-     * 
-     * @type {Array<StudyOlapQueryResultRow>}
-     * @memberof StudyOlapQueryResult
-     */
     'rows'?: Array<StudyOlapQueryResultRow>;
 }
-/**
- * 
- * @export
- * @interface StudyOlapQueryResultRow
- */
 export interface StudyOlapQueryResultRow {
     /**
      * Measurements related to this object
-     * @type {Array<Measurement>}
-     * @memberof StudyOlapQueryResultRow
      */
     'measurements': Array<Measurement>;
-    /**
-     * 
-     * @type {Array<StudyOlapFilterItem>}
-     * @memberof StudyOlapQueryResultRow
-     */
     'dimensions'?: Array<StudyOlapFilterItem>;
 }
 /**
  * Provides information about the current user\'s permissions of a study
- * @export
- * @interface StudyPermissions
  */
 export interface StudyPermissions {
     /**
      * Can the current user GET (read) study information?
-     * @type {boolean}
-     * @memberof StudyPermissions
      */
     'get': boolean;
     /**
      * Can the current user PUT (update) study information?
-     * @type {boolean}
-     * @memberof StudyPermissions
      */
     'put': boolean;
     /**
      * Can the current user DELETE the study?
-     * @type {boolean}
-     * @memberof StudyPermissions
      */
     'delete': boolean;
 }
-/**
- * 
- * @export
- * @interface StudySummaryStats
- */
 export interface StudySummaryStats {
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof StudySummaryStats
-     */
     'private': MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof StudySummaryStats
-     */
     'business': MeasurementsContainer;
-    /**
-     * 
-     * @type {MeasurementsContainer}
-     * @memberof StudySummaryStats
-     */
     'not_resolved': MeasurementsContainer;
 }
 /**
  * Represents a UTC date of gathering timeline data for a study.
- * @export
- * @interface StudyTimelineDate
  */
 export interface StudyTimelineDate {
-    /**
-     * 
-     * @type {string}
-     * @memberof StudyTimelineDate
-     */
     'date': string;
-    /**
-     * 
-     * @type {Array<StudyTimelineHour>}
-     * @memberof StudyTimelineDate
-     */
     'hours': Array<StudyTimelineHour>;
 }
 /**
  * Represents a UTC hour of gathering timeline data for a study.
- * @export
- * @interface StudyTimelineHour
  */
 export interface StudyTimelineHour {
     /**
      * The hour of the day (from 0-23) in UTC time
-     * @type {number}
-     * @memberof StudyTimelineHour
      */
     'hour'?: number;
     /**
      * The total count of events recorded in the hour.
-     * @type {number}
-     * @memberof StudyTimelineHour
      */
     'count'?: number;
     /**
      * The total count of impressions recorded in the hour.
-     * @type {number}
-     * @memberof StudyTimelineHour
      */
     'impressions'?: number;
     /**
      * The total count of clicks recorded in the hour.
-     * @type {number}
-     * @memberof StudyTimelineHour
      */
     'clicks'?: number;
 }
-/**
- * 
- * @export
- * @interface StudyTimelineStats
- */
 export interface StudyTimelineStats {
-    /**
-     * 
-     * @type {Array<StudyTimelineDate>}
-     * @memberof StudyTimelineStats
-     */
     'dates': Array<StudyTimelineDate>;
 }
-/**
- * 
- * @export
- * @interface StudyTimingStats
- */
 export interface StudyTimingStats {
-    /**
-     * 
-     * @type {HourOfDayStats}
-     * @memberof StudyTimingStats
-     */
     'hour_of_day'?: HourOfDayStats;
-    /**
-     * 
-     * @type {DayOfWeekStats}
-     * @memberof StudyTimingStats
-     */
     'day_of_week'?: DayOfWeekStats;
-    /**
-     * 
-     * @type {DayOfMonthStats}
-     * @memberof StudyTimingStats
-     */
     'day_of_month'?: DayOfMonthStats;
 }
-/**
- * 
- * @export
- * @interface SubscriptionOfferAux
- */
 export interface SubscriptionOfferAux {
-    /**
-     * 
-     * @type {SubscriptionPlanFull}
-     * @memberof SubscriptionOfferAux
-     */
     'plan'?: SubscriptionPlanFull;
 }
-/**
- * 
- * @export
- * @interface SubscriptionOfferBase
- */
 export interface SubscriptionOfferBase {
     /**
      * The ID of the account that has the offer
-     * @type {string}
-     * @memberof SubscriptionOfferBase
      */
     'account_id': string;
     /**
      * The ID of the subscription plan that is offered (may have changed from the original, or may not exist yet)
-     * @type {string}
-     * @memberof SubscriptionOfferBase
      */
     'subscription_plan_id'?: string;
     /**
      * The ID of the user who accepted the offer
-     * @type {string}
-     * @memberof SubscriptionOfferBase
      */
     'accepted_by'?: string;
     /**
      * Date and time of the acceptance
-     * @type {string}
-     * @memberof SubscriptionOfferBase
      */
     'accepted_at'?: string;
     /**
      * The ID of the subscription plan that this offer was originally based on
-     * @type {string}
-     * @memberof SubscriptionOfferBase
      */
     'original_plan_id'?: string;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof SubscriptionOfferBase
-     */
     'offered_price': SubscriptionPrice;
 }
-/**
- * 
- * @export
- * @interface SubscriptionOfferCreation
- */
 export interface SubscriptionOfferCreation {
     /**
      * The ID of the subscription plan
-     * @type {string}
-     * @memberof SubscriptionOfferCreation
      */
     'original_plan_id': string;
     /**
      * The ID of the account that has the offer
-     * @type {string}
-     * @memberof SubscriptionOfferCreation
      */
     'account_id': string;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof SubscriptionOfferCreation
-     */
     'offered_price': SubscriptionPrice;
 }
-/**
- * 
- * @export
- * @interface SubscriptionOfferFull
- */
 export interface SubscriptionOfferFull {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof SubscriptionOfferFull
      */
     'id'?: string;
     /**
      * The ID of the account that has the offer
-     * @type {string}
-     * @memberof SubscriptionOfferFull
      */
     'account_id': string;
     /**
      * The ID of the subscription plan that is offered (may have changed from the original, or may not exist yet)
-     * @type {string}
-     * @memberof SubscriptionOfferFull
      */
     'subscription_plan_id'?: string;
     /**
      * The ID of the user who accepted the offer
-     * @type {string}
-     * @memberof SubscriptionOfferFull
      */
     'accepted_by'?: string;
     /**
      * Date and time of the acceptance
-     * @type {string}
-     * @memberof SubscriptionOfferFull
      */
     'accepted_at'?: string;
     /**
      * The ID of the subscription plan that this offer was originally based on
-     * @type {string}
-     * @memberof SubscriptionOfferFull
      */
     'original_plan_id'?: string;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof SubscriptionOfferFull
-     */
     'offered_price': SubscriptionPrice;
-    /**
-     * 
-     * @type {SubscriptionPlanFull}
-     * @memberof SubscriptionOfferFull
-     */
     'plan'?: SubscriptionPlanFull;
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof SubscriptionOfferFull
      */
     'created_at'?: string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof SubscriptionOfferFull
      */
     'created_by'?: string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof SubscriptionOfferFull
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof SubscriptionOfferFull
      */
     'updated_by'?: string;
 }
-/**
- * 
- * @export
- * @interface SubscriptionOfferItem
- */
 export interface SubscriptionOfferItem {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof SubscriptionOfferItem
      */
     'id'?: string;
     /**
      * The ID of the account that has the offer
-     * @type {string}
-     * @memberof SubscriptionOfferItem
      */
     'account_id': string;
     /**
      * The ID of the subscription plan that is offered (may have changed from the original, or may not exist yet)
-     * @type {string}
-     * @memberof SubscriptionOfferItem
      */
     'subscription_plan_id'?: string;
     /**
      * The ID of the user who accepted the offer
-     * @type {string}
-     * @memberof SubscriptionOfferItem
      */
     'accepted_by'?: string;
     /**
      * Date and time of the acceptance
-     * @type {string}
-     * @memberof SubscriptionOfferItem
      */
     'accepted_at'?: string;
     /**
      * The ID of the subscription plan that this offer was originally based on
-     * @type {string}
-     * @memberof SubscriptionOfferItem
      */
     'original_plan_id'?: string;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof SubscriptionOfferItem
-     */
     'offered_price': SubscriptionPrice;
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof SubscriptionOfferItem
      */
     'created_at'?: string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof SubscriptionOfferItem
      */
     'created_by'?: string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof SubscriptionOfferItem
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof SubscriptionOfferItem
      */
     'updated_by'?: string;
 }
 /**
  * Defines a subscription plan (a feature set at a given pricing configuration)
- * @export
- * @interface SubscriptionPlanAux
  */
 export interface SubscriptionPlanAux {
     /**
      * The ID of the plan/price that the account is subscribed to
-     * @type {string}
-     * @memberof SubscriptionPlanAux
      */
     'id'?: string;
-    /**
-     * 
-     * @type {PlanFeatureSet}
-     * @memberof SubscriptionPlanAux
-     */
     'feature_set': PlanFeatureSet;
 }
-/**
- * 
- * @export
- * @interface SubscriptionPlanBase
- */
 export interface SubscriptionPlanBase {
     /**
      * The display name of the price/plan
-     * @type {string}
-     * @memberof SubscriptionPlanBase
      */
     'display_name'?: string;
     /**
      * An optional code, typically provided if the plan/price is public and advertised
-     * @type {string}
-     * @memberof SubscriptionPlanBase
      */
     'code'?: string;
     /**
      * Is the plan/price a public price or custom?
-     * @type {boolean}
-     * @memberof SubscriptionPlanBase
      */
     'is_public': boolean;
-    /**
-     * 
-     * @type {SubscriptionProductType}
-     * @memberof SubscriptionPlanBase
-     */
     'product_type': SubscriptionProductType;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof SubscriptionPlanBase
-     */
     'list_price'?: SubscriptionPrice;
-    /**
-     * 
-     * @type {string}
-     * @memberof SubscriptionPlanBase
-     */
     'stripe_product_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SubscriptionPlanBase
-     */
     'stripe_price_id'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface SubscriptionPlanFree
- */
 export interface SubscriptionPlanFree {
     /**
      * The display name of the price/plan
-     * @type {string}
-     * @memberof SubscriptionPlanFree
      */
     'display_name'?: string;
     /**
      * An optional code, typically provided if the plan/price is public and advertised
-     * @type {string}
-     * @memberof SubscriptionPlanFree
      */
     'code'?: string;
     /**
      * Is the plan/price a public price or custom?
-     * @type {boolean}
-     * @memberof SubscriptionPlanFree
      */
     'is_public': boolean;
-    /**
-     * 
-     * @type {SubscriptionProductType}
-     * @memberof SubscriptionPlanFree
-     */
     'product_type': SubscriptionProductType;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof SubscriptionPlanFree
-     */
     'list_price'?: SubscriptionPrice;
-    /**
-     * 
-     * @type {string}
-     * @memberof SubscriptionPlanFree
-     */
     'stripe_product_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SubscriptionPlanFree
-     */
     'stripe_price_id'?: string;
     /**
      * The ID of the plan/price that the account is subscribed to
-     * @type {string}
-     * @memberof SubscriptionPlanFree
      */
     'id'?: string;
-    /**
-     * 
-     * @type {PlanFeatureSet}
-     * @memberof SubscriptionPlanFree
-     */
     'feature_set': PlanFeatureSet;
 }
 
 
-/**
- * 
- * @export
- * @interface SubscriptionPlanFull
- */
 export interface SubscriptionPlanFull {
     /**
      * The ID of the plan/price that the account is subscribed to
-     * @type {string}
-     * @memberof SubscriptionPlanFull
      */
     'id'?: string;
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof SubscriptionPlanFull
      */
     'created_at'?: string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof SubscriptionPlanFull
      */
     'created_by'?: string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof SubscriptionPlanFull
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof SubscriptionPlanFull
      */
     'updated_by'?: string;
     /**
      * The display name of the price/plan
-     * @type {string}
-     * @memberof SubscriptionPlanFull
      */
     'display_name'?: string;
     /**
      * An optional code, typically provided if the plan/price is public and advertised
-     * @type {string}
-     * @memberof SubscriptionPlanFull
      */
     'code'?: string;
     /**
      * Is the plan/price a public price or custom?
-     * @type {boolean}
-     * @memberof SubscriptionPlanFull
      */
     'is_public': boolean;
-    /**
-     * 
-     * @type {SubscriptionProductType}
-     * @memberof SubscriptionPlanFull
-     */
     'product_type': SubscriptionProductType;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof SubscriptionPlanFull
-     */
     'list_price'?: SubscriptionPrice;
-    /**
-     * 
-     * @type {string}
-     * @memberof SubscriptionPlanFull
-     */
     'stripe_product_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SubscriptionPlanFull
-     */
     'stripe_price_id'?: string;
-    /**
-     * 
-     * @type {PlanFeatureSet}
-     * @memberof SubscriptionPlanFull
-     */
     'feature_set': PlanFeatureSet;
 }
 
 
-/**
- * 
- * @export
- * @interface SubscriptionPlanItem
- */
 export interface SubscriptionPlanItem {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof SubscriptionPlanItem
      */
     'id'?: string;
     /**
      * The display name of the price/plan
-     * @type {string}
-     * @memberof SubscriptionPlanItem
      */
     'display_name'?: string;
     /**
      * An optional code, typically provided if the plan/price is public and advertised
-     * @type {string}
-     * @memberof SubscriptionPlanItem
      */
     'code'?: string;
     /**
      * Is the plan/price a public price or custom?
-     * @type {boolean}
-     * @memberof SubscriptionPlanItem
      */
     'is_public': boolean;
-    /**
-     * 
-     * @type {SubscriptionProductType}
-     * @memberof SubscriptionPlanItem
-     */
     'product_type': SubscriptionProductType;
-    /**
-     * 
-     * @type {SubscriptionPrice}
-     * @memberof SubscriptionPlanItem
-     */
     'list_price'?: SubscriptionPrice;
-    /**
-     * 
-     * @type {string}
-     * @memberof SubscriptionPlanItem
-     */
     'stripe_product_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SubscriptionPlanItem
-     */
     'stripe_price_id'?: string;
 }
 
 
-/**
- * 
- * @export
- * @interface SubscriptionPlanMutation
- */
 export interface SubscriptionPlanMutation {
-    /**
-     * 
-     * @type {PlanFeatureSet}
-     * @memberof SubscriptionPlanMutation
-     */
     'feature_set'?: PlanFeatureSet;
     /**
      * The display name of the price/plan
-     * @type {string}
-     * @memberof SubscriptionPlanMutation
      */
     'display_name'?: string;
     /**
      * An optional code, typically provided if the plan/price is public and advertised
-     * @type {string}
-     * @memberof SubscriptionPlanMutation
      */
     'code'?: string;
     /**
      * Is the plan/price a public price or custom?
-     * @type {boolean}
-     * @memberof SubscriptionPlanMutation
      */
     'is_public'?: boolean;
 }
-/**
- * 
- * @export
- * @interface SubscriptionPrice
- */
 export interface SubscriptionPrice {
-    /**
-     * 
-     * @type {number}
-     * @memberof SubscriptionPrice
-     */
     'amount': number;
-    /**
-     * 
-     * @type {SubscriptionPriceCurrency}
-     * @memberof SubscriptionPrice
-     */
     'currency': SubscriptionPriceCurrency;
-    /**
-     * 
-     * @type {SubscriptionPriceInterval}
-     * @memberof SubscriptionPrice
-     */
     'interval': SubscriptionPriceInterval;
 }
 
 
 /**
  * Currency code for the price
- * @export
- * @enum {string}
  */
 
 export const SubscriptionPriceCurrency = {
@@ -7131,11 +3254,6 @@ export const SubscriptionPriceCurrency = {
 export type SubscriptionPriceCurrency = typeof SubscriptionPriceCurrency[keyof typeof SubscriptionPriceCurrency];
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
 
 export const SubscriptionPriceInterval = {
     Daily: 'daily',
@@ -7147,11 +3265,6 @@ export const SubscriptionPriceInterval = {
 export type SubscriptionPriceInterval = typeof SubscriptionPriceInterval[keyof typeof SubscriptionPriceInterval];
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
 
 export const SubscriptionProductType = {
     Base: 'base',
@@ -7163,195 +3276,103 @@ export type SubscriptionProductType = typeof SubscriptionProductType[keyof typeo
 
 /**
  * Represents a Tax ID used for account billing
- * @export
- * @interface TaxId
  */
 export interface TaxId {
     /**
      * The Tax ID number / code
-     * @type {string}
-     * @memberof TaxId
      */
     'value': string;
     /**
      * The type of Tax ID
-     * @type {string}
-     * @memberof TaxId
      */
     'type': string;
 }
-/**
- * 
- * @export
- * @interface TimestampedObject
- */
 export interface TimestampedObject {
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof TimestampedObject
      */
     'created_at'?: string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof TimestampedObject
      */
     'created_by'?: string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof TimestampedObject
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof TimestampedObject
      */
     'updated_by'?: string;
 }
-/**
- * 
- * @export
- * @interface TimestampedObject1
- */
 export interface TimestampedObject1 {
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof TimestampedObject1
      */
     'created_at': string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof TimestampedObject1
      */
     'created_by': string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof TimestampedObject1
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof TimestampedObject1
      */
     'updated_by'?: string;
 }
-/**
- * 
- * @export
- * @interface UserAccountMembership
- */
 export interface UserAccountMembership {
     /**
      * The ID of the account
-     * @type {string}
-     * @memberof UserAccountMembership
      */
     'account_id': string;
     /**
      * The name of the account
-     * @type {string}
-     * @memberof UserAccountMembership
      */
     'account_name'?: string;
     /**
      * The roles that the user has within the account
-     * @type {Array<UserAccountRole>}
-     * @memberof UserAccountMembership
      */
     'roles': Array<UserAccountRole>;
-    /**
-     * 
-     * @type {AccountFull}
-     * @memberof UserAccountMembership
-     */
     'account'?: AccountFull;
-    /**
-     * 
-     * @type {PlanFeatureSet}
-     * @memberof UserAccountMembership
-     */
     'feature_set'?: PlanFeatureSet;
-    /**
-     * 
-     * @type {Array<AccountSubscriptionItem>}
-     * @memberof UserAccountMembership
-     */
     'subscriptions'?: Array<AccountSubscriptionItem>;
 }
 /**
  * Describes a user\'s membership of an account
- * @export
- * @interface UserAccountMembershipBase
  */
 export interface UserAccountMembershipBase {
     /**
      * The ID of the account
-     * @type {string}
-     * @memberof UserAccountMembershipBase
      */
     'account_id': string;
     /**
      * The name of the account
-     * @type {string}
-     * @memberof UserAccountMembershipBase
      */
     'account_name'?: string;
     /**
      * The roles that the user has within the account
-     * @type {Array<UserAccountRole>}
-     * @memberof UserAccountMembershipBase
      */
     'roles': Array<UserAccountRole>;
 }
 /**
  * Additional properties that may appear as read-only properties depending on the `include` parameter
- * @export
- * @interface UserAccountMembershipIncludeAux
  */
 export interface UserAccountMembershipIncludeAux {
-    /**
-     * 
-     * @type {AccountFull}
-     * @memberof UserAccountMembershipIncludeAux
-     */
     'account'?: AccountFull;
-    /**
-     * 
-     * @type {PlanFeatureSet}
-     * @memberof UserAccountMembershipIncludeAux
-     */
     'feature_set'?: PlanFeatureSet;
-    /**
-     * 
-     * @type {Array<AccountSubscriptionItem>}
-     * @memberof UserAccountMembershipIncludeAux
-     */
     'subscriptions'?: Array<AccountSubscriptionItem>;
 }
-/**
- * 
- * @export
- * @interface UserAccountMembershipUpdate
- */
 export interface UserAccountMembershipUpdate {
     /**
      * The roles to apply to the user within the account
-     * @type {Array<UserAccountRole>}
-     * @memberof UserAccountMembershipUpdate
      */
     'roles': Array<UserAccountRole>;
 }
 /**
  * Determines the role of a user within an account. The permissions of each role are defined to fulfill the following use cases: * `user` is a basic role needed to make use of the platforms primary features. * `admin` is required to perform administrative functions on the account, such as adding members to it. Admin permissions does NOT include removing the account altogether or billing-related actions. * `owner` is required to make changes to account billing, or delete the account. 
- * @export
- * @enum {string}
  */
 
 export const UserAccountRole = {
@@ -7363,278 +3384,153 @@ export const UserAccountRole = {
 export type UserAccountRole = typeof UserAccountRole[keyof typeof UserAccountRole];
 
 
-/**
- * 
- * @export
- * @interface UserAux
- */
 export interface UserAux {
-    /**
-     * 
-     * @type {Array<UserAccountMembership>}
-     * @memberof UserAux
-     */
     'account_memberships'?: Array<UserAccountMembership>;
     /**
      * Determines if the user is a super admin of Digiseg API services
-     * @type {boolean}
-     * @memberof UserAux
      * @deprecated
      */
     'is_super_admin'?: boolean;
-    /**
-     * 
-     * @type {Array<UserPlatformRole>}
-     * @memberof UserAux
-     */
     'platform_roles'?: Array<UserPlatformRole>;
 }
-/**
- * 
- * @export
- * @interface UserBase
- */
 export interface UserBase {
     /**
      * The email of the user (used as username when authenticating with password)
-     * @type {string}
-     * @memberof UserBase
      */
     'email'?: string;
     /**
      * Human readable name of the user
-     * @type {string}
-     * @memberof UserBase
      */
     'name'?: string;
     /**
      * ID of the account that this user pertains to. If the user has multiple account memberships, this account ID will represent the primary account of the user. 
-     * @type {string}
-     * @memberof UserBase
      * @deprecated
      */
     'account_id'?: string;
     /**
      * The roles that the user has within the account
-     * @type {Array<UserAccountRole>}
-     * @memberof UserBase
      * @deprecated
      */
     'roles'?: Array<UserAccountRole>;
     /**
      * The URL to an avatar of the user
-     * @type {string}
-     * @memberof UserBase
      */
     'avatar_url'?: string;
     /**
      * The approximate last time that the user logged in
-     * @type {string}
-     * @memberof UserBase
      */
     'logged_in_at'?: string;
 }
-/**
- * 
- * @export
- * @interface UserCreation
- */
 export interface UserCreation {
     /**
      * The email of the user (used as username when authenticating with password)
-     * @type {string}
-     * @memberof UserCreation
      */
     'email'?: string;
     /**
      * Human readable name of the user
-     * @type {string}
-     * @memberof UserCreation
      */
     'name'?: string;
     /**
      * ID of the account that this user pertains to. If the user has multiple account memberships, this account ID will represent the primary account of the user. 
-     * @type {string}
-     * @memberof UserCreation
      * @deprecated
      */
     'account_id'?: string;
     /**
      * The roles that the user has within the account
-     * @type {Array<UserAccountRole>}
-     * @memberof UserCreation
      * @deprecated
      */
     'roles'?: Array<UserAccountRole>;
     /**
      * The URL to an avatar of the user
-     * @type {string}
-     * @memberof UserCreation
      */
     'avatar_url'?: string;
     /**
      * The approximate last time that the user logged in
-     * @type {string}
-     * @memberof UserCreation
      */
     'logged_in_at'?: string;
-    /**
-     * 
-     * @type {Array<UserAccountMembership>}
-     * @memberof UserCreation
-     */
     'account_memberships'?: Array<UserAccountMembership>;
     /**
      * Determines if the user is a super admin of Digiseg API services
-     * @type {boolean}
-     * @memberof UserCreation
      * @deprecated
      */
     'is_super_admin'?: boolean;
-    /**
-     * 
-     * @type {Array<UserPlatformRole>}
-     * @memberof UserCreation
-     */
     'platform_roles'?: Array<UserPlatformRole>;
     /**
      * Password of the user
-     * @type {string}
-     * @memberof UserCreation
      */
     'password'?: string;
     /**
      * Whether or not to notify the user that they have been registered
-     * @type {boolean}
-     * @memberof UserCreation
      */
     'notify_user'?: boolean;
 }
-/**
- * 
- * @export
- * @interface UserCreationNotification
- */
 export interface UserCreationNotification {
     /**
      * Whether or not to notify the user that they have been registered
-     * @type {boolean}
-     * @memberof UserCreationNotification
      */
     'notify_user'?: boolean;
 }
-/**
- * 
- * @export
- * @interface UserCredentials
- */
 export interface UserCredentials {
     /**
      * Password of the user
-     * @type {string}
-     * @memberof UserCredentials
      */
     'password'?: string;
 }
-/**
- * 
- * @export
- * @interface UserFull
- */
 export interface UserFull {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof UserFull
      */
     'id'?: string;
     /**
      * The email of the user (used as username when authenticating with password)
-     * @type {string}
-     * @memberof UserFull
      */
     'email'?: string;
     /**
      * Human readable name of the user
-     * @type {string}
-     * @memberof UserFull
      */
     'name'?: string;
     /**
      * ID of the account that this user pertains to. If the user has multiple account memberships, this account ID will represent the primary account of the user. 
-     * @type {string}
-     * @memberof UserFull
      * @deprecated
      */
     'account_id'?: string;
     /**
      * The roles that the user has within the account
-     * @type {Array<UserAccountRole>}
-     * @memberof UserFull
      * @deprecated
      */
     'roles'?: Array<UserAccountRole>;
     /**
      * The URL to an avatar of the user
-     * @type {string}
-     * @memberof UserFull
      */
     'avatar_url'?: string;
     /**
      * The approximate last time that the user logged in
-     * @type {string}
-     * @memberof UserFull
      */
     'logged_in_at'?: string;
-    /**
-     * 
-     * @type {Array<UserAccountMembership>}
-     * @memberof UserFull
-     */
     'account_memberships'?: Array<UserAccountMembership>;
     /**
      * Determines if the user is a super admin of Digiseg API services
-     * @type {boolean}
-     * @memberof UserFull
      * @deprecated
      */
     'is_super_admin'?: boolean;
-    /**
-     * 
-     * @type {Array<UserPlatformRole>}
-     * @memberof UserFull
-     */
     'platform_roles'?: Array<UserPlatformRole>;
     /**
      * Date and time of the object creation
-     * @type {string}
-     * @memberof UserFull
      */
     'created_at'?: string;
     /**
      * ID of the user who created the object
-     * @type {string}
-     * @memberof UserFull
      */
     'created_by'?: string;
     /**
      * Date and time of the latest update to the object
-     * @type {string}
-     * @memberof UserFull
      */
     'updated_at'?: string;
     /**
      * ID of the user who last updated the object
-     * @type {string}
-     * @memberof UserFull
      */
     'updated_by'?: string;
 }
-/**
- * 
- * @export
- * @enum {string}
- */
 
 export const UserIncludeParam = {
     None: 'none',
@@ -7645,150 +3541,89 @@ export const UserIncludeParam = {
 export type UserIncludeParam = typeof UserIncludeParam[keyof typeof UserIncludeParam];
 
 
-/**
- * 
- * @export
- * @interface UserItem
- */
 export interface UserItem {
     /**
      * Unique ID for the object
-     * @type {string}
-     * @memberof UserItem
      */
     'id'?: string;
     /**
      * The email of the user (used as username when authenticating with password)
-     * @type {string}
-     * @memberof UserItem
      */
     'email'?: string;
     /**
      * Human readable name of the user
-     * @type {string}
-     * @memberof UserItem
      */
     'name'?: string;
     /**
      * ID of the account that this user pertains to. If the user has multiple account memberships, this account ID will represent the primary account of the user. 
-     * @type {string}
-     * @memberof UserItem
      * @deprecated
      */
     'account_id'?: string;
     /**
      * The roles that the user has within the account
-     * @type {Array<UserAccountRole>}
-     * @memberof UserItem
      * @deprecated
      */
     'roles'?: Array<UserAccountRole>;
     /**
      * The URL to an avatar of the user
-     * @type {string}
-     * @memberof UserItem
      */
     'avatar_url'?: string;
     /**
      * The approximate last time that the user logged in
-     * @type {string}
-     * @memberof UserItem
      */
     'logged_in_at'?: string;
 }
-/**
- * 
- * @export
- * @interface UserLinks
- */
 export interface UserLinks {
     /**
      * Link for getting to the user\'s account
-     * @type {string}
-     * @memberof UserLinks
      */
     'account'?: string;
     /**
      * Link for getting to the user\'s api keys
-     * @type {string}
-     * @memberof UserLinks
      */
     'apikeys'?: string;
 }
-/**
- * 
- * @export
- * @interface UserMutation
- */
 export interface UserMutation {
     /**
      * The email of the user (used as username when authenticating with password)
-     * @type {string}
-     * @memberof UserMutation
      */
     'email'?: string;
     /**
      * Human readable name of the user
-     * @type {string}
-     * @memberof UserMutation
      */
     'name'?: string;
     /**
      * ID of the account that this user pertains to. If the user has multiple account memberships, this account ID will represent the primary account of the user. 
-     * @type {string}
-     * @memberof UserMutation
      * @deprecated
      */
     'account_id'?: string;
     /**
      * The roles that the user has within the account
-     * @type {Array<UserAccountRole>}
-     * @memberof UserMutation
      * @deprecated
      */
     'roles'?: Array<UserAccountRole>;
     /**
      * The URL to an avatar of the user
-     * @type {string}
-     * @memberof UserMutation
      */
     'avatar_url'?: string;
     /**
      * The approximate last time that the user logged in
-     * @type {string}
-     * @memberof UserMutation
      */
     'logged_in_at'?: string;
-    /**
-     * 
-     * @type {Array<UserAccountMembership>}
-     * @memberof UserMutation
-     */
     'account_memberships'?: Array<UserAccountMembership>;
     /**
      * Determines if the user is a super admin of Digiseg API services
-     * @type {boolean}
-     * @memberof UserMutation
      * @deprecated
      */
     'is_super_admin'?: boolean;
-    /**
-     * 
-     * @type {Array<UserPlatformRole>}
-     * @memberof UserMutation
-     */
     'platform_roles'?: Array<UserPlatformRole>;
     /**
      * Password of the user
-     * @type {string}
-     * @memberof UserMutation
      */
     'password'?: string;
 }
 /**
  * Defines the role of the user in the Digiseg platform. Most users will not have any platform roles, since this is preserved for account-agnostic operational privileges. 
- * @export
- * @enum {string}
  */
 
 export const UserPlatformRole = {
@@ -7800,11 +3635,6 @@ export const UserPlatformRole = {
 export type UserPlatformRole = typeof UserPlatformRole[keyof typeof UserPlatformRole];
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
 
 export const UserSortOption = {
     CreatedAt: 'created_at',
@@ -7821,7 +3651,6 @@ export type UserSortOption = typeof UserSortOption[keyof typeof UserSortOption];
 
 /**
  * AccountsApi - axios parameter creator
- * @export
  */
 export const AccountsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -8579,7 +4408,6 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
 
 /**
  * AccountsApi - functional programming interface
- * @export
  */
 export const AccountsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AccountsApiAxiosParamCreator(configuration)
@@ -8786,7 +4614,6 @@ export const AccountsApiFp = function(configuration?: Configuration) {
 
 /**
  * AccountsApi - factory interface
- * @export
  */
 export const AccountsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = AccountsApiFp(configuration)
@@ -8951,9 +4778,6 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
 
 /**
  * AccountsApi - object-oriented interface
- * @export
- * @class AccountsApi
- * @extends {BaseAPI}
  */
 export class AccountsApi extends BaseAPI {
     /**
@@ -8963,7 +4787,6 @@ export class AccountsApi extends BaseAPI {
      * @param {AccountUserAddition} accountUserAddition 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public addUserToAccount(accountId: string, accountUserAddition: AccountUserAddition, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).addUserToAccount(accountId, accountUserAddition, options).then((request) => request(this.axios, this.basePath));
@@ -8975,7 +4798,6 @@ export class AccountsApi extends BaseAPI {
      * @param {AccountCreation} accountCreation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public createAccount(accountCreation: AccountCreation, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).createAccount(accountCreation, options).then((request) => request(this.axios, this.basePath));
@@ -8987,7 +4809,6 @@ export class AccountsApi extends BaseAPI {
      * @param {string} accountId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public deleteAccountLogo(accountId: string, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).deleteAccountLogo(accountId, options).then((request) => request(this.axios, this.basePath));
@@ -9000,7 +4821,6 @@ export class AccountsApi extends BaseAPI {
      * @param {Array<AccountIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public getAccountById(accountId: string, include?: Array<AccountIncludeParam>, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).getAccountById(accountId, include, options).then((request) => request(this.axios, this.basePath));
@@ -9012,7 +4832,6 @@ export class AccountsApi extends BaseAPI {
      * @param {string} accountId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public getAccountLogo(accountId: string, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).getAccountLogo(accountId, options).then((request) => request(this.axios, this.basePath));
@@ -9025,7 +4844,6 @@ export class AccountsApi extends BaseAPI {
      * @param {string} subscriptionId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public getAccountSubscriptionById(accountId: string, subscriptionId: string, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).getAccountSubscriptionById(accountId, subscriptionId, options).then((request) => request(this.axios, this.basePath));
@@ -9037,7 +4855,6 @@ export class AccountsApi extends BaseAPI {
      * @param {string} accountId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public getAccountSubscriptions(accountId: string, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).getAccountSubscriptions(accountId, options).then((request) => request(this.axios, this.basePath));
@@ -9050,7 +4867,6 @@ export class AccountsApi extends BaseAPI {
      * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public getUserAccountMembership(accountId: string, userId: string, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).getUserAccountMembership(accountId, userId, options).then((request) => request(this.axios, this.basePath));
@@ -9062,7 +4878,6 @@ export class AccountsApi extends BaseAPI {
      * @param {string} accountId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public listApiKeysByAccountId(accountId: string, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).listApiKeysByAccountId(accountId, options).then((request) => request(this.axios, this.basePath));
@@ -9080,7 +4895,6 @@ export class AccountsApi extends BaseAPI {
      * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterAccountRoles?: UserAccountRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).listUsersByAccountId(accountId, filterPlatformRoles, filterAccountRoles, filterNameContains, sort, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
@@ -9093,7 +4907,6 @@ export class AccountsApi extends BaseAPI {
      * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public removeUserFromAccount(accountId: string, userId: string, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).removeUserFromAccount(accountId, userId, options).then((request) => request(this.axios, this.basePath));
@@ -9106,7 +4919,6 @@ export class AccountsApi extends BaseAPI {
      * @param {AccountMutation} accountMutation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public updateAccountById(accountId: string, accountMutation: AccountMutation, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).updateAccountById(accountId, accountMutation, options).then((request) => request(this.axios, this.basePath));
@@ -9120,7 +4932,6 @@ export class AccountsApi extends BaseAPI {
      * @param {UserAccountMembershipUpdate} userAccountMembershipUpdate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public updateUserAccountMembership(accountId: string, userId: string, userAccountMembershipUpdate: UserAccountMembershipUpdate, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).updateUserAccountMembership(accountId, userId, userAccountMembershipUpdate, options).then((request) => request(this.axios, this.basePath));
@@ -9133,7 +4944,6 @@ export class AccountsApi extends BaseAPI {
      * @param {File} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountsApi
      */
     public uploadAccountLogo(accountId: string, body: File, options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).uploadAccountLogo(accountId, body, options).then((request) => request(this.axios, this.basePath));
@@ -9144,14 +4954,13 @@ export class AccountsApi extends BaseAPI {
 
 /**
  * AudiencesApi - axios parameter creator
- * @export
  */
 export const AudiencesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
          * @summary Get audiences of the API client
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9206,7 +5015,7 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
          * 
          * @summary Get audiences for multiple IP addresses
          * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -9261,7 +5070,7 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
          * 
          * @summary Get audiences for a given IP address
          * @param {string} userIp The IP address to look up.
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -9315,7 +5124,6 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
 
 /**
  * AudiencesApi - functional programming interface
- * @export
  */
 export const AudiencesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AudiencesApiAxiosParamCreator(configuration)
@@ -9323,7 +5131,7 @@ export const AudiencesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get audiences of the API client
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9338,7 +5146,7 @@ export const AudiencesApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get audiences for multiple IP addresses
          * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -9352,7 +5160,7 @@ export const AudiencesApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get audiences for a given IP address
          * @param {string} userIp The IP address to look up.
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -9367,7 +5175,6 @@ export const AudiencesApiFp = function(configuration?: Configuration) {
 
 /**
  * AudiencesApi - factory interface
- * @export
  */
 export const AudiencesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = AudiencesApiFp(configuration)
@@ -9375,7 +5182,7 @@ export const AudiencesApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @summary Get audiences of the API client
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9387,7 +5194,7 @@ export const AudiencesApiFactory = function (configuration?: Configuration, base
          * 
          * @summary Get audiences for multiple IP addresses
          * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -9398,7 +5205,7 @@ export const AudiencesApiFactory = function (configuration?: Configuration, base
          * 
          * @summary Get audiences for a given IP address
          * @param {string} userIp The IP address to look up.
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -9410,19 +5217,15 @@ export const AudiencesApiFactory = function (configuration?: Configuration, base
 
 /**
  * AudiencesApi - object-oriented interface
- * @export
- * @class AudiencesApi
- * @extends {BaseAPI}
  */
 export class AudiencesApi extends BaseAPI {
     /**
      * 
      * @summary Get audiences of the API client
-     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
      * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AudiencesApi
      */
     public resolveAudiencesOfClient(include?: Array<AudiencesIncludeParam>, type?: string, options?: RawAxiosRequestConfig) {
         return AudiencesApiFp(this.configuration).resolveAudiencesOfClient(include, type, options).then((request) => request(this.axios, this.basePath));
@@ -9432,10 +5235,9 @@ export class AudiencesApi extends BaseAPI {
      * 
      * @summary Get audiences for multiple IP addresses
      * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AudiencesApi
      */
     public resolveAudiencesOfMultiple(resolveAudiencesOfMultipleRequest: ResolveAudiencesOfMultipleRequest, include?: Array<AudiencesIncludeParam>, options?: RawAxiosRequestConfig) {
         return AudiencesApiFp(this.configuration).resolveAudiencesOfMultiple(resolveAudiencesOfMultipleRequest, include, options).then((request) => request(this.axios, this.basePath));
@@ -9445,10 +5247,9 @@ export class AudiencesApi extends BaseAPI {
      * 
      * @summary Get audiences for a given IP address
      * @param {string} userIp The IP address to look up.
-     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AudiencesApi
      */
     public resolveAudiencesOfSingle(userIp: string, include?: Array<AudiencesIncludeParam>, options?: RawAxiosRequestConfig) {
         return AudiencesApiFp(this.configuration).resolveAudiencesOfSingle(userIp, include, options).then((request) => request(this.axios, this.basePath));
@@ -9459,7 +5260,6 @@ export class AudiencesApi extends BaseAPI {
 
 /**
  * AuthApi - axios parameter creator
- * @export
  */
 export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -9821,7 +5621,6 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
 /**
  * AuthApi - functional programming interface
- * @export
  */
 export const AuthApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AuthApiAxiosParamCreator(configuration)
@@ -9928,7 +5727,6 @@ export const AuthApiFp = function(configuration?: Configuration) {
 
 /**
  * AuthApi - factory interface
- * @export
  */
 export const AuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = AuthApiFp(configuration)
@@ -10014,9 +5812,6 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
 
 /**
  * AuthApi - object-oriented interface
- * @export
- * @class AuthApi
- * @extends {BaseAPI}
  */
 export class AuthApi extends BaseAPI {
     /**
@@ -10025,7 +5820,6 @@ export class AuthApi extends BaseAPI {
      * @param {AuthTokenRequest} authTokenRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthApi
      */
     public createAccessToken(authTokenRequest: AuthTokenRequest, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).createAccessToken(authTokenRequest, options).then((request) => request(this.axios, this.basePath));
@@ -10038,7 +5832,6 @@ export class AuthApi extends BaseAPI {
      * @param {ApiKeyCreation} apiKeyCreation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthApi
      */
     public createApiKey(userId: string, apiKeyCreation: ApiKeyCreation, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).createApiKey(userId, apiKeyCreation, options).then((request) => request(this.axios, this.basePath));
@@ -10051,7 +5844,6 @@ export class AuthApi extends BaseAPI {
      * @param {string} keyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthApi
      */
     public deleteApiKeyById(userId: string, keyId: string, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).deleteApiKeyById(userId, keyId, options).then((request) => request(this.axios, this.basePath));
@@ -10064,7 +5856,6 @@ export class AuthApi extends BaseAPI {
      * @param {string} keyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthApi
      */
     public getApiKeyById(userId: string, keyId: string, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).getApiKeyById(userId, keyId, options).then((request) => request(this.axios, this.basePath));
@@ -10076,7 +5867,6 @@ export class AuthApi extends BaseAPI {
      * @param {string} accountId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthApi
      */
     public listApiKeysByAccountId(accountId: string, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).listApiKeysByAccountId(accountId, options).then((request) => request(this.axios, this.basePath));
@@ -10089,7 +5879,6 @@ export class AuthApi extends BaseAPI {
      * @param {string} [filterAccountId] Filter by specific account id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthApi
      */
     public listApiKeysByUserId(userId: string, filterAccountId?: string, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).listApiKeysByUserId(userId, filterAccountId, options).then((request) => request(this.axios, this.basePath));
@@ -10103,7 +5892,6 @@ export class AuthApi extends BaseAPI {
      * @param {ApiKeyMutation} apiKeyMutation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthApi
      */
     public updateApiKeyById(userId: string, keyId: string, apiKeyMutation: ApiKeyMutation, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).updateApiKeyById(userId, keyId, apiKeyMutation, options).then((request) => request(this.axios, this.basePath));
@@ -10113,8 +5901,980 @@ export class AuthApi extends BaseAPI {
 
 
 /**
+ * EnrichmentApi - axios parameter creator
+ */
+export const EnrichmentApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Create enrichment job
+         * @param {EnrichmentJobFull} enrichmentJobFull 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEnrichmentJob: async (enrichmentJobFull: EnrichmentJobFull, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'enrichmentJobFull' is not null or undefined
+            assertParamExists('createEnrichmentJob', 'enrichmentJobFull', enrichmentJobFull)
+            const localVarPath = `/enrichment/jobs`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(enrichmentJobFull, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete enrichment job
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteEnrichmentJob: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteEnrichmentJob', 'id', id)
+            const localVarPath = `/enrichment/jobs/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete enrichment job result data
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteEnrichmentJobResultData: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteEnrichmentJobResultData', 'id', id)
+            const localVarPath = `/enrichment/jobs/{id}/result`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete enrichment job source data
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteEnrichmentJobSourceData: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteEnrichmentJobSourceData', 'id', id)
+            const localVarPath = `/enrichment/jobs/{id}/source`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Download enriched file
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        downloadResultFile: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('downloadResultFile', 'id', id)
+            const localVarPath = `/enrichment/jobs/{id}/result/file`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get enrichment job by ID
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getEnrichmentJobById: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getEnrichmentJobById', 'id', id)
+            const localVarPath = `/enrichment/jobs/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List enrichment jobs
+         * @param {number} [pageSize] The desired page size
+         * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
+         * @param {EnrichmentJobSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listEnrichmentJobs: async (pageSize?: number, pageAfter?: string, sort?: EnrichmentJobSortOption, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/enrichment/jobs`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page[size]'] = pageSize;
+            }
+
+            if (pageAfter !== undefined) {
+                localVarQueryParameter['page[after]'] = pageAfter;
+            }
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Preview the source data (with the current configuration) of an enrichment job
+         * @summary Preview the source data
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        previewEnrichmentJobSourceData: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('previewEnrichmentJobSourceData', 'id', id)
+            const localVarPath = `/enrichment/jobs/{id}/source/preview`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Start enrichment job
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startEnrichmentJob: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('startEnrichmentJob', 'id', id)
+            const localVarPath = `/enrichment/jobs/{id}/start`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update enrichment job
+         * @param {string} id 
+         * @param {EnrichmentJobUpdate} [enrichmentJobUpdate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateEnrichmentJob: async (id: string, enrichmentJobUpdate?: EnrichmentJobUpdate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateEnrichmentJob', 'id', id)
+            const localVarPath = `/enrichment/jobs/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(enrichmentJobUpdate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Upload source data to enrichment job
+         * @param {string} id 
+         * @param {File} [file] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadEnrichmentJobSourceData: async (id: string, file?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('uploadEnrichmentJobSourceData', 'id', id)
+            const localVarPath = `/enrichment/jobs/{id}/source`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+
+            if (file !== undefined) { 
+                localVarFormParams.append('file', file as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * EnrichmentApi - functional programming interface
+ */
+export const EnrichmentApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = EnrichmentApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Create enrichment job
+         * @param {EnrichmentJobFull} enrichmentJobFull 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createEnrichmentJob(enrichmentJobFull: EnrichmentJobFull, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EnrichmentJobSingleResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createEnrichmentJob(enrichmentJobFull, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EnrichmentApi.createEnrichmentJob']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Delete enrichment job
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteEnrichmentJob(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteEnrichmentJob(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EnrichmentApi.deleteEnrichmentJob']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Delete enrichment job result data
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteEnrichmentJobResultData(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteEnrichmentJobResultData(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EnrichmentApi.deleteEnrichmentJobResultData']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Delete enrichment job source data
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteEnrichmentJobSourceData(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteEnrichmentJobSourceData(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EnrichmentApi.deleteEnrichmentJobSourceData']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Download enriched file
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async downloadResultFile(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadResultFile(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EnrichmentApi.downloadResultFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get enrichment job by ID
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getEnrichmentJobById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EnrichmentJobSingleResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getEnrichmentJobById(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EnrichmentApi.getEnrichmentJobById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary List enrichment jobs
+         * @param {number} [pageSize] The desired page size
+         * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
+         * @param {EnrichmentJobSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listEnrichmentJobs(pageSize?: number, pageAfter?: string, sort?: EnrichmentJobSortOption, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EnrichmentJobListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listEnrichmentJobs(pageSize, pageAfter, sort, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EnrichmentApi.listEnrichmentJobs']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Preview the source data (with the current configuration) of an enrichment job
+         * @summary Preview the source data
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async previewEnrichmentJobSourceData(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EnrichmentJobSourceDataPreviewResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.previewEnrichmentJobSourceData(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EnrichmentApi.previewEnrichmentJobSourceData']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Start enrichment job
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async startEnrichmentJob(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startEnrichmentJob(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EnrichmentApi.startEnrichmentJob']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Update enrichment job
+         * @param {string} id 
+         * @param {EnrichmentJobUpdate} [enrichmentJobUpdate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateEnrichmentJob(id: string, enrichmentJobUpdate?: EnrichmentJobUpdate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EnrichmentJobSingleResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateEnrichmentJob(id, enrichmentJobUpdate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EnrichmentApi.updateEnrichmentJob']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Upload source data to enrichment job
+         * @param {string} id 
+         * @param {File} [file] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async uploadEnrichmentJobSourceData(id: string, file?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadEnrichmentJobSourceData(id, file, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EnrichmentApi.uploadEnrichmentJobSourceData']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * EnrichmentApi - factory interface
+ */
+export const EnrichmentApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = EnrichmentApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Create enrichment job
+         * @param {EnrichmentJobFull} enrichmentJobFull 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEnrichmentJob(enrichmentJobFull: EnrichmentJobFull, options?: RawAxiosRequestConfig): AxiosPromise<EnrichmentJobSingleResponse> {
+            return localVarFp.createEnrichmentJob(enrichmentJobFull, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete enrichment job
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteEnrichmentJob(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deleteEnrichmentJob(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete enrichment job result data
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteEnrichmentJobResultData(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deleteEnrichmentJobResultData(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete enrichment job source data
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteEnrichmentJobSourceData(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deleteEnrichmentJobSourceData(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Download enriched file
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        downloadResultFile(id: string, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.downloadResultFile(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get enrichment job by ID
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getEnrichmentJobById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<EnrichmentJobSingleResponse> {
+            return localVarFp.getEnrichmentJobById(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List enrichment jobs
+         * @param {number} [pageSize] The desired page size
+         * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
+         * @param {EnrichmentJobSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listEnrichmentJobs(pageSize?: number, pageAfter?: string, sort?: EnrichmentJobSortOption, options?: RawAxiosRequestConfig): AxiosPromise<EnrichmentJobListResponse> {
+            return localVarFp.listEnrichmentJobs(pageSize, pageAfter, sort, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Preview the source data (with the current configuration) of an enrichment job
+         * @summary Preview the source data
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        previewEnrichmentJobSourceData(id: string, options?: RawAxiosRequestConfig): AxiosPromise<EnrichmentJobSourceDataPreviewResponse> {
+            return localVarFp.previewEnrichmentJobSourceData(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Start enrichment job
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startEnrichmentJob(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.startEnrichmentJob(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update enrichment job
+         * @param {string} id 
+         * @param {EnrichmentJobUpdate} [enrichmentJobUpdate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateEnrichmentJob(id: string, enrichmentJobUpdate?: EnrichmentJobUpdate, options?: RawAxiosRequestConfig): AxiosPromise<EnrichmentJobSingleResponse> {
+            return localVarFp.updateEnrichmentJob(id, enrichmentJobUpdate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Upload source data to enrichment job
+         * @param {string} id 
+         * @param {File} [file] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadEnrichmentJobSourceData(id: string, file?: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.uploadEnrichmentJobSourceData(id, file, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * EnrichmentApi - object-oriented interface
+ */
+export class EnrichmentApi extends BaseAPI {
+    /**
+     * 
+     * @summary Create enrichment job
+     * @param {EnrichmentJobFull} enrichmentJobFull 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public createEnrichmentJob(enrichmentJobFull: EnrichmentJobFull, options?: RawAxiosRequestConfig) {
+        return EnrichmentApiFp(this.configuration).createEnrichmentJob(enrichmentJobFull, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete enrichment job
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public deleteEnrichmentJob(id: string, options?: RawAxiosRequestConfig) {
+        return EnrichmentApiFp(this.configuration).deleteEnrichmentJob(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete enrichment job result data
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public deleteEnrichmentJobResultData(id: string, options?: RawAxiosRequestConfig) {
+        return EnrichmentApiFp(this.configuration).deleteEnrichmentJobResultData(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete enrichment job source data
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public deleteEnrichmentJobSourceData(id: string, options?: RawAxiosRequestConfig) {
+        return EnrichmentApiFp(this.configuration).deleteEnrichmentJobSourceData(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Download enriched file
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public downloadResultFile(id: string, options?: RawAxiosRequestConfig) {
+        return EnrichmentApiFp(this.configuration).downloadResultFile(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get enrichment job by ID
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getEnrichmentJobById(id: string, options?: RawAxiosRequestConfig) {
+        return EnrichmentApiFp(this.configuration).getEnrichmentJobById(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List enrichment jobs
+     * @param {number} [pageSize] The desired page size
+     * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
+     * @param {EnrichmentJobSortOption} [sort] Defines the field to sort the result items by. Ascending order is applied by default, but the minus character can be used to indicate descending order instead. 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listEnrichmentJobs(pageSize?: number, pageAfter?: string, sort?: EnrichmentJobSortOption, options?: RawAxiosRequestConfig) {
+        return EnrichmentApiFp(this.configuration).listEnrichmentJobs(pageSize, pageAfter, sort, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Preview the source data (with the current configuration) of an enrichment job
+     * @summary Preview the source data
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public previewEnrichmentJobSourceData(id: string, options?: RawAxiosRequestConfig) {
+        return EnrichmentApiFp(this.configuration).previewEnrichmentJobSourceData(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Start enrichment job
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public startEnrichmentJob(id: string, options?: RawAxiosRequestConfig) {
+        return EnrichmentApiFp(this.configuration).startEnrichmentJob(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update enrichment job
+     * @param {string} id 
+     * @param {EnrichmentJobUpdate} [enrichmentJobUpdate] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public updateEnrichmentJob(id: string, enrichmentJobUpdate?: EnrichmentJobUpdate, options?: RawAxiosRequestConfig) {
+        return EnrichmentApiFp(this.configuration).updateEnrichmentJob(id, enrichmentJobUpdate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Upload source data to enrichment job
+     * @param {string} id 
+     * @param {File} [file] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public uploadEnrichmentJobSourceData(id: string, file?: File, options?: RawAxiosRequestConfig) {
+        return EnrichmentApiFp(this.configuration).uploadEnrichmentJobSourceData(id, file, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * MeasurementClientsApi - axios parameter creator
- * @export
  */
 export const MeasurementClientsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -10537,7 +7297,6 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
 
 /**
  * MeasurementClientsApi - functional programming interface
- * @export
  */
 export const MeasurementClientsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MeasurementClientsApiAxiosParamCreator(configuration)
@@ -10656,7 +7415,6 @@ export const MeasurementClientsApiFp = function(configuration?: Configuration) {
 
 /**
  * MeasurementClientsApi - factory interface
- * @export
  */
 export const MeasurementClientsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MeasurementClientsApiFp(configuration)
@@ -10751,9 +7509,6 @@ export const MeasurementClientsApiFactory = function (configuration?: Configurat
 
 /**
  * MeasurementClientsApi - object-oriented interface
- * @export
- * @class MeasurementClientsApi
- * @extends {BaseAPI}
  */
 export class MeasurementClientsApi extends BaseAPI {
     /**
@@ -10762,7 +7517,6 @@ export class MeasurementClientsApi extends BaseAPI {
      * @param {MeasurementClientMutation} measurementClientMutation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeasurementClientsApi
      */
     public createMeasurementClient(measurementClientMutation: MeasurementClientMutation, options?: RawAxiosRequestConfig) {
         return MeasurementClientsApiFp(this.configuration).createMeasurementClient(measurementClientMutation, options).then((request) => request(this.axios, this.basePath));
@@ -10774,7 +7528,6 @@ export class MeasurementClientsApi extends BaseAPI {
      * @param {string} clientId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeasurementClientsApi
      */
     public deleteClientLogo(clientId: string, options?: RawAxiosRequestConfig) {
         return MeasurementClientsApiFp(this.configuration).deleteClientLogo(clientId, options).then((request) => request(this.axios, this.basePath));
@@ -10786,7 +7539,6 @@ export class MeasurementClientsApi extends BaseAPI {
      * @param {string} clientId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeasurementClientsApi
      */
     public deleteMeasurementClientById(clientId: string, options?: RawAxiosRequestConfig) {
         return MeasurementClientsApiFp(this.configuration).deleteMeasurementClientById(clientId, options).then((request) => request(this.axios, this.basePath));
@@ -10798,7 +7550,6 @@ export class MeasurementClientsApi extends BaseAPI {
      * @param {string} clientId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeasurementClientsApi
      */
     public getClientLogo(clientId: string, options?: RawAxiosRequestConfig) {
         return MeasurementClientsApiFp(this.configuration).getClientLogo(clientId, options).then((request) => request(this.axios, this.basePath));
@@ -10810,7 +7561,6 @@ export class MeasurementClientsApi extends BaseAPI {
      * @param {string} clientId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeasurementClientsApi
      */
     public getMeasurementClientById(clientId: string, options?: RawAxiosRequestConfig) {
         return MeasurementClientsApiFp(this.configuration).getMeasurementClientById(clientId, options).then((request) => request(this.axios, this.basePath));
@@ -10825,7 +7575,6 @@ export class MeasurementClientsApi extends BaseAPI {
      * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeasurementClientsApi
      */
     public listMeasurementClients(filterAccountId?: string, filterNameContains?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
         return MeasurementClientsApiFp(this.configuration).listMeasurementClients(filterAccountId, filterNameContains, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
@@ -10838,7 +7587,6 @@ export class MeasurementClientsApi extends BaseAPI {
      * @param {MeasurementClientMutation} measurementClientMutation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeasurementClientsApi
      */
     public updateMeasurementClientById(clientId: string, measurementClientMutation: MeasurementClientMutation, options?: RawAxiosRequestConfig) {
         return MeasurementClientsApiFp(this.configuration).updateMeasurementClientById(clientId, measurementClientMutation, options).then((request) => request(this.axios, this.basePath));
@@ -10851,7 +7599,6 @@ export class MeasurementClientsApi extends BaseAPI {
      * @param {File} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeasurementClientsApi
      */
     public uploadClientLogo(clientId: string, body: File, options?: RawAxiosRequestConfig) {
         return MeasurementClientsApiFp(this.configuration).uploadClientLogo(clientId, body, options).then((request) => request(this.axios, this.basePath));
@@ -10862,7 +7609,6 @@ export class MeasurementClientsApi extends BaseAPI {
 
 /**
  * MeasurementLabelsApi - axios parameter creator
- * @export
  */
 export const MeasurementLabelsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -10920,7 +7666,6 @@ export const MeasurementLabelsApiAxiosParamCreator = function (configuration?: C
 
 /**
  * MeasurementLabelsApi - functional programming interface
- * @export
  */
 export const MeasurementLabelsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MeasurementLabelsApiAxiosParamCreator(configuration)
@@ -10943,7 +7688,6 @@ export const MeasurementLabelsApiFp = function(configuration?: Configuration) {
 
 /**
  * MeasurementLabelsApi - factory interface
- * @export
  */
 export const MeasurementLabelsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MeasurementLabelsApiFp(configuration)
@@ -10963,9 +7707,6 @@ export const MeasurementLabelsApiFactory = function (configuration?: Configurati
 
 /**
  * MeasurementLabelsApi - object-oriented interface
- * @export
- * @class MeasurementLabelsApi
- * @extends {BaseAPI}
  */
 export class MeasurementLabelsApi extends BaseAPI {
     /**
@@ -10974,7 +7715,6 @@ export class MeasurementLabelsApi extends BaseAPI {
      * @param {string} [filterAccountId] Optional parameter used to query measurement labels by specific account IDs (only available to super admins). The value &#x60;*&#x60; is synonymous for \&quot;all accounts\&quot;. 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeasurementLabelsApi
      */
     public listMeasurementLabels(filterAccountId?: string, options?: RawAxiosRequestConfig) {
         return MeasurementLabelsApiFp(this.configuration).listMeasurementLabels(filterAccountId, options).then((request) => request(this.axios, this.basePath));
@@ -10985,7 +7725,6 @@ export class MeasurementLabelsApi extends BaseAPI {
 
 /**
  * PopulationsApi - axios parameter creator
- * @export
  */
 export const PopulationsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -11094,7 +7833,6 @@ export const PopulationsApiAxiosParamCreator = function (configuration?: Configu
 
 /**
  * PopulationsApi - functional programming interface
- * @export
  */
 export const PopulationsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = PopulationsApiAxiosParamCreator(configuration)
@@ -11131,7 +7869,6 @@ export const PopulationsApiFp = function(configuration?: Configuration) {
 
 /**
  * PopulationsApi - factory interface
- * @export
  */
 export const PopulationsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = PopulationsApiFp(configuration)
@@ -11162,9 +7899,6 @@ export const PopulationsApiFactory = function (configuration?: Configuration, ba
 
 /**
  * PopulationsApi - object-oriented interface
- * @export
- * @class PopulationsApi
- * @extends {BaseAPI}
  */
 export class PopulationsApi extends BaseAPI {
     /**
@@ -11174,7 +7908,6 @@ export class PopulationsApi extends BaseAPI {
      * @param {string} populationKey An identifier for the population
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof PopulationsApi
      */
     public getPopuplationByKey(categoryKey: string, populationKey: string, options?: RawAxiosRequestConfig) {
         return PopulationsApiFp(this.configuration).getPopuplationByKey(categoryKey, populationKey, options).then((request) => request(this.axios, this.basePath));
@@ -11186,7 +7919,6 @@ export class PopulationsApi extends BaseAPI {
      * @param {string} categoryKey An identifier for the category
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof PopulationsApi
      */
     public listPopuplations(categoryKey: string, options?: RawAxiosRequestConfig) {
         return PopulationsApiFp(this.configuration).listPopuplations(categoryKey, options).then((request) => request(this.axios, this.basePath));
@@ -11197,7 +7929,6 @@ export class PopulationsApi extends BaseAPI {
 
 /**
  * StudiesApi - axios parameter creator
- * @export
  */
 export const StudiesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -11975,10 +8706,11 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
          * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of events per user, or distinct reach of a study. It can also be helpful to identify how multiple events for the same users may or may not generate more clicks. 
          * @summary Frequency statistics for study
          * @param {string} studyId 
+         * @param {number} [limit] The maximum frequency to query. Frequencies above this will be counted against the &#x60;count_above_cap&#x60; result.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        queryStudyFrequencyStats: async (studyId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        queryStudyFrequencyStats: async (studyId: string, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('queryStudyFrequencyStats', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}/stats/frequencies`
@@ -12007,6 +8739,10 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
 
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
 
 
     
@@ -12242,7 +8978,6 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
 
 /**
  * StudiesApi - functional programming interface
- * @export
  */
 export const StudiesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = StudiesApiAxiosParamCreator(configuration)
@@ -12450,11 +9185,12 @@ export const StudiesApiFp = function(configuration?: Configuration) {
          * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of events per user, or distinct reach of a study. It can also be helpful to identify how multiple events for the same users may or may not generate more clicks. 
          * @summary Frequency statistics for study
          * @param {string} studyId 
+         * @param {number} [limit] The maximum frequency to query. Frequencies above this will be counted against the &#x60;count_above_cap&#x60; result.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async queryStudyFrequencyStats(studyId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueryStudyFrequencyStats200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.queryStudyFrequencyStats(studyId, options);
+        async queryStudyFrequencyStats(studyId: string, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueryStudyFrequencyStats200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.queryStudyFrequencyStats(studyId, limit, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StudiesApi.queryStudyFrequencyStats']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12520,7 +9256,6 @@ export const StudiesApiFp = function(configuration?: Configuration) {
 
 /**
  * StudiesApi - factory interface
- * @export
  */
 export const StudiesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = StudiesApiFp(configuration)
@@ -12686,11 +9421,12 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
          * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of events per user, or distinct reach of a study. It can also be helpful to identify how multiple events for the same users may or may not generate more clicks. 
          * @summary Frequency statistics for study
          * @param {string} studyId 
+         * @param {number} [limit] The maximum frequency to query. Frequencies above this will be counted against the &#x60;count_above_cap&#x60; result.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        queryStudyFrequencyStats(studyId: string, options?: RawAxiosRequestConfig): AxiosPromise<QueryStudyFrequencyStats200Response> {
-            return localVarFp.queryStudyFrequencyStats(studyId, options).then((request) => request(axios, basePath));
+        queryStudyFrequencyStats(studyId: string, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<QueryStudyFrequencyStats200Response> {
+            return localVarFp.queryStudyFrequencyStats(studyId, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * Query the timeline statistics for a study. 
@@ -12741,9 +9477,6 @@ export const StudiesApiFactory = function (configuration?: Configuration, basePa
 
 /**
  * StudiesApi - object-oriented interface
- * @export
- * @class StudiesApi
- * @extends {BaseAPI}
  */
 export class StudiesApi extends BaseAPI {
     /**
@@ -12753,7 +9486,6 @@ export class StudiesApi extends BaseAPI {
      * @param {SharedReportCreation} sharedReportCreation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public createSharedReport(studyId: string, sharedReportCreation: SharedReportCreation, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).createSharedReport(studyId, sharedReportCreation, options).then((request) => request(this.axios, this.basePath));
@@ -12765,7 +9497,6 @@ export class StudiesApi extends BaseAPI {
      * @param {StudyCreation} studyCreation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public createStudy(studyCreation: StudyCreation, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).createStudy(studyCreation, options).then((request) => request(this.axios, this.basePath));
@@ -12778,7 +9509,6 @@ export class StudiesApi extends BaseAPI {
      * @param {StudyEventCreation} studyEventCreation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public createStudyEvent(studyId: string, studyEventCreation: StudyEventCreation, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).createStudyEvent(studyId, studyEventCreation, options).then((request) => request(this.axios, this.basePath));
@@ -12791,7 +9521,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} reportId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public deleteSharedReportById(studyId: string, reportId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).deleteSharedReportById(studyId, reportId, options).then((request) => request(this.axios, this.basePath));
@@ -12803,7 +9532,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} studyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public deleteStudyBannerImage(studyId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).deleteStudyBannerImage(studyId, options).then((request) => request(this.axios, this.basePath));
@@ -12815,7 +9543,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} studyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public deleteStudyById(studyId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).deleteStudyById(studyId, options).then((request) => request(this.axios, this.basePath));
@@ -12828,7 +9555,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} reportId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public getSharedReportById(studyId: string, reportId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).getSharedReportById(studyId, reportId, options).then((request) => request(this.axios, this.basePath));
@@ -12840,7 +9566,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} studyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public getStudyBannerImage(studyId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).getStudyBannerImage(studyId, options).then((request) => request(this.axios, this.basePath));
@@ -12852,7 +9577,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} studyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public getStudyById(studyId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).getStudyById(studyId, options).then((request) => request(this.axios, this.basePath));
@@ -12864,7 +9588,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} studyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public listSharedReportsByStudyId(studyId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).listSharedReportsByStudyId(studyId, options).then((request) => request(this.axios, this.basePath));
@@ -12889,7 +9612,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public listStudies(sort?: ListStudiesSortEnum, filterLifeCycleStage?: StudyLifecycleStage, filterLifeCycleStageNot?: StudyLifecycleStage, filterIsExample?: boolean, filterLabel?: string, filterNameContains?: string, filterStartDateAfter?: string, filterStartDateBefore?: string, filterEndDate?: string, filterCreatedAtAfter?: string, filterCreatedAtBefore?: string, filterAccountId?: string, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).listStudies(sort, filterLifeCycleStage, filterLifeCycleStageNot, filterIsExample, filterLabel, filterNameContains, filterStartDateAfter, filterStartDateBefore, filterEndDate, filterCreatedAtAfter, filterCreatedAtBefore, filterAccountId, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
@@ -12901,7 +9623,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} studyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public queryStudyAudienceStats(studyId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).queryStudyAudienceStats(studyId, options).then((request) => request(this.axios, this.basePath));
@@ -12913,7 +9634,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} studyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public queryStudyCountryStats(studyId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).queryStudyCountryStats(studyId, options).then((request) => request(this.axios, this.basePath));
@@ -12925,7 +9645,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} studyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public queryStudyDeviceStats(studyId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).queryStudyDeviceStats(studyId, options).then((request) => request(this.axios, this.basePath));
@@ -12935,12 +9654,12 @@ export class StudiesApi extends BaseAPI {
      * Query the frequency statistics for a study. Frequency statistics are helpful to identify the frequency of events per user, or distinct reach of a study. It can also be helpful to identify how multiple events for the same users may or may not generate more clicks. 
      * @summary Frequency statistics for study
      * @param {string} studyId 
+     * @param {number} [limit] The maximum frequency to query. Frequencies above this will be counted against the &#x60;count_above_cap&#x60; result.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
-    public queryStudyFrequencyStats(studyId: string, options?: RawAxiosRequestConfig) {
-        return StudiesApiFp(this.configuration).queryStudyFrequencyStats(studyId, options).then((request) => request(this.axios, this.basePath));
+    public queryStudyFrequencyStats(studyId: string, limit?: number, options?: RawAxiosRequestConfig) {
+        return StudiesApiFp(this.configuration).queryStudyFrequencyStats(studyId, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -12951,7 +9670,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} [toDate] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public queryStudyTimelineStats(studyId: string, fromDate?: string, toDate?: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).queryStudyTimelineStats(studyId, fromDate, toDate, options).then((request) => request(this.axios, this.basePath));
@@ -12963,7 +9681,6 @@ export class StudiesApi extends BaseAPI {
      * @param {string} studyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public queryStudyTimingStats(studyId: string, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).queryStudyTimingStats(studyId, options).then((request) => request(this.axios, this.basePath));
@@ -12976,7 +9693,6 @@ export class StudiesApi extends BaseAPI {
      * @param {StudyMutation} studyMutation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public updateStudyById(studyId: string, studyMutation: StudyMutation, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).updateStudyById(studyId, studyMutation, options).then((request) => request(this.axios, this.basePath));
@@ -12989,16 +9705,12 @@ export class StudiesApi extends BaseAPI {
      * @param {File} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudiesApi
      */
     public uploadStudyBannerImage(studyId: string, body: File, options?: RawAxiosRequestConfig) {
         return StudiesApiFp(this.configuration).uploadStudyBannerImage(studyId, body, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
-/**
- * @export
- */
 export const ListStudiesSortEnum = {
     CreatedAt: 'created_at',
     CreatedAt2: '-created_at',
@@ -13010,7 +9722,6 @@ export type ListStudiesSortEnum = typeof ListStudiesSortEnum[keyof typeof ListSt
 
 /**
  * SubscriptionsApi - axios parameter creator
- * @export
  */
 export const SubscriptionsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -13286,7 +9997,6 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
 
 /**
  * SubscriptionsApi - functional programming interface
- * @export
  */
 export const SubscriptionsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SubscriptionsApiAxiosParamCreator(configuration)
@@ -13366,7 +10076,6 @@ export const SubscriptionsApiFp = function(configuration?: Configuration) {
 
 /**
  * SubscriptionsApi - factory interface
- * @export
  */
 export const SubscriptionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = SubscriptionsApiFp(configuration)
@@ -13431,9 +10140,6 @@ export const SubscriptionsApiFactory = function (configuration?: Configuration, 
 
 /**
  * SubscriptionsApi - object-oriented interface
- * @export
- * @class SubscriptionsApi
- * @extends {BaseAPI}
  */
 export class SubscriptionsApi extends BaseAPI {
     /**
@@ -13443,7 +10149,6 @@ export class SubscriptionsApi extends BaseAPI {
      * @param {string} subscriptionId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SubscriptionsApi
      */
     public getAccountSubscriptionById(accountId: string, subscriptionId: string, options?: RawAxiosRequestConfig) {
         return SubscriptionsApiFp(this.configuration).getAccountSubscriptionById(accountId, subscriptionId, options).then((request) => request(this.axios, this.basePath));
@@ -13455,7 +10160,6 @@ export class SubscriptionsApi extends BaseAPI {
      * @param {string} accountId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SubscriptionsApi
      */
     public getAccountSubscriptions(accountId: string, options?: RawAxiosRequestConfig) {
         return SubscriptionsApiFp(this.configuration).getAccountSubscriptions(accountId, options).then((request) => request(this.axios, this.basePath));
@@ -13466,7 +10170,6 @@ export class SubscriptionsApi extends BaseAPI {
      * @summary Gets the default/free subscription plan
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SubscriptionsApi
      */
     public getSubscriptionPlanFree(options?: RawAxiosRequestConfig) {
         return SubscriptionsApiFp(this.configuration).getSubscriptionPlanFree(options).then((request) => request(this.axios, this.basePath));
@@ -13478,7 +10181,6 @@ export class SubscriptionsApi extends BaseAPI {
      * @param {string} [filterAccountId] Optional parameter used to filter on the account ID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SubscriptionsApi
      */
     public listSubscriptionOffers(filterAccountId?: string, options?: RawAxiosRequestConfig) {
         return SubscriptionsApiFp(this.configuration).listSubscriptionOffers(filterAccountId, options).then((request) => request(this.axios, this.basePath));
@@ -13495,7 +10197,6 @@ export class SubscriptionsApi extends BaseAPI {
      * @param {SubscriptionPriceInterval} [filterListPriceInterval] Optional parameter used to filter on the list price\&#39;s interval
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SubscriptionsApi
      */
     public listSubscriptionPlans(pageSize?: number, pageAfter?: string, filterIsPublic?: boolean, filterProductType?: SubscriptionProductType, filterListPriceCurrency?: SubscriptionPriceCurrency, filterListPriceInterval?: SubscriptionPriceInterval, options?: RawAxiosRequestConfig) {
         return SubscriptionsApiFp(this.configuration).listSubscriptionPlans(pageSize, pageAfter, filterIsPublic, filterProductType, filterListPriceCurrency, filterListPriceInterval, options).then((request) => request(this.axios, this.basePath));
@@ -13506,7 +10207,6 @@ export class SubscriptionsApi extends BaseAPI {
 
 /**
  * TaxonomyApi - axios parameter creator
- * @export
  */
 export const TaxonomyApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -13657,7 +10357,6 @@ export const TaxonomyApiAxiosParamCreator = function (configuration?: Configurat
 
 /**
  * TaxonomyApi - functional programming interface
- * @export
  */
 export const TaxonomyApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TaxonomyApiAxiosParamCreator(configuration)
@@ -13705,7 +10404,6 @@ export const TaxonomyApiFp = function(configuration?: Configuration) {
 
 /**
  * TaxonomyApi - factory interface
- * @export
  */
 export const TaxonomyApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = TaxonomyApiFp(configuration)
@@ -13744,9 +10442,6 @@ export const TaxonomyApiFactory = function (configuration?: Configuration, baseP
 
 /**
  * TaxonomyApi - object-oriented interface
- * @export
- * @class TaxonomyApi
- * @extends {BaseAPI}
  */
 export class TaxonomyApi extends BaseAPI {
     /**
@@ -13754,7 +10449,6 @@ export class TaxonomyApi extends BaseAPI {
      * @summary List audience platforms
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TaxonomyApi
      */
     public listAudiencePlatforms(options?: RawAxiosRequestConfig) {
         return TaxonomyApiFp(this.configuration).listAudiencePlatforms(options).then((request) => request(this.axios, this.basePath));
@@ -13767,7 +10461,6 @@ export class TaxonomyApi extends BaseAPI {
      * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TaxonomyApi
      */
     public listAudiences(platform?: string, country?: string, options?: RawAxiosRequestConfig) {
         return TaxonomyApiFp(this.configuration).listAudiences(platform, country, options).then((request) => request(this.axios, this.basePath));
@@ -13778,7 +10471,6 @@ export class TaxonomyApi extends BaseAPI {
      * @summary List countries
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TaxonomyApi
      */
     public listCountries(options?: RawAxiosRequestConfig) {
         return TaxonomyApiFp(this.configuration).listCountries(options).then((request) => request(this.axios, this.basePath));
@@ -13789,7 +10481,6 @@ export class TaxonomyApi extends BaseAPI {
 
 /**
  * UsageApi - axios parameter creator
- * @export
  */
 export const UsageApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -13976,7 +10667,6 @@ export const UsageApiAxiosParamCreator = function (configuration?: Configuration
 
 /**
  * UsageApi - functional programming interface
- * @export
  */
 export const UsageApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UsageApiAxiosParamCreator(configuration)
@@ -14031,7 +10721,6 @@ export const UsageApiFp = function(configuration?: Configuration) {
 
 /**
  * UsageApi - factory interface
- * @export
  */
 export const UsageApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = UsageApiFp(configuration)
@@ -14077,9 +10766,6 @@ export const UsageApiFactory = function (configuration?: Configuration, basePath
 
 /**
  * UsageApi - object-oriented interface
- * @export
- * @class UsageApi
- * @extends {BaseAPI}
  */
 export class UsageApi extends BaseAPI {
     /**
@@ -14091,7 +10777,6 @@ export class UsageApi extends BaseAPI {
      * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsageApi
      */
     public listDataDailyUsage(data: ListDataDailyUsageDataEnum, filterDateFrom?: string, filterDateTo?: string, filterAccountId?: string, options?: RawAxiosRequestConfig) {
         return UsageApiFp(this.configuration).listDataDailyUsage(data, filterDateFrom, filterDateTo, filterAccountId, options).then((request) => request(this.axios, this.basePath));
@@ -14105,7 +10790,6 @@ export class UsageApi extends BaseAPI {
      * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsageApi
      */
     public listDataMonthlyUsage(data: ListDataMonthlyUsageDataEnum, filterYear?: number, filterAccountId?: string, options?: RawAxiosRequestConfig) {
         return UsageApiFp(this.configuration).listDataMonthlyUsage(data, filterYear, filterAccountId, options).then((request) => request(this.axios, this.basePath));
@@ -14118,32 +10802,22 @@ export class UsageApi extends BaseAPI {
      * @param {string} [filterAccountId] Optional parameter used to query usage of specific account IDs (only available to super admins). 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsageApi
      */
     public listDataRealtimeUsage(data: ListDataRealtimeUsageDataEnum, filterAccountId?: string, options?: RawAxiosRequestConfig) {
         return UsageApiFp(this.configuration).listDataRealtimeUsage(data, filterAccountId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
-/**
- * @export
- */
 export const ListDataDailyUsageDataEnum = {
     AudienceData: 'audience_data',
     AnalyticsData: 'analytics_data'
 } as const;
 export type ListDataDailyUsageDataEnum = typeof ListDataDailyUsageDataEnum[keyof typeof ListDataDailyUsageDataEnum];
-/**
- * @export
- */
 export const ListDataMonthlyUsageDataEnum = {
     AudienceData: 'audience_data',
     AnalyticsData: 'analytics_data'
 } as const;
 export type ListDataMonthlyUsageDataEnum = typeof ListDataMonthlyUsageDataEnum[keyof typeof ListDataMonthlyUsageDataEnum];
-/**
- * @export
- */
 export const ListDataRealtimeUsageDataEnum = {
     AudienceData: 'audience_data',
     AnalyticsData: 'analytics_data'
@@ -14153,7 +10827,6 @@ export type ListDataRealtimeUsageDataEnum = typeof ListDataRealtimeUsageDataEnum
 
 /**
  * UsersApi - axios parameter creator
- * @export
  */
 export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -15079,7 +11752,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
 
 /**
  * UsersApi - functional programming interface
- * @export
  */
 export const UsersApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
@@ -15330,7 +12002,6 @@ export const UsersApiFp = function(configuration?: Configuration) {
 
 /**
  * UsersApi - factory interface
- * @export
  */
 export const UsersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = UsersApiFp(configuration)
@@ -15530,9 +12201,6 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
 
 /**
  * UsersApi - object-oriented interface
- * @export
- * @class UsersApi
- * @extends {BaseAPI}
  */
 export class UsersApi extends BaseAPI {
     /**
@@ -15542,7 +12210,6 @@ export class UsersApi extends BaseAPI {
      * @param {AccountUserAddition} accountUserAddition 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public addUserToAccount(accountId: string, accountUserAddition: AccountUserAddition, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).addUserToAccount(accountId, accountUserAddition, options).then((request) => request(this.axios, this.basePath));
@@ -15555,7 +12222,6 @@ export class UsersApi extends BaseAPI {
      * @param {ApiKeyCreation} apiKeyCreation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public createApiKey(userId: string, apiKeyCreation: ApiKeyCreation, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).createApiKey(userId, apiKeyCreation, options).then((request) => request(this.axios, this.basePath));
@@ -15568,7 +12234,6 @@ export class UsersApi extends BaseAPI {
      * @param {string} keyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public deleteApiKeyById(userId: string, keyId: string, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).deleteApiKeyById(userId, keyId, options).then((request) => request(this.axios, this.basePath));
@@ -15580,7 +12245,6 @@ export class UsersApi extends BaseAPI {
      * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public deleteUserAvatar(userId: string, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).deleteUserAvatar(userId, options).then((request) => request(this.axios, this.basePath));
@@ -15592,7 +12256,6 @@ export class UsersApi extends BaseAPI {
      * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public deleteUserById(userId: string, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).deleteUserById(userId, options).then((request) => request(this.axios, this.basePath));
@@ -15605,7 +12268,6 @@ export class UsersApi extends BaseAPI {
      * @param {string} keyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public getApiKeyById(userId: string, keyId: string, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).getApiKeyById(userId, keyId, options).then((request) => request(this.axios, this.basePath));
@@ -15617,7 +12279,6 @@ export class UsersApi extends BaseAPI {
      * @param {Array<UserIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public getCurrentUser(include?: Array<UserIncludeParam>, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).getCurrentUser(include, options).then((request) => request(this.axios, this.basePath));
@@ -15630,7 +12291,6 @@ export class UsersApi extends BaseAPI {
      * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public getUserAccountMembership(accountId: string, userId: string, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).getUserAccountMembership(accountId, userId, options).then((request) => request(this.axios, this.basePath));
@@ -15642,7 +12302,6 @@ export class UsersApi extends BaseAPI {
      * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public getUserAvatar(userId: string, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).getUserAvatar(userId, options).then((request) => request(this.axios, this.basePath));
@@ -15655,7 +12314,6 @@ export class UsersApi extends BaseAPI {
      * @param {Array<UserIncludeParam>} [include] Optional parameter used to define aux properties to load in the response
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public getUserById(userId: string, include?: Array<UserIncludeParam>, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).getUserById(userId, include, options).then((request) => request(this.axios, this.basePath));
@@ -15668,7 +12326,6 @@ export class UsersApi extends BaseAPI {
      * @param {string} [filterAccountId] Filter by specific account id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public listApiKeysByUserId(userId: string, filterAccountId?: string, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).listApiKeysByUserId(userId, filterAccountId, options).then((request) => request(this.axios, this.basePath));
@@ -15686,7 +12343,6 @@ export class UsersApi extends BaseAPI {
      * @param {string} [pageAfter] Optional pagination parameter, indicating the previous cursor value to paginate beyond. The value to provide here is opaque, but can be found in previous requests in the &#x60;meta.page.last_cursor&#x60; field. 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public listUsersByAccountId(accountId: string, filterPlatformRoles?: UserPlatformRole, filterAccountRoles?: UserAccountRole, filterNameContains?: string, sort?: UserSortOption, pageSize?: number, pageAfter?: string, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).listUsersByAccountId(accountId, filterPlatformRoles, filterAccountRoles, filterNameContains, sort, pageSize, pageAfter, options).then((request) => request(this.axios, this.basePath));
@@ -15699,7 +12355,6 @@ export class UsersApi extends BaseAPI {
      * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public removeUserFromAccount(accountId: string, userId: string, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).removeUserFromAccount(accountId, userId, options).then((request) => request(this.axios, this.basePath));
@@ -15713,7 +12368,6 @@ export class UsersApi extends BaseAPI {
      * @param {ApiKeyMutation} apiKeyMutation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public updateApiKeyById(userId: string, keyId: string, apiKeyMutation: ApiKeyMutation, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).updateApiKeyById(userId, keyId, apiKeyMutation, options).then((request) => request(this.axios, this.basePath));
@@ -15727,7 +12381,6 @@ export class UsersApi extends BaseAPI {
      * @param {UserAccountMembershipUpdate} userAccountMembershipUpdate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public updateUserAccountMembership(accountId: string, userId: string, userAccountMembershipUpdate: UserAccountMembershipUpdate, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).updateUserAccountMembership(accountId, userId, userAccountMembershipUpdate, options).then((request) => request(this.axios, this.basePath));
@@ -15740,7 +12393,6 @@ export class UsersApi extends BaseAPI {
      * @param {UserMutation} userMutation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public updateUserById(userId: string, userMutation: UserMutation, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).updateUserById(userId, userMutation, options).then((request) => request(this.axios, this.basePath));
@@ -15753,7 +12405,6 @@ export class UsersApi extends BaseAPI {
      * @param {File} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public uploadUserAvatar(userId: string, body: File, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).uploadUserAvatar(userId, body, options).then((request) => request(this.axios, this.basePath));
