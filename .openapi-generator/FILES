@@ -63,6 +63,7 @@ docs/AuthTokenRequest.md
 docs/AuthTokenResponse.md
 docs/BusinessAudienceStats.md
 docs/BusinessAudienceStatsAudienceCategories.md
+docs/CategoryListResponseMeta.md
 docs/CategoryPopulationsFull.md
 docs/CompanySize.md
 docs/CompanyType.md
@@ -126,6 +127,8 @@ docs/LimitedOrFullFeature.md
 docs/ListApiKeysByAccountId200Response.md
 docs/ListAudiencePlatforms200Response.md
 docs/ListAudiences200Response.md
+docs/ListAudiences200ResponseOneOf.md
+docs/ListAudiences200ResponseOneOf1.md
 docs/ListCountries200Response.md
 docs/ListDataDailyUsage200Response.md
 docs/ListDataMonthlyUsage200Response.md

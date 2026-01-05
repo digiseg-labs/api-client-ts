@@ -1019,6 +1019,7 @@ export interface AudienceSetItem {
 export interface AudienceSetListResponseMeta {
     'country'?: CountryItem;
     'platform'?: AudiencePlatformItem;
+    'page'?: ListPaginationMetaPage;
 }
 export interface AudienceStats {
     /**
@@ -1100,6 +1101,11 @@ export interface BusinessAudienceStats {
 }
 export interface BusinessAudienceStatsAudienceCategories {
     'size': AudienceCategoryStats;
+}
+export interface CategoryListResponseMeta {
+    'country'?: CountryItem;
+    'platform'?: AudiencePlatformItem;
+    'page'?: ListPaginationMetaPage;
 }
 export interface CategoryPopulationsFull {
     'populations'?: Array<PopulationItem>;
@@ -1652,9 +1658,18 @@ export interface ListApiKeysByAccountId200Response {
 export interface ListAudiencePlatforms200Response {
     'data'?: Array<AudiencePlatformItem>;
 }
-export interface ListAudiences200Response {
+/**
+ * @type ListAudiences200Response
+ */
+export type ListAudiences200Response = ListAudiences200ResponseOneOf | ListAudiences200ResponseOneOf1;
+
+export interface ListAudiences200ResponseOneOf {
     'meta'?: AudienceSetListResponseMeta;
     'data'?: Array<AudienceSetItem>;
+}
+export interface ListAudiences200ResponseOneOf1 {
+    'meta'?: CategoryListResponseMeta;
+    'data'?: Array<AudienceCategoryItem>;
 }
 export interface ListCountries200Response {
     'data'?: Array<CountryItem>;
@@ -10255,14 +10270,18 @@ export const TaxonomyApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * 
+         * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
          * @summary List audiences
          * @param {string} [platform] A platform code to apply for platform-specific audience codes
          * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {number} [pageSize] Number of items to return per page
+         * @param {string} [pageAfter] Cursor for pagination to get the next page of results
+         * @param {ListAudiencesSortEnum} [sort] Sort order for audiences (by code) and categories (by display name) - either ascending (default) or descending.
+         * @param {string} [filter] Optional parameter used to search for categories and audiences where the name contains a substring (case insensitive)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudiences: async (platform?: string, country?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listAudiences: async (platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/taxonomy/audiences`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -10297,8 +10316,24 @@ export const TaxonomyApiAxiosParamCreator = function (configuration?: Configurat
                 localVarQueryParameter['country'] = country;
             }
 
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page[size]'] = pageSize;
+            }
 
-    
+            if (pageAfter !== undefined) {
+                localVarQueryParameter['page[after]'] = pageAfter;
+            }
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
+
+            if (filter !== undefined) {
+                localVarQueryParameter['filter'] = filter;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -10374,15 +10409,19 @@ export const TaxonomyApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
          * @summary List audiences
          * @param {string} [platform] A platform code to apply for platform-specific audience codes
          * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {number} [pageSize] Number of items to return per page
+         * @param {string} [pageAfter] Cursor for pagination to get the next page of results
+         * @param {ListAudiencesSortEnum} [sort] Sort order for audiences (by code) and categories (by display name) - either ascending (default) or descending.
+         * @param {string} [filter] Optional parameter used to search for categories and audiences where the name contains a substring (case insensitive)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listAudiences(platform?: string, country?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAudiences200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listAudiences(platform, country, options);
+        async listAudiences(platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAudiences200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listAudiences(platform, country, pageSize, pageAfter, sort, filter, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TaxonomyApi.listAudiences']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -10418,15 +10457,19 @@ export const TaxonomyApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.listAudiencePlatforms(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
          * @summary List audiences
          * @param {string} [platform] A platform code to apply for platform-specific audience codes
          * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {number} [pageSize] Number of items to return per page
+         * @param {string} [pageAfter] Cursor for pagination to get the next page of results
+         * @param {ListAudiencesSortEnum} [sort] Sort order for audiences (by code) and categories (by display name) - either ascending (default) or descending.
+         * @param {string} [filter] Optional parameter used to search for categories and audiences where the name contains a substring (case insensitive)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudiences(platform?: string, country?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListAudiences200Response> {
-            return localVarFp.listAudiences(platform, country, options).then((request) => request(axios, basePath));
+        listAudiences(platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListAudiences200Response> {
+            return localVarFp.listAudiences(platform, country, pageSize, pageAfter, sort, filter, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10455,15 +10498,19 @@ export class TaxonomyApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
      * @summary List audiences
      * @param {string} [platform] A platform code to apply for platform-specific audience codes
      * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+     * @param {number} [pageSize] Number of items to return per page
+     * @param {string} [pageAfter] Cursor for pagination to get the next page of results
+     * @param {ListAudiencesSortEnum} [sort] Sort order for audiences (by code) and categories (by display name) - either ascending (default) or descending.
+     * @param {string} [filter] Optional parameter used to search for categories and audiences where the name contains a substring (case insensitive)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public listAudiences(platform?: string, country?: string, options?: RawAxiosRequestConfig) {
-        return TaxonomyApiFp(this.configuration).listAudiences(platform, country, options).then((request) => request(this.axios, this.basePath));
+    public listAudiences(platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, options?: RawAxiosRequestConfig) {
+        return TaxonomyApiFp(this.configuration).listAudiences(platform, country, pageSize, pageAfter, sort, filter, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -10477,6 +10524,11 @@ export class TaxonomyApi extends BaseAPI {
     }
 }
 
+export const ListAudiencesSortEnum = {
+    Asc: 'asc',
+    Desc: 'desc'
+} as const;
+export type ListAudiencesSortEnum = typeof ListAudiencesSortEnum[keyof typeof ListAudiencesSortEnum];
 
 
 /**
