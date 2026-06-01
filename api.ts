@@ -18,7 +18,7 @@ import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from './common';
 import type { RequestArgs } from './base';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
@@ -260,7 +260,7 @@ export interface AccountIncludeAux {
 
 export const AccountIncludeParam = {
     None: 'none',
-    Subscriptions: 'subscriptions'
+    Subscriptions: 'subscriptions',
 } as const;
 
 export type AccountIncludeParam = typeof AccountIncludeParam[keyof typeof AccountIncludeParam];
@@ -400,7 +400,7 @@ export const AccountSortOption = {
     CreatedAt: 'created_at',
     CreatedAt2: '-created_at',
     Name: 'name',
-    Name2: '-name'
+    Name2: '-name',
 } as const;
 
 export type AccountSortOption = typeof AccountSortOption[keyof typeof AccountSortOption];
@@ -569,13 +569,13 @@ export interface AccountSubscriptionPaymentConfiguration {
 
 export const AccountSubscriptionPaymentConfigurationPlatformEnum = {
     Stripe: 'stripe',
-    Manual: 'manual'
+    Manual: 'manual',
 } as const;
 
 export type AccountSubscriptionPaymentConfigurationPlatformEnum = typeof AccountSubscriptionPaymentConfigurationPlatformEnum[keyof typeof AccountSubscriptionPaymentConfigurationPlatformEnum];
 export const AccountSubscriptionPaymentConfigurationTimingEnum = {
     Pre: 'pre',
-    Post: 'post'
+    Post: 'post',
 } as const;
 
 export type AccountSubscriptionPaymentConfigurationTimingEnum = typeof AccountSubscriptionPaymentConfigurationTimingEnum[keyof typeof AccountSubscriptionPaymentConfigurationTimingEnum];
@@ -851,7 +851,7 @@ export interface ApiKeyMutation {
 export const ApiKeyStatus = {
     Enabled: 'enabled',
     Disabled: 'disabled',
-    Expired: 'expired'
+    Expired: 'expired',
 } as const;
 
 export type ApiKeyStatus = typeof ApiKeyStatus[keyof typeof ApiKeyStatus];
@@ -883,6 +883,27 @@ export interface Audience {
      */
     'name'?: string;
 }
+/**
+ * Segment metadata and reach metrics used by the Audience Builder.
+ */
+export interface AudienceBuilderSegmentItem {
+    /**
+     * Unique code for the audience builder segment.
+     */
+    'code': string;
+    /**
+     * Short display name for the segment.
+     */
+    'short_name': string;
+    /**
+     * Estimated reach for the segment as a fraction of the audience.
+     */
+    'segment_reach': number;
+    /**
+     * Estimated in-target reach for the segment as a fraction of the audience.
+     */
+    'in_target_reach': number;
+}
 export interface AudienceCategoryItem {
     /**
      * A code used to represent the audience category
@@ -890,6 +911,23 @@ export interface AudienceCategoryItem {
     'code': string;
     'display_name': string;
     'audiences': Array<AudienceItem>;
+    /**
+     * A list of labels associated with the audience category
+     */
+    'labels': Array<string>;
+}
+/**
+ * Minimal category reference for a single audience
+ */
+export interface AudienceCategoryRef {
+    /**
+     * Category code
+     */
+    'code'?: string;
+    /**
+     * Category display name
+     */
+    'display_name'?: string;
 }
 export interface AudienceCategoryStats {
     /**
@@ -918,14 +956,19 @@ export interface AudienceItem {
      */
     'description'?: string;
     /**
-     * A list of audience codes that this audience is composed from
+     * A single-letter identifier for the audience (e.g., A, B, C) used for simplified display
      */
-    'composition'?: Array<string>;
+    'identifier'?: string;
     /**
      * Platform-specific code, provided when `platform` (and `country` if needed for the platform) is provided
      */
     'platform_code'?: string;
+    /**
+     * A list of labels associated with the audience
+     */
+    'labels': Array<string>;
     'reach_stats'?: AudienceReachStats;
+    'category'?: AudienceCategoryRef;
 }
 export interface AudiencePlatformItem {
     /**
@@ -995,6 +1038,14 @@ export interface AudienceResponse {
 }
 
 
+export interface AudienceResponse1 {
+    'data'?: AudienceItem;
+    'meta'?: AudienceResponseMeta;
+}
+export interface AudienceResponseMeta {
+    'country'?: CountryItem;
+    'platform'?: AudiencePlatformItem;
+}
 /**
  * Describes the result of resolving the audiences of an IP address. `resolved` means that the IP was resolved and audiences are returned. `unresolved` means that the IP could not be resolved and no audiences are returned. `forbidden` means that the authenticated user did not have grants to resolve audiences in the country of the IP. 
  */
@@ -1002,7 +1053,7 @@ export interface AudienceResponse {
 export const AudienceResponseStatus = {
     Resolved: 'resolved',
     Unresolved: 'unresolved',
-    Forbidden: 'forbidden'
+    Forbidden: 'forbidden',
 } as const;
 
 export type AudienceResponseStatus = typeof AudienceResponseStatus[keyof typeof AudienceResponseStatus];
@@ -1041,8 +1092,10 @@ export const AudiencesIncludeParam = {
     Core: 'core',
     Composite: 'composite',
     Iab: 'iab',
+    Ctv: 'ctv',
+    Brand: 'brand',
     Name: 'name',
-    Category: 'category'
+    Category: 'category',
 } as const;
 
 export type AudiencesIncludeParam = typeof AudiencesIncludeParam[keyof typeof AudiencesIncludeParam];
@@ -1110,6 +1163,10 @@ export interface CategoryListResponseMeta {
 export interface CategoryPopulationsFull {
     'populations'?: Array<PopulationItem>;
 }
+export interface CategoryResponse {
+    'data'?: AudienceCategoryItem;
+    'meta'?: AudienceResponseMeta;
+}
 /**
  * Describes the size of a company
  */
@@ -1123,7 +1180,7 @@ export const CompanySize = {
     _5011000Employees: '501-1000 employees',
     _10015000Employees: '1001-5000 employees',
     _500110000Employees: '5001-10,000 employees',
-    _10001Employees: '10,001+ employees'
+    _10001Employees: '10,001+ employees',
 } as const;
 
 export type CompanySize = typeof CompanySize[keyof typeof CompanySize];
@@ -1138,7 +1195,7 @@ export const CompanyType = {
     Agency: 'agency',
     Publisher: 'publisher',
     TechnologyProvider: 'technology_provider',
-    Other: 'other'
+    Other: 'other',
 } as const;
 
 export type CompanyType = typeof CompanyType[keyof typeof CompanyType];
@@ -1347,7 +1404,7 @@ export interface EnrichmentJobFileSource {
 
 export const EnrichmentJobFileSourceContentTypeEnum = {
     Csv: 'csv',
-    Plain: 'plain'
+    Plain: 'plain',
 } as const;
 
 export type EnrichmentJobFileSourceContentTypeEnum = typeof EnrichmentJobFileSourceContentTypeEnum[keyof typeof EnrichmentJobFileSourceContentTypeEnum];
@@ -1462,7 +1519,7 @@ export interface EnrichmentJobSingleResponse {
 
 export const EnrichmentJobSortOption = {
     CreatedAt: 'created_at',
-    CreatedAt2: '-created_at'
+    CreatedAt2: '-created_at',
 } as const;
 
 export type EnrichmentJobSortOption = typeof EnrichmentJobSortOption[keyof typeof EnrichmentJobSortOption];
@@ -1487,7 +1544,7 @@ export const EnrichmentJobStatus = {
     Ready: 'ready',
     Started: 'started',
     Finished: 'finished',
-    Failed: 'failed'
+    Failed: 'failed',
 } as const;
 
 export type EnrichmentJobStatus = typeof EnrichmentJobStatus[keyof typeof EnrichmentJobStatus];
@@ -1600,51 +1657,57 @@ export interface IdentifyableObject1 {
     'id': string;
 }
 export interface InlineObject {
-    'data'?: RegistrationCreationResponseData;
+    'data'?: OAuthRegistrationResponseData;
 }
 export interface InlineObject1 {
+    'data'?: RegistrationCreationResponseData;
+}
+export interface InlineObject10 {
+    'data'?: StudyOlapQueryResult;
+}
+export interface InlineObject11 {
+    'data'?: PopulationSource;
+}
+export interface InlineObject12 {
+    'data'?: { [key: string]: string; };
+}
+export interface InlineObject13 {
+    'data'?: AudienceRecommendationResponseMessage;
+}
+export interface InlineObject14 {
+    'data'?: Array<AudienceBuilderSegmentItem>;
+}
+export interface InlineObject2 {
     'data'?: RegistrationVerificationResponseData;
     'links'?: RegistrationVerificationResponseLinks;
 }
-export interface InlineObject10 {
-    'data'?: PopulationSource;
-}
-export interface InlineObject11 {
-    'data'?: { [key: string]: string; };
-}
-export interface InlineObject12 {
-    'data'?: AudienceRecommendationResponseMessage;
-}
-export interface InlineObject2 {
+export interface InlineObject3 {
     'data'?: RegistrationByIdResponseData;
 }
-export interface InlineObject3 {
+export interface InlineObject4 {
     'data'?: SubscriptionPlanFull;
 }
-export interface InlineObject4 {
+export interface InlineObject5 {
     'data'?: SubscriptionOfferFull;
 }
-export interface InlineObject5 {
+export interface InlineObject6 {
     'meta'?: ListPaginationMeta;
     'links'?: ListPaginationLinks;
     'data'?: Array<AccountItem>;
 }
-export interface InlineObject6 {
+export interface InlineObject7 {
     'data'?: StripeAccountSubscriptionCheckoutSession;
 }
-export interface InlineObject7 {
+export interface InlineObject8 {
     'data'?: AccountStripeBillingInfo;
 }
-export interface InlineObject8 {
-    'data'?: SharedReportPublicData;
-}
 export interface InlineObject9 {
-    'data'?: StudyOlapQueryResult;
+    'data'?: SharedReportPublicData;
 }
 
 export const LimitedOrFullFeature = {
     Full: 'full',
-    Limited: 'limited'
+    Limited: 'limited',
 } as const;
 
 export type LimitedOrFullFeature = typeof LimitedOrFullFeature[keyof typeof LimitedOrFullFeature];
@@ -1884,7 +1947,7 @@ export interface MeasurementEventLinks {
 
 export const MeasurementEventSet = {
     ImpressionsOnly: 'impressions_only',
-    ImpressionsAndClicks: 'impressions_and_clicks'
+    ImpressionsAndClicks: 'impressions_and_clicks',
 } as const;
 
 export type MeasurementEventSet = typeof MeasurementEventSet[keyof typeof MeasurementEventSet];
@@ -1911,6 +1974,67 @@ export interface MeasurementsContainer {
      * Measurements related to this object
      */
     'measurements': Array<Measurement>;
+}
+export interface OAuthCallbackResponseData {
+    /**
+     * Indicates whether the user already exists (true) or is a new user (false)
+     */
+    'user_exists': boolean;
+    'registration_token'?: OAuthRegistrationToken;
+    'access_token'?: AccessTokenData;
+    /**
+     * The ID of the user from the OAuth provider
+     */
+    'provider_user_id': string;
+    /**
+     * Username from the OAuth provider
+     */
+    'username': string;
+    /**
+     * Email from the OAuth provider
+     */
+    'email': string;
+    /**
+     * User ID (present when user already exists)
+     */
+    'user_id'?: string;
+}
+export interface OAuthRegistrationRequest {
+    /**
+     * The name of the account to create
+     */
+    'account_name': string;
+    /**
+     * The email of the account owner
+     */
+    'owner_email': string;
+    /**
+     * The name of the account owner
+     */
+    'owner_name': string;
+    /**
+     * The ID of the user from the OAuth provider
+     */
+    'provider_user_id': string;
+    /**
+     * Registration token provided after successful OAuth authentication
+     */
+    'registration_token': string;
+}
+export interface OAuthRegistrationResponseData {
+    'userId': string;
+    'provider_user_id': string;
+    'access_token': AccessTokenData;
+}
+export interface OAuthRegistrationToken {
+    /**
+     * Registration token to be used in the registration request with OAuth
+     */
+    'registration_token'?: string;
+    /**
+     * Expiration time of the registration token
+     */
+    'expires_at'?: string;
 }
 export interface PasswordlessAuthRequest {
     /**
@@ -2306,7 +2430,7 @@ export interface SendEmailUserFilters {
 export const SendEmailUserFiltersQueryTypeEnum = {
     SingleUser: 'single_user',
     UsersFilter: 'users_filter',
-    Everyone: 'everyone'
+    Everyone: 'everyone',
 } as const;
 
 export type SendEmailUserFiltersQueryTypeEnum = typeof SendEmailUserFiltersQueryTypeEnum[keyof typeof SendEmailUserFiltersQueryTypeEnum];
@@ -2425,7 +2549,7 @@ export interface SharedReportPublicData {
  */
 
 export const SharedReportType = {
-    AudienceEvaluation: 'audience_evaluation'
+    AudienceEvaluation: 'audience_evaluation',
 } as const;
 
 export type SharedReportType = typeof SharedReportType[keyof typeof SharedReportType];
@@ -2443,6 +2567,20 @@ export interface StripeAccountSubscriptionPurchaseCreation {
      * The ID of the plan to subscribe to
      */
     'plan_id': string;
+}
+export interface StudyAIImportantNumber {
+    'label': string;
+    'value': string;
+    'unit': string;
+    'context': string;
+}
+export interface StudyAISummary {
+    'title': string;
+    'executive_summary': string;
+    'key_findings': Array<string>;
+    'important_numbers': Array<StudyAIImportantNumber>;
+    'caveats': Array<string>;
+    'generated_at'?: string;
 }
 export interface StudyAudienceStats {
     'not_resolved'?: MeasurementsContainer;
@@ -2580,7 +2718,7 @@ export const StudyDeviceTypeCategory = {
     Tv: 'tv',
     Bot: 'bot',
     Other: 'other',
-    Unknown: 'unknown'
+    Unknown: 'unknown',
 } as const;
 
 export type StudyDeviceTypeCategory = typeof StudyDeviceTypeCategory[keyof typeof StudyDeviceTypeCategory];
@@ -2727,6 +2865,7 @@ export interface StudyFull {
      * ID of the user who last updated the object
      */
     'updated_by'?: string;
+    'ai_summary'?: StudyAISummary;
 }
 
 
@@ -2740,7 +2879,7 @@ export const StudyIngestionStatus = {
     ActiveFulfilled: 'active_fulfilled',
     PausedLimited: 'paused_limited',
     FinishedComplete: 'finished_complete',
-    FinishedExpired: 'finished_expired'
+    FinishedExpired: 'finished_expired',
 } as const;
 
 export type StudyIngestionStatus = typeof StudyIngestionStatus[keyof typeof StudyIngestionStatus];
@@ -2787,7 +2926,7 @@ export const StudyLifecycleStage = {
     Pending: 'pending',
     Active: 'active',
     Paused: 'paused',
-    Finished: 'finished'
+    Finished: 'finished',
 } as const;
 
 export type StudyLifecycleStage = typeof StudyLifecycleStage[keyof typeof StudyLifecycleStage];
@@ -2894,7 +3033,7 @@ export const StudyOlapDimensionKey = {
     BuildingAge: 'building_age',
     LivingSpace: 'living_space',
     TechLevel: 'tech_level',
-    BusinessSize: 'business_size'
+    BusinessSize: 'business_size',
 } as const;
 
 export type StudyOlapDimensionKey = typeof StudyOlapDimensionKey[keyof typeof StudyOlapDimensionKey];
@@ -3263,7 +3402,7 @@ export interface SubscriptionPrice {
 export const SubscriptionPriceCurrency = {
     Eur: 'EUR',
     Usd: 'USD',
-    Dkk: 'DKK'
+    Dkk: 'DKK',
 } as const;
 
 export type SubscriptionPriceCurrency = typeof SubscriptionPriceCurrency[keyof typeof SubscriptionPriceCurrency];
@@ -3274,7 +3413,7 @@ export const SubscriptionPriceInterval = {
     Daily: 'daily',
     Weekly: 'weekly',
     Monthly: 'monthly',
-    Annually: 'annually'
+    Annually: 'annually',
 } as const;
 
 export type SubscriptionPriceInterval = typeof SubscriptionPriceInterval[keyof typeof SubscriptionPriceInterval];
@@ -3283,7 +3422,7 @@ export type SubscriptionPriceInterval = typeof SubscriptionPriceInterval[keyof t
 
 export const SubscriptionProductType = {
     Base: 'base',
-    AddOn: 'add-on'
+    AddOn: 'add-on',
 } as const;
 
 export type SubscriptionProductType = typeof SubscriptionProductType[keyof typeof SubscriptionProductType];
@@ -3393,7 +3532,7 @@ export interface UserAccountMembershipUpdate {
 export const UserAccountRole = {
     Owner: 'owner',
     Admin: 'admin',
-    User: 'user'
+    User: 'user',
 } as const;
 
 export type UserAccountRole = typeof UserAccountRole[keyof typeof UserAccountRole];
@@ -3550,7 +3689,7 @@ export interface UserFull {
 export const UserIncludeParam = {
     None: 'none',
     Subscriptions: 'subscriptions',
-    Account: 'account'
+    Account: 'account',
 } as const;
 
 export type UserIncludeParam = typeof UserIncludeParam[keyof typeof UserIncludeParam];
@@ -3644,7 +3783,7 @@ export interface UserMutation {
 export const UserPlatformRole = {
     SuperAdmin: 'super_admin',
     DevOps: 'dev_ops',
-    CustomerOps: 'customer_ops'
+    CustomerOps: 'customer_ops',
 } as const;
 
 export type UserPlatformRole = typeof UserPlatformRole[keyof typeof UserPlatformRole];
@@ -3657,7 +3796,7 @@ export const UserSortOption = {
     Name: 'name',
     Name2: '-name',
     LoggedInAt: 'logged_in_at',
-    LoggedInAt2: '-logged_in_at'
+    LoggedInAt2: '-logged_in_at',
 } as const;
 
 export type UserSortOption = typeof UserSortOption[keyof typeof UserSortOption];
@@ -3683,7 +3822,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'accountUserAddition' is not null or undefined
             assertParamExists('addUserToAccount', 'accountUserAddition', accountUserAddition)
             const localVarPath = `/accounts/{account_id}/users`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3709,9 +3848,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3759,9 +3897,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3784,7 +3921,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('deleteAccountLogo', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}/assets/logo`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3811,7 +3948,6 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3833,7 +3969,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('getAccountById', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3863,8 +3999,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
                 localVarQueryParameter['include'] = include.join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3885,7 +4021,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('getAccountLogo', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}/assets/logo`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3912,7 +4048,6 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3936,8 +4071,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'subscriptionId' is not null or undefined
             assertParamExists('getAccountSubscriptionById', 'subscriptionId', subscriptionId)
             const localVarPath = `/accounts/{account_id}/subscriptions/{subscription_id}`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
-                .replace(`{${"subscription_id"}}`, encodeURIComponent(String(subscriptionId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)))
+                .replace('{subscription_id}', encodeURIComponent(String(subscriptionId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3963,8 +4098,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3985,7 +4120,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('getAccountSubscriptions', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}/subscriptions`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4011,8 +4146,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4036,8 +4171,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('getUserAccountMembership', 'userId', userId)
             const localVarPath = `/accounts/{account_id}/users/{user_id}`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)))
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4063,8 +4198,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4085,7 +4220,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('listApiKeysByAccountId', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}/apikeys`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4111,8 +4246,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4139,7 +4274,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('listUsersByAccountId', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}/users`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4189,8 +4324,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
                 localVarQueryParameter['page[after]'] = pageAfter;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4214,8 +4349,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('removeUserFromAccount', 'userId', userId)
             const localVarPath = `/accounts/{account_id}/users/{user_id}`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)))
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4242,7 +4377,6 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4266,7 +4400,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'accountMutation' is not null or undefined
             assertParamExists('updateAccountById', 'accountMutation', accountMutation)
             const localVarPath = `/accounts/{account_id}`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4292,9 +4426,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4323,8 +4456,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'userAccountMembershipUpdate' is not null or undefined
             assertParamExists('updateUserAccountMembership', 'userAccountMembershipUpdate', userAccountMembershipUpdate)
             const localVarPath = `/accounts/{account_id}/users/{user_id}`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)))
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4350,9 +4483,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4378,7 +4510,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'body' is not null or undefined
             assertParamExists('uploadAccountLogo', 'body', body)
             const localVarPath = `/accounts/{account_id}/assets/logo`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4404,8 +4536,6 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'image/gif';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -4975,7 +5105,7 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary Get audiences of the API client
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5015,8 +5145,8 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
                 localVarQueryParameter['type'] = type;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5030,7 +5160,7 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
          * 
          * @summary Get audiences for multiple IP addresses
          * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5067,9 +5197,8 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
                 localVarQueryParameter['include'] = include.join(COLLECTION_FORMATS.csv);
             }
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5085,7 +5214,7 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
          * 
          * @summary Get audiences for a given IP address
          * @param {string} userIp The IP address to look up.
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5093,7 +5222,7 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
             // verify required parameter 'userIp' is not null or undefined
             assertParamExists('resolveAudiencesOfSingle', 'userIp', userIp)
             const localVarPath = `/audiences/{user_ip}`
-                .replace(`{${"user_ip"}}`, encodeURIComponent(String(userIp)));
+                .replace('{user_ip}', encodeURIComponent(String(userIp)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5123,8 +5252,8 @@ export const AudiencesApiAxiosParamCreator = function (configuration?: Configura
                 localVarQueryParameter['include'] = include.join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5146,7 +5275,7 @@ export const AudiencesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get audiences of the API client
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5161,7 +5290,7 @@ export const AudiencesApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get audiences for multiple IP addresses
          * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5175,7 +5304,7 @@ export const AudiencesApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get audiences for a given IP address
          * @param {string} userIp The IP address to look up.
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5197,7 +5326,7 @@ export const AudiencesApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @summary Get audiences of the API client
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5209,7 +5338,7 @@ export const AudiencesApiFactory = function (configuration?: Configuration, base
          * 
          * @summary Get audiences for multiple IP addresses
          * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5220,7 +5349,7 @@ export const AudiencesApiFactory = function (configuration?: Configuration, base
          * 
          * @summary Get audiences for a given IP address
          * @param {string} userIp The IP address to look up.
-         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+         * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5237,7 +5366,7 @@ export class AudiencesApi extends BaseAPI {
     /**
      * 
      * @summary Get audiences of the API client
-     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
      * @param {string} [type] Optional parameter to set to &#x60;jsonp&#x60; if a JSONP response format is needed.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5250,7 +5379,7 @@ export class AudiencesApi extends BaseAPI {
      * 
      * @summary Get audiences for multiple IP addresses
      * @param {ResolveAudiencesOfMultipleRequest} resolveAudiencesOfMultipleRequest 
-     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5262,7 +5391,7 @@ export class AudiencesApi extends BaseAPI {
      * 
      * @summary Get audiences for a given IP address
      * @param {string} userIp The IP address to look up.
-     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
+     * @param {Array<AudiencesIncludeParam>} [include] Optional parameter used to specify which audience information to be returned. The value is comprised of comma-separated values, each indicating a set of audiences:    * &#x60;core&#x60; represents the core audiences that are directly linked to household characteristics   * &#x60;composite&#x60; represents the composite audiences, used to model likely behaviours or buying     needs associated with the household characteristics.   * &#x60;iab&#x60; represents audiences mapped against the IAB standard taxonomy.   * &#x60;ctv&#x60; represents the connected-TV audiences, modelling streaming and TV viewership behaviours.   * &#x60;brand&#x60; represents the brand-affinity audiences, modelling propensity towards specific brands.   * &#x60;name&#x60; and &#x60;category&#x60; refer to the fields of the same names in the returned Audience     objects. There is a slight performance gain in leaving these out when they are not needed. 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5300,9 +5429,8 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5328,7 +5456,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // verify required parameter 'apiKeyCreation' is not null or undefined
             assertParamExists('createApiKey', 'apiKeyCreation', apiKeyCreation)
             const localVarPath = `/users/{user_id}/apikeys`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5354,9 +5482,8 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5382,8 +5509,8 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // verify required parameter 'keyId' is not null or undefined
             assertParamExists('deleteApiKeyById', 'keyId', keyId)
             const localVarPath = `/users/{user_id}/apikeys/{key_id}`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)))
-                .replace(`{${"key_id"}}`, encodeURIComponent(String(keyId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)))
+                .replace('{key_id}', encodeURIComponent(String(keyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5410,7 +5537,6 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5434,8 +5560,8 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // verify required parameter 'keyId' is not null or undefined
             assertParamExists('getApiKeyById', 'keyId', keyId)
             const localVarPath = `/users/{user_id}/apikeys/{key_id}`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)))
-                .replace(`{${"key_id"}}`, encodeURIComponent(String(keyId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)))
+                .replace('{key_id}', encodeURIComponent(String(keyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5461,8 +5587,8 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5483,7 +5609,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('listApiKeysByAccountId', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}/apikeys`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5509,8 +5635,8 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5532,7 +5658,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('listApiKeysByUserId', 'userId', userId)
             const localVarPath = `/users/{user_id}/apikeys`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5562,8 +5688,8 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['filter[account_id]'] = filterAccountId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5590,8 +5716,8 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // verify required parameter 'apiKeyMutation' is not null or undefined
             assertParamExists('updateApiKeyById', 'apiKeyMutation', apiKeyMutation)
             const localVarPath = `/users/{user_id}/apikeys/{key_id}`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)))
-                .replace(`{${"key_id"}}`, encodeURIComponent(String(keyId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)))
+                .replace('{key_id}', encodeURIComponent(String(keyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5617,9 +5743,8 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5956,9 +6081,8 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5981,7 +6105,7 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteEnrichmentJob', 'id', id)
             const localVarPath = `/enrichment/jobs/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6008,7 +6132,6 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6029,7 +6152,7 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteEnrichmentJobResultData', 'id', id)
             const localVarPath = `/enrichment/jobs/{id}/result`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6056,7 +6179,6 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6077,7 +6199,7 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteEnrichmentJobSourceData', 'id', id)
             const localVarPath = `/enrichment/jobs/{id}/source`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6104,7 +6226,6 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6125,7 +6246,7 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // verify required parameter 'id' is not null or undefined
             assertParamExists('downloadResultFile', 'id', id)
             const localVarPath = `/enrichment/jobs/{id}/result/file`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6151,8 +6272,8 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/octet-stream';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6173,7 +6294,7 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // verify required parameter 'id' is not null or undefined
             assertParamExists('getEnrichmentJobById', 'id', id)
             const localVarPath = `/enrichment/jobs/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6199,8 +6320,8 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6258,8 +6379,8 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
                 localVarQueryParameter['sort'] = sort;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6280,7 +6401,7 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // verify required parameter 'id' is not null or undefined
             assertParamExists('previewEnrichmentJobSourceData', 'id', id)
             const localVarPath = `/enrichment/jobs/{id}/source/preview`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6306,8 +6427,8 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6328,7 +6449,7 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // verify required parameter 'id' is not null or undefined
             assertParamExists('startEnrichmentJob', 'id', id)
             const localVarPath = `/enrichment/jobs/{id}/start`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6355,7 +6476,6 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6377,7 +6497,7 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // verify required parameter 'id' is not null or undefined
             assertParamExists('updateEnrichmentJob', 'id', id)
             const localVarPath = `/enrichment/jobs/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6403,9 +6523,8 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -6429,7 +6548,7 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             // verify required parameter 'id' is not null or undefined
             assertParamExists('uploadEnrichmentJobSourceData', 'id', id)
             const localVarPath = `/enrichment/jobs/{id}/source`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6460,10 +6579,8 @@ export const EnrichmentApiAxiosParamCreator = function (configuration?: Configur
             if (file !== undefined) { 
                 localVarFormParams.append('file', file as any);
             }
-    
-    
             localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
-    
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6929,9 +7046,8 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -6954,7 +7070,7 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             // verify required parameter 'clientId' is not null or undefined
             assertParamExists('deleteClientLogo', 'clientId', clientId)
             const localVarPath = `/measurement/clients/{client_id}/assets/logo`
-                .replace(`{${"client_id"}}`, encodeURIComponent(String(clientId)));
+                .replace('{client_id}', encodeURIComponent(String(clientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6981,7 +7097,6 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7002,7 +7117,7 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             // verify required parameter 'clientId' is not null or undefined
             assertParamExists('deleteMeasurementClientById', 'clientId', clientId)
             const localVarPath = `/measurement/clients/{client_id}`
-                .replace(`{${"client_id"}}`, encodeURIComponent(String(clientId)));
+                .replace('{client_id}', encodeURIComponent(String(clientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -7029,7 +7144,6 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7050,7 +7164,7 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             // verify required parameter 'clientId' is not null or undefined
             assertParamExists('getClientLogo', 'clientId', clientId)
             const localVarPath = `/measurement/clients/{client_id}/assets/logo`
-                .replace(`{${"client_id"}}`, encodeURIComponent(String(clientId)));
+                .replace('{client_id}', encodeURIComponent(String(clientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -7077,7 +7191,6 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7098,7 +7211,7 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             // verify required parameter 'clientId' is not null or undefined
             assertParamExists('getMeasurementClientById', 'clientId', clientId)
             const localVarPath = `/measurement/clients/{client_id}`
-                .replace(`{${"client_id"}}`, encodeURIComponent(String(clientId)));
+                .replace('{client_id}', encodeURIComponent(String(clientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -7124,8 +7237,8 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7188,8 +7301,8 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
                 localVarQueryParameter['page[after]'] = pageAfter;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7213,7 +7326,7 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             // verify required parameter 'measurementClientMutation' is not null or undefined
             assertParamExists('updateMeasurementClientById', 'measurementClientMutation', measurementClientMutation)
             const localVarPath = `/measurement/clients/{client_id}`
-                .replace(`{${"client_id"}}`, encodeURIComponent(String(clientId)));
+                .replace('{client_id}', encodeURIComponent(String(clientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -7239,9 +7352,8 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7267,7 +7379,7 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             // verify required parameter 'body' is not null or undefined
             assertParamExists('uploadClientLogo', 'body', body)
             const localVarPath = `/measurement/clients/{client_id}/assets/logo`
-                .replace(`{${"client_id"}}`, encodeURIComponent(String(clientId)));
+                .replace('{client_id}', encodeURIComponent(String(clientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -7293,8 +7405,6 @@ export const MeasurementClientsApiAxiosParamCreator = function (configuration?: 
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'image/gif';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -7665,8 +7775,8 @@ export const MeasurementLabelsApiAxiosParamCreator = function (configuration?: C
                 localVarQueryParameter['filter[account_id]'] = filterAccountId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7757,8 +7867,8 @@ export const PopulationsApiAxiosParamCreator = function (configuration?: Configu
             // verify required parameter 'populationKey' is not null or undefined
             assertParamExists('getPopuplationByKey', 'populationKey', populationKey)
             const localVarPath = `/populations/{category_key}/{population_key}`
-                .replace(`{${"category_key"}}`, encodeURIComponent(String(categoryKey)))
-                .replace(`{${"population_key"}}`, encodeURIComponent(String(populationKey)));
+                .replace('{category_key}', encodeURIComponent(String(categoryKey)))
+                .replace('{population_key}', encodeURIComponent(String(populationKey)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -7784,8 +7894,8 @@ export const PopulationsApiAxiosParamCreator = function (configuration?: Configu
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7806,7 +7916,7 @@ export const PopulationsApiAxiosParamCreator = function (configuration?: Configu
             // verify required parameter 'categoryKey' is not null or undefined
             assertParamExists('listPopuplations', 'categoryKey', categoryKey)
             const localVarPath = `/populations/{category_key}`
-                .replace(`{${"category_key"}}`, encodeURIComponent(String(categoryKey)));
+                .replace('{category_key}', encodeURIComponent(String(categoryKey)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -7832,8 +7942,8 @@ export const PopulationsApiAxiosParamCreator = function (configuration?: Configu
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7961,7 +8071,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'sharedReportCreation' is not null or undefined
             assertParamExists('createSharedReport', 'sharedReportCreation', sharedReportCreation)
             const localVarPath = `/studies/{study_id}/shared_reports`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -7987,9 +8097,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -8037,9 +8146,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -8065,7 +8173,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyEventCreation' is not null or undefined
             assertParamExists('createStudyEvent', 'studyEventCreation', studyEventCreation)
             const localVarPath = `/studies/{study_id}/events`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8091,8 +8199,6 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -8119,8 +8225,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'reportId' is not null or undefined
             assertParamExists('deleteSharedReportById', 'reportId', reportId)
             const localVarPath = `/studies/{study_id}/shared_reports/{report_id}`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)))
-                .replace(`{${"report_id"}}`, encodeURIComponent(String(reportId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)))
+                .replace('{report_id}', encodeURIComponent(String(reportId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8147,7 +8253,6 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8168,7 +8273,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('deleteStudyBannerImage', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}/assets/banner_image`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8195,7 +8300,6 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8216,7 +8320,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('deleteStudyById', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8243,7 +8347,6 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8267,8 +8370,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'reportId' is not null or undefined
             assertParamExists('getSharedReportById', 'reportId', reportId)
             const localVarPath = `/studies/{study_id}/shared_reports/{report_id}`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)))
-                .replace(`{${"report_id"}}`, encodeURIComponent(String(reportId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)))
+                .replace('{report_id}', encodeURIComponent(String(reportId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8294,8 +8397,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8316,7 +8419,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('getStudyBannerImage', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}/assets/banner_image`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8343,7 +8446,6 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8364,7 +8466,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('getStudyById', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8390,8 +8492,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8412,7 +8514,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('listSharedReportsByStudyId', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}/shared_reports`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8438,8 +8540,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8562,8 +8664,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['page[after]'] = pageAfter;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8584,7 +8686,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('queryStudyAudienceStats', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}/stats/audiences`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8610,8 +8712,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8632,7 +8734,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('queryStudyCountryStats', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}/stats/countries`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8658,8 +8760,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8680,7 +8782,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('queryStudyDeviceStats', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}/stats/devices`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8706,8 +8808,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8729,7 +8831,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('queryStudyFrequencyStats', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}/stats/frequencies`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8759,8 +8861,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['limit'] = limit;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8783,7 +8885,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('queryStudyTimelineStats', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}/stats/timeline`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8821,8 +8923,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
                     toDate;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8843,7 +8945,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyId' is not null or undefined
             assertParamExists('queryStudyTimingStats', 'studyId', studyId)
             const localVarPath = `/studies/{study_id}/stats/timing`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8869,8 +8971,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8894,7 +8996,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'studyMutation' is not null or undefined
             assertParamExists('updateStudyById', 'studyMutation', studyMutation)
             const localVarPath = `/studies/{study_id}`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8920,9 +9022,8 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -8948,7 +9049,7 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'body' is not null or undefined
             assertParamExists('uploadStudyBannerImage', 'body', body)
             const localVarPath = `/studies/{study_id}/assets/banner_image`
-                .replace(`{${"study_id"}}`, encodeURIComponent(String(studyId)));
+                .replace('{study_id}', encodeURIComponent(String(studyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8974,8 +9075,6 @@ export const StudiesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'image/gif';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -9730,7 +9829,7 @@ export const ListStudiesSortEnum = {
     CreatedAt: 'created_at',
     CreatedAt2: '-created_at',
     Name: 'name',
-    Name2: '-name'
+    Name2: '-name',
 } as const;
 export type ListStudiesSortEnum = typeof ListStudiesSortEnum[keyof typeof ListStudiesSortEnum];
 
@@ -9754,8 +9853,8 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
             // verify required parameter 'subscriptionId' is not null or undefined
             assertParamExists('getAccountSubscriptionById', 'subscriptionId', subscriptionId)
             const localVarPath = `/accounts/{account_id}/subscriptions/{subscription_id}`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
-                .replace(`{${"subscription_id"}}`, encodeURIComponent(String(subscriptionId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)))
+                .replace('{subscription_id}', encodeURIComponent(String(subscriptionId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9781,8 +9880,8 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9803,7 +9902,7 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('getAccountSubscriptions', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}/subscriptions`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9829,8 +9928,8 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9873,8 +9972,8 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9922,8 +10021,8 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
                 localVarQueryParameter['filter[account_id]'] = filterAccountId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9996,8 +10095,8 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
                 localVarQueryParameter['filter[list_price.interval]'] = filterListPriceInterval;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -10227,6 +10326,122 @@ export const TaxonomyApiAxiosParamCreator = function (configuration?: Configurat
     return {
         /**
          * 
+         * @summary Get an audience by its code
+         * @param {string} audienceCode The code of the audience to retrieve
+         * @param {string} [platform] A platform code to apply for platform-specific audience codes
+         * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAudience: async (audienceCode: string, platform?: string, country?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'audienceCode' is not null or undefined
+            assertParamExists('getAudience', 'audienceCode', audienceCode)
+            const localVarPath = `/taxonomy/audiences/{audience_code}`
+                .replace('{audience_code}', encodeURIComponent(String(audienceCode)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+            if (platform !== undefined) {
+                localVarQueryParameter['platform'] = platform;
+            }
+
+            if (country !== undefined) {
+                localVarQueryParameter['country'] = country;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a category by its code
+         * @param {string} categoryCode The code of the category to retrieve
+         * @param {string} [platform] A platform code to apply for platform-specific audience codes
+         * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCategory: async (categoryCode: string, platform?: string, country?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'categoryCode' is not null or undefined
+            assertParamExists('getCategory', 'categoryCode', categoryCode)
+            const localVarPath = `/taxonomy/categories/{category_code}`
+                .replace('{category_code}', encodeURIComponent(String(categoryCode)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication oAuth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "oAuth", [], configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            // authentication apiKeyHeaderAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "X-API-KEY", configuration)
+
+            // authentication apiKeyQueryParamAuth required
+            await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
+
+            if (platform !== undefined) {
+                localVarQueryParameter['platform'] = platform;
+            }
+
+            if (country !== undefined) {
+                localVarQueryParameter['country'] = country;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary List audience platforms
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10258,8 +10473,8 @@ export const TaxonomyApiAxiosParamCreator = function (configuration?: Configurat
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -10270,7 +10485,7 @@ export const TaxonomyApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
+         * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB, ctv and brand). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
          * @summary List audiences
          * @param {string} [platform] A platform code to apply for platform-specific audience codes
          * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
@@ -10278,10 +10493,11 @@ export const TaxonomyApiAxiosParamCreator = function (configuration?: Configurat
          * @param {string} [pageAfter] Cursor for pagination to get the next page of results
          * @param {ListAudiencesSortEnum} [sort] Sort order for audiences (by code) and categories (by display name) - either ascending (default) or descending.
          * @param {string} [filter] Optional parameter used to search for categories and audiences where the name contains a substring (case insensitive)
+         * @param {string} [labels] Optional parameter used to filter categories and audiences by labels. Multiple labels can be provided, separated by commas. When multiple labels are provided, only categories and audiences that have all of the specified labels will be returned.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudiences: async (platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listAudiences: async (platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, labels?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/taxonomy/audiences`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -10332,6 +10548,10 @@ export const TaxonomyApiAxiosParamCreator = function (configuration?: Configurat
                 localVarQueryParameter['filter'] = filter;
             }
 
+            if (labels !== undefined) {
+                localVarQueryParameter['labels'] = labels;
+            }
+
             localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -10376,8 +10596,8 @@ export const TaxonomyApiAxiosParamCreator = function (configuration?: Configurat
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -10398,6 +10618,36 @@ export const TaxonomyApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Get an audience by its code
+         * @param {string} audienceCode The code of the audience to retrieve
+         * @param {string} [platform] A platform code to apply for platform-specific audience codes
+         * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAudience(audienceCode: string, platform?: string, country?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AudienceResponse1>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAudience(audienceCode, platform, country, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TaxonomyApi.getAudience']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get a category by its code
+         * @param {string} categoryCode The code of the category to retrieve
+         * @param {string} [platform] A platform code to apply for platform-specific audience codes
+         * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCategory(categoryCode: string, platform?: string, country?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CategoryResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCategory(categoryCode, platform, country, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TaxonomyApi.getCategory']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary List audience platforms
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10409,7 +10659,7 @@ export const TaxonomyApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
+         * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB, ctv and brand). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
          * @summary List audiences
          * @param {string} [platform] A platform code to apply for platform-specific audience codes
          * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
@@ -10417,11 +10667,12 @@ export const TaxonomyApiFp = function(configuration?: Configuration) {
          * @param {string} [pageAfter] Cursor for pagination to get the next page of results
          * @param {ListAudiencesSortEnum} [sort] Sort order for audiences (by code) and categories (by display name) - either ascending (default) or descending.
          * @param {string} [filter] Optional parameter used to search for categories and audiences where the name contains a substring (case insensitive)
+         * @param {string} [labels] Optional parameter used to filter categories and audiences by labels. Multiple labels can be provided, separated by commas. When multiple labels are provided, only categories and audiences that have all of the specified labels will be returned.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listAudiences(platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAudiences200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listAudiences(platform, country, pageSize, pageAfter, sort, filter, options);
+        async listAudiences(platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, labels?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAudiences200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listAudiences(platform, country, pageSize, pageAfter, sort, filter, labels, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TaxonomyApi.listAudiences']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -10449,6 +10700,30 @@ export const TaxonomyApiFactory = function (configuration?: Configuration, baseP
     return {
         /**
          * 
+         * @summary Get an audience by its code
+         * @param {string} audienceCode The code of the audience to retrieve
+         * @param {string} [platform] A platform code to apply for platform-specific audience codes
+         * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAudience(audienceCode: string, platform?: string, country?: string, options?: RawAxiosRequestConfig): AxiosPromise<AudienceResponse1> {
+            return localVarFp.getAudience(audienceCode, platform, country, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a category by its code
+         * @param {string} categoryCode The code of the category to retrieve
+         * @param {string} [platform] A platform code to apply for platform-specific audience codes
+         * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCategory(categoryCode: string, platform?: string, country?: string, options?: RawAxiosRequestConfig): AxiosPromise<CategoryResponse> {
+            return localVarFp.getCategory(categoryCode, platform, country, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary List audience platforms
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10457,7 +10732,7 @@ export const TaxonomyApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.listAudiencePlatforms(options).then((request) => request(axios, basePath));
         },
         /**
-         * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
+         * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB, ctv and brand). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
          * @summary List audiences
          * @param {string} [platform] A platform code to apply for platform-specific audience codes
          * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
@@ -10465,11 +10740,12 @@ export const TaxonomyApiFactory = function (configuration?: Configuration, baseP
          * @param {string} [pageAfter] Cursor for pagination to get the next page of results
          * @param {ListAudiencesSortEnum} [sort] Sort order for audiences (by code) and categories (by display name) - either ascending (default) or descending.
          * @param {string} [filter] Optional parameter used to search for categories and audiences where the name contains a substring (case insensitive)
+         * @param {string} [labels] Optional parameter used to filter categories and audiences by labels. Multiple labels can be provided, separated by commas. When multiple labels are provided, only categories and audiences that have all of the specified labels will be returned.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAudiences(platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListAudiences200Response> {
-            return localVarFp.listAudiences(platform, country, pageSize, pageAfter, sort, filter, options).then((request) => request(axios, basePath));
+        listAudiences(platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, labels?: string, options?: RawAxiosRequestConfig): AxiosPromise<ListAudiences200Response> {
+            return localVarFp.listAudiences(platform, country, pageSize, pageAfter, sort, filter, labels, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10489,6 +10765,32 @@ export const TaxonomyApiFactory = function (configuration?: Configuration, baseP
 export class TaxonomyApi extends BaseAPI {
     /**
      * 
+     * @summary Get an audience by its code
+     * @param {string} audienceCode The code of the audience to retrieve
+     * @param {string} [platform] A platform code to apply for platform-specific audience codes
+     * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getAudience(audienceCode: string, platform?: string, country?: string, options?: RawAxiosRequestConfig) {
+        return TaxonomyApiFp(this.configuration).getAudience(audienceCode, platform, country, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a category by its code
+     * @param {string} categoryCode The code of the category to retrieve
+     * @param {string} [platform] A platform code to apply for platform-specific audience codes
+     * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getCategory(categoryCode: string, platform?: string, country?: string, options?: RawAxiosRequestConfig) {
+        return TaxonomyApiFp(this.configuration).getCategory(categoryCode, platform, country, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary List audience platforms
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10498,7 +10800,7 @@ export class TaxonomyApi extends BaseAPI {
     }
 
     /**
-     * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
+     * Returns a list of audiences. When `flat=false` (default), audiences are organized by sets (core, composite, IAB, ctv and brand). When `flat=true`, audiences are returned as a flat list of categories. Pagination is supported via the `page[size]` and `page[after]` parameters - when provided, pagination metadata is included in the response. 
      * @summary List audiences
      * @param {string} [platform] A platform code to apply for platform-specific audience codes
      * @param {string} [country] A country code to apply for platform-specific and country-specific audience codes
@@ -10506,11 +10808,12 @@ export class TaxonomyApi extends BaseAPI {
      * @param {string} [pageAfter] Cursor for pagination to get the next page of results
      * @param {ListAudiencesSortEnum} [sort] Sort order for audiences (by code) and categories (by display name) - either ascending (default) or descending.
      * @param {string} [filter] Optional parameter used to search for categories and audiences where the name contains a substring (case insensitive)
+     * @param {string} [labels] Optional parameter used to filter categories and audiences by labels. Multiple labels can be provided, separated by commas. When multiple labels are provided, only categories and audiences that have all of the specified labels will be returned.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public listAudiences(platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, options?: RawAxiosRequestConfig) {
-        return TaxonomyApiFp(this.configuration).listAudiences(platform, country, pageSize, pageAfter, sort, filter, options).then((request) => request(this.axios, this.basePath));
+    public listAudiences(platform?: string, country?: string, pageSize?: number, pageAfter?: string, sort?: ListAudiencesSortEnum, filter?: string, labels?: string, options?: RawAxiosRequestConfig) {
+        return TaxonomyApiFp(this.configuration).listAudiences(platform, country, pageSize, pageAfter, sort, filter, labels, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -10526,7 +10829,7 @@ export class TaxonomyApi extends BaseAPI {
 
 export const ListAudiencesSortEnum = {
     Asc: 'asc',
-    Desc: 'desc'
+    Desc: 'desc',
 } as const;
 export type ListAudiencesSortEnum = typeof ListAudiencesSortEnum[keyof typeof ListAudiencesSortEnum];
 
@@ -10550,7 +10853,7 @@ export const UsageApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'data' is not null or undefined
             assertParamExists('listDataDailyUsage', 'data', data)
             const localVarPath = `/usage/{data}/daily`
-                .replace(`{${"data"}}`, encodeURIComponent(String(data)));
+                .replace('{data}', encodeURIComponent(String(data)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10592,8 +10895,8 @@ export const UsageApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['filter[account_id]'] = filterAccountId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -10616,7 +10919,7 @@ export const UsageApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'data' is not null or undefined
             assertParamExists('listDataMonthlyUsage', 'data', data)
             const localVarPath = `/usage/{data}/monthly`
-                .replace(`{${"data"}}`, encodeURIComponent(String(data)));
+                .replace('{data}', encodeURIComponent(String(data)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10650,8 +10953,8 @@ export const UsageApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['filter[account_id]'] = filterAccountId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -10673,7 +10976,7 @@ export const UsageApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'data' is not null or undefined
             assertParamExists('listDataRealtimeUsage', 'data', data)
             const localVarPath = `/usage/{data}/realtime`
-                .replace(`{${"data"}}`, encodeURIComponent(String(data)));
+                .replace('{data}', encodeURIComponent(String(data)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10703,8 +11006,8 @@ export const UsageApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['filter[account_id]'] = filterAccountId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -10862,17 +11165,17 @@ export class UsageApi extends BaseAPI {
 
 export const ListDataDailyUsageDataEnum = {
     AudienceData: 'audience_data',
-    AnalyticsData: 'analytics_data'
+    AnalyticsData: 'analytics_data',
 } as const;
 export type ListDataDailyUsageDataEnum = typeof ListDataDailyUsageDataEnum[keyof typeof ListDataDailyUsageDataEnum];
 export const ListDataMonthlyUsageDataEnum = {
     AudienceData: 'audience_data',
-    AnalyticsData: 'analytics_data'
+    AnalyticsData: 'analytics_data',
 } as const;
 export type ListDataMonthlyUsageDataEnum = typeof ListDataMonthlyUsageDataEnum[keyof typeof ListDataMonthlyUsageDataEnum];
 export const ListDataRealtimeUsageDataEnum = {
     AudienceData: 'audience_data',
-    AnalyticsData: 'analytics_data'
+    AnalyticsData: 'analytics_data',
 } as const;
 export type ListDataRealtimeUsageDataEnum = typeof ListDataRealtimeUsageDataEnum[keyof typeof ListDataRealtimeUsageDataEnum];
 
@@ -10896,7 +11199,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'accountUserAddition' is not null or undefined
             assertParamExists('addUserToAccount', 'accountUserAddition', accountUserAddition)
             const localVarPath = `/accounts/{account_id}/users`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10922,9 +11225,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -10950,7 +11252,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'apiKeyCreation' is not null or undefined
             assertParamExists('createApiKey', 'apiKeyCreation', apiKeyCreation)
             const localVarPath = `/users/{user_id}/apikeys`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10976,9 +11278,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -11004,8 +11305,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'keyId' is not null or undefined
             assertParamExists('deleteApiKeyById', 'keyId', keyId)
             const localVarPath = `/users/{user_id}/apikeys/{key_id}`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)))
-                .replace(`{${"key_id"}}`, encodeURIComponent(String(keyId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)))
+                .replace('{key_id}', encodeURIComponent(String(keyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11032,7 +11333,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -11053,7 +11353,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('deleteUserAvatar', 'userId', userId)
             const localVarPath = `/users/{user_id}/assets/avatar`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11080,7 +11380,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -11101,7 +11400,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('deleteUserById', 'userId', userId)
             const localVarPath = `/users/{user_id}`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11128,7 +11427,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -11152,8 +11450,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'keyId' is not null or undefined
             assertParamExists('getApiKeyById', 'keyId', keyId)
             const localVarPath = `/users/{user_id}/apikeys/{key_id}`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)))
-                .replace(`{${"key_id"}}`, encodeURIComponent(String(keyId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)))
+                .replace('{key_id}', encodeURIComponent(String(keyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11179,8 +11477,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -11228,8 +11526,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['include'] = include.join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -11253,8 +11551,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('getUserAccountMembership', 'userId', userId)
             const localVarPath = `/accounts/{account_id}/users/{user_id}`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)))
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11280,8 +11578,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -11302,7 +11600,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('getUserAvatar', 'userId', userId)
             const localVarPath = `/users/{user_id}/assets/avatar`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11329,7 +11627,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -11351,7 +11648,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('getUserById', 'userId', userId)
             const localVarPath = `/users/{user_id}`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11381,8 +11678,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['include'] = include.join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -11404,7 +11701,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('listApiKeysByUserId', 'userId', userId)
             const localVarPath = `/users/{user_id}/apikeys`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11434,8 +11731,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['filter[account_id]'] = filterAccountId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -11462,7 +11759,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('listUsersByAccountId', 'accountId', accountId)
             const localVarPath = `/accounts/{account_id}/users`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11512,8 +11809,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['page[after]'] = pageAfter;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -11537,8 +11834,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('removeUserFromAccount', 'userId', userId)
             const localVarPath = `/accounts/{account_id}/users/{user_id}`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)))
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11565,7 +11862,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -11592,8 +11888,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'apiKeyMutation' is not null or undefined
             assertParamExists('updateApiKeyById', 'apiKeyMutation', apiKeyMutation)
             const localVarPath = `/users/{user_id}/apikeys/{key_id}`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)))
-                .replace(`{${"key_id"}}`, encodeURIComponent(String(keyId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)))
+                .replace('{key_id}', encodeURIComponent(String(keyId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11619,9 +11915,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -11650,8 +11945,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'userAccountMembershipUpdate' is not null or undefined
             assertParamExists('updateUserAccountMembership', 'userAccountMembershipUpdate', userAccountMembershipUpdate)
             const localVarPath = `/accounts/{account_id}/users/{user_id}`
-                .replace(`{${"account_id"}}`, encodeURIComponent(String(accountId)))
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{account_id}', encodeURIComponent(String(accountId)))
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11677,9 +11972,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -11705,7 +11999,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'userMutation' is not null or undefined
             assertParamExists('updateUserById', 'userMutation', userMutation)
             const localVarPath = `/users/{user_id}`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11731,9 +12025,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -11759,7 +12052,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'body' is not null or undefined
             assertParamExists('uploadUserAvatar', 'body', body)
             const localVarPath = `/users/{user_id}/assets/avatar`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
+                .replace('{user_id}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11785,8 +12078,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // authentication apiKeyQueryParamAuth required
             await setApiKeyToObject(localVarQueryParameter, "api_key", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'image/gif';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);

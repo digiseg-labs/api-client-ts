@@ -41,7 +41,9 @@ docs/ApiKeyMutation.md
 docs/ApiKeyStatus.md
 docs/ApiKeyToken.md
 docs/Audience.md
+docs/AudienceBuilderSegmentItem.md
 docs/AudienceCategoryItem.md
+docs/AudienceCategoryRef.md
 docs/AudienceCategoryStats.md
 docs/AudienceExampleInput.md
 docs/AudienceExampleInputsResponse.md
@@ -52,6 +54,8 @@ docs/AudienceRecommendationRecommendationItem.md
 docs/AudienceRecommendationRequestMessage.md
 docs/AudienceRecommendationResponseMessage.md
 docs/AudienceResponse.md
+docs/AudienceResponse1.md
+docs/AudienceResponseMeta.md
 docs/AudienceResponseStatus.md
 docs/AudienceSetItem.md
 docs/AudienceSetListResponseMeta.md
@@ -65,6 +69,7 @@ docs/BusinessAudienceStats.md
 docs/BusinessAudienceStatsAudienceCategories.md
 docs/CategoryListResponseMeta.md
 docs/CategoryPopulationsFull.md
+docs/CategoryResponse.md
 docs/CompanySize.md
 docs/CompanyType.md
 docs/Comparison.md
@@ -115,6 +120,8 @@ docs/InlineObject1.md
 docs/InlineObject10.md
 docs/InlineObject11.md
 docs/InlineObject12.md
+docs/InlineObject13.md
+docs/InlineObject14.md
 docs/InlineObject2.md
 docs/InlineObject3.md
 docs/InlineObject4.md
@@ -157,6 +164,10 @@ docs/MeasurementEventSet.md
 docs/MeasurementIntegrationPlatform.md
 docs/MeasurementLabelsApi.md
 docs/MeasurementsContainer.md
+docs/OAuthCallbackResponseData.md
+docs/OAuthRegistrationRequest.md
+docs/OAuthRegistrationResponseData.md
+docs/OAuthRegistrationToken.md
 docs/PasswordlessAuthRequest.md
 docs/PermissionScopes.md
 docs/PlanFeatureSet.md
@@ -216,6 +227,8 @@ docs/SharedReportType.md
 docs/StripeAccountSubscriptionCheckoutSession.md
 docs/StripeAccountSubscriptionPurchaseCreation.md
 docs/StudiesApi.md
+docs/StudyAIImportantNumber.md
+docs/StudyAISummary.md
 docs/StudyAudienceStats.md
 docs/StudyAux.md
 docs/StudyBase.md
