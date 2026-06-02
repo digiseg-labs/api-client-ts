@@ -1,5 +1,4 @@
 /* tslint:disable */
-/* eslint-disable */
 /**
  * Digiseg API
  * ### Digiseg API documentation  # Introduction  This API let you harness the power of Digisegs powerful and tracking-free segmentation engine.  Audiences by Digiseg are available in 50+ countries, probablistically mapping neighborhood characteristics to the IP addresses observed on the internet - Household targeting & measurement for the post-cookie world.  ## Developer SDKs  In addition to using these APIs directly through any HTTP client, we provide a set of API client SDKs for popular programming languages:  <div class=\"api-clients\">   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-python\">     <i class=\"api-client-sdk-logo devicon-python-plain\"></i>     <p>API client for<br/>Python</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-ts\">     <i class=\"api-client-sdk-logo devicon-typescript-plain\"></i>     <p>API client for<br/>TypeScript</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-go\">     <i class=\"api-client-sdk-logo devicon-go-original-wordmark\"></i>     <p>API client for<br/>Go</p>   </a>   <a class=\"api-client-box\" href=\"https://github.com/digiseg-labs/api-client-dotnet\">     <i class=\"api-client-sdk-logo devicon-dot-net-plain\"></i>     <p>API client for<br/>.NET</p>   </a> </div> <div class=\"api-clients-breaker\" /> 
@@ -12,12 +11,24 @@
  * Do not edit the class manually.
  */
 
+interface AWSv4Configuration {
+  options?: {
+    region?: string
+    service?: string
+  }
+  credentials?: {
+    accessKeyId?: string
+    secretAccessKey?: string,
+    sessionToken?: string
+  }
+}
 
 export interface ConfigurationParameters {
     apiKey?: string | Promise<string> | ((name: string) => string) | ((name: string) => Promise<string>);
     username?: string;
     password?: string;
     accessToken?: string | Promise<string> | ((name?: string, scopes?: string[]) => string) | ((name?: string, scopes?: string[]) => Promise<string>);
+    awsv4?: AWSv4Configuration;
     basePath?: string;
     serverIndex?: number;
     baseOptions?: any;
@@ -45,6 +56,17 @@ export class Configuration {
      */
     accessToken?: string | Promise<string> | ((name?: string, scopes?: string[]) => string) | ((name?: string, scopes?: string[]) => Promise<string>);
     /**
+     * parameter for aws4 signature security
+     * @param {Object} AWS4Signature - AWS4 Signature security
+     * @param {string} options.region - aws region
+     * @param {string} options.service - name of the service.
+     * @param {string} credentials.accessKeyId - aws access key id
+     * @param {string} credentials.secretAccessKey - aws access key
+     * @param {string} credentials.sessionToken - aws session token
+     * @memberof Configuration
+     */
+    awsv4?: AWSv4Configuration;
+    /**
      * override base path
      */
     basePath?: string;
@@ -70,6 +92,7 @@ export class Configuration {
         this.username = param.username;
         this.password = param.password;
         this.accessToken = param.accessToken;
+        this.awsv4 = param.awsv4;
         this.basePath = param.basePath;
         this.serverIndex = param.serverIndex;
         this.baseOptions = {
@@ -92,7 +115,7 @@ export class Configuration {
      * @return True if the given MIME is JSON, false otherwise.
      */
     public isJsonMime(mime: string): boolean {
-        const jsonMime: RegExp = new RegExp('^(application\/json|[^;/ \t]+\/[^;/ \t]+[+]json)[ \t]*(;.*)?$', 'i');
-        return mime !== null && (jsonMime.test(mime) || mime.toLowerCase() === 'application/json-patch+json');
+        const jsonMime: RegExp = /^(application\/json|[^;/ \t]+\/[^;/ \t]+[+]json)[ \t]*(;.*)?$/i;
+        return mime !== null && jsonMime.test(mime);
     }
 }
